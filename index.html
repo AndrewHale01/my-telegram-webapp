@@ -2,16 +2,78 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Мій Telegram WebApp</title>
-  <script>
-    function sendToBot() {
-      Telegram.WebApp.sendData(document.getElementById('input').value);
+  <title>Telegram Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #222;
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
     }
-  </script>
+    .profile {
+      margin-top: 40px;
+      background: #333;
+      padding: 32px 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      margin-bottom: 18px;
+      border: 3px solid #00bfae;
+      object-fit: cover;
+      background: #111;
+    }
+    .username {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+      color: #00bfae;
+    }
+    .userid {
+      font-size: 1rem;
+      margin-bottom: 16px;
+      color: #aaa;
+    }
+    .wins {
+      font-size: 1.1rem;
+      color: #fff;
+      background: #00bfae;
+      padding: 8px 18px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Вітаємо у Telegram WebApp!</h2>
-  <input id="input" type="text" placeholder="Введіть щось...">
-  <button onclick="sendToBot()">Надіслати в бот</button>
+  <div class="profile">
+    <img id="avatar" class="avatar" src="" alt="avatar">
+    <div class="username" id="username"></div>
+    <div class="userid" id="userid"></div>
+    <div class="wins" id="wins"></div>
+  </div>
+  <script>
+    // Отримати дані користувача з Telegram WebApp
+    const user = window.Telegram.WebApp.initDataUnsafe.user;
+    if (user) {
+      document.getElementById('avatar').src = `https://t.me/i/userpic/320/${user.id}.jpg`;
+      document.getElementById('username').textContent = user.username ? '@' + user.username : user.first_name;
+      document.getElementById('userid').textContent = 'ID: ' + user.id;
+      // Тут можна підставити кількість виграних турнірів з API, зараз просто 0
+      document.getElementById('wins').textContent = 'Wins: 0';
+    } else {
+      document.querySelector('.profile').innerHTML = '<b>Cannot get user info. Please open via Telegram.</b>';
+    }
+  </script>
 </body>
 </html>
