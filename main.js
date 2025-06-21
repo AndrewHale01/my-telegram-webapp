@@ -1,74 +1,85 @@
-Telegram.WebApp.ready();
+window.addEventListener("DOMContentLoaded", () => {
+  const tg = window.Telegram.WebApp;
+  const user = tg.initDataUnsafe?.user;
+  const langCode = tg.initDataUnsafe?.user?.language_code || "uk";
 
-const user = Telegram.WebApp.initDataUnsafe?.user;
-const avatar = document.getElementById("avatar-small");
-const usernameEl = document.getElementById("username");
-const useridEl = document.getElementById("userid");
-const profilePopup = document.getElementById("profile-popup");
-const settingsPopup = document.getElementById("settings-popup");
-const settingsIcon = document.getElementById("settings-icon");
-const winsEl = document.getElementById("wins");
-const closeBtn = document.getElementById("close-btn");
+  const avatar = document.getElementById("avatar-small");
+  const popup = document.getElementById("profile-popup");
+  const usernameEl = document.getElementById("username");
+  const useridEl = document.getElementById("userid");
+  const winsEl = document.getElementById("wins");
 
-// Переклади
-const translations = {
-  en: {
-    wins: "Wins: 0",
-    close: "Close"
-  },
-  uk: {
-    wins: "Перемоги: 0",
-    close: "Закрити"
+  const langBtn = document.getElementById("language-btn");
+  const langMenu = document.getElementById("language-menu");
+
+  // Локалізація
+  const translations = {
+    uk: {
+      wins: "Перемоги: ",
+      id: "ID: ",
+    },
+    ru: {
+      wins: "Победы: ",
+      id: "ID: ",
+    },
+    en: {
+      wins: "Wins: ",
+      id: "ID: ",
+    },
+  };
+
+  // Визначаємо початкову мову
+  let currentLang = langCode.startsWith("ru")
+    ? "ru"
+    : langCode.startsWith("en")
+    ? "en"
+    : "uk";
+
+  function applyLanguage() {
+    if (user) {
+      usernameEl.textContent = user.username ? `@${user.username}` : user.first_name;
+      useridEl.textContent = `${translations[currentLang].id}${user.id}`;
+      winsEl.textContent = `${translations[currentLang].wins}0`;
+    }
   }
-};
 
-function applyLanguage(lang) {
-  const t = translations[lang] || translations.en;
-  winsEl.textContent = t.wins;
-  closeBtn.textContent = t.close;
-  localStorage.setItem("lang", lang);
-}
+  // Показати профіль
+  if (user) {
+    avatar.src = `https://t.me/i/userpic/320/${user.id}.jpg`;
+    applyLanguage();
 
-// Отримати мову
-let lang = localStorage.getItem("lang");
-if (!lang && user?.language_code) {
-  lang = ["uk", "en"].includes(user.language_code) ? user.language_code : "en";
-}
-applyLanguage(lang || "en");
+    avatar.addEventListener("click", (e) => {
+      e.stopPropagation();
+      popup.classList.toggle("active");
+      langMenu.style.display = "none";
+    });
 
-// Заповнення профілю
-if (user) {
-  usernameEl.textContent = user.username ? `@${user.username}` : `${user.first_name} ${user.last_name || ''}`;
-  useridEl.textContent = `ID: ${user.id}`;
-  avatar.src = `https://t.me/i/userpic/320/${user.id}.jpg`;
-}
-
-// Відкриття/закриття
-avatar.onclick = (e) => {
-  e.stopPropagation();
-  profilePopup.classList.add("active");
-  settingsPopup.classList.remove("active");
-};
-
-settingsIcon.onclick = (e) => {
-  e.stopPropagation();
-  settingsPopup.classList.toggle("active");
-  profilePopup.classList.remove("active");
-};
-
-closeBtn.onclick = () => profilePopup.classList.remove("active");
-
-document.addEventListener("click", (e) => {
-  if (!profilePopup.contains(e.target) && e.target !== avatar) {
-    profilePopup.classList.remove("active");
+    document.addEventListener("click", (e) => {
+      if (
+        !popup.contains(e.target) &&
+        e.target !== avatar &&
+        !langMenu.contains(e.target) &&
+        e.target !== langBtn
+      ) {
+        popup.classList.remove("active");
+        langMenu.style.display = "none";
+      }
+    });
+  } else {
+    avatar.style.display = "none";
   }
-  if (!settingsPopup.contains(e.target) && e.target !== settingsIcon) {
-    settingsPopup.classList.remove("active");
-  }
+
+  // Перемикання мови
+  langBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    langMenu.style.display = langMenu.style.display === "flex" ? "none" : "flex";
+  });
+
+  langMenu.querySelectorAll("button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      currentLang = btn.dataset.lang;
+      applyLanguage();
+      langMenu.style.display = "none";
+    });
+  });
 });
-
-// Зміна мови
-window.changeLanguage = function(lang) {
-  applyLanguage(lang);
-  settingsPopup.classList.remove("active");
-};
