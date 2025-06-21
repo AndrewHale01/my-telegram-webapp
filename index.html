@@ -41,15 +41,6 @@
       margin-left: auto;
       margin-right: auto;
     }
-    .avatar {
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      margin-bottom: 18px;
-      border: 3px solid #00bfae;
-      object-fit: cover;
-      background: #111;
-    }
     .username {
       font-size: 1.2rem;
       margin-bottom: 6px;
@@ -75,7 +66,6 @@
     <img id="avatar-small" class="avatar-small" src="" alt="avatar">
   </div>
   <div class="profile">
-    <img id="avatar" class="avatar" src="" alt="avatar">
     <div class="username" id="username"></div>
     <div class="userid" id="userid"></div>
     <div class="wins" id="wins"></div>
@@ -85,7 +75,6 @@
     const user = window.Telegram.WebApp.initDataUnsafe.user;
     if (user) {
       const avatarUrl = `https://t.me/i/userpic/320/${user.id}.jpg`;
-      document.getElementById('avatar').src = avatarUrl;
       document.getElementById('avatar-small').src = avatarUrl;
       document.getElementById('username').textContent = user.username ? '@' + user.username : user.first_name;
       document.getElementById('userid').textContent = 'ID: ' + user.id;
