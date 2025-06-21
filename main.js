@@ -1,85 +1,84 @@
-window.addEventListener("DOMContentLoaded", () => {
-  const tg = window.Telegram.WebApp;
-  const user = tg.initDataUnsafe?.user;
-  const langCode = tg.initDataUnsafe?.user?.language_code || "uk";
+// Дані користувача Telegram
+const user = window.Telegram.WebApp.initDataUnsafe?.user;
 
+// Синхронізація профілю
+if (user) {
   const avatar = document.getElementById("avatar-small");
-  const popup = document.getElementById("profile-popup");
-  const usernameEl = document.getElementById("username");
-  const useridEl = document.getElementById("userid");
-  const winsEl = document.getElementById("wins");
+  const username = document.getElementById("username");
+  const userid = document.getElementById("userid");
 
-  const langBtn = document.getElementById("language-btn");
-  const langMenu = document.getElementById("language-menu");
+  avatar.src = `https://t.me/i/userpic/320/${user.id}.jpg`;
+  username.textContent = user.username ? '@' + user.username : user.first_name;
+  userid.textContent = 'ID: ' + user.id;
+} else {
+  document.getElementById("avatar-small").src = "avatar.png"; // fallback
+  document.getElementById("avatar-small").style.display = "block";
+}
 
-  // Локалізація
-  const translations = {
-    uk: {
-      wins: "Перемоги: ",
-      id: "ID: ",
-    },
-    ru: {
-      wins: "Победы: ",
-      id: "ID: ",
-    },
-    en: {
-      wins: "Wins: ",
-      id: "ID: ",
-    },
-  };
-
-  // Визначаємо початкову мову
-  let currentLang = langCode.startsWith("ru")
-    ? "ru"
-    : langCode.startsWith("en")
-    ? "en"
-    : "uk";
-
-  function applyLanguage() {
-    if (user) {
-      usernameEl.textContent = user.username ? `@${user.username}` : user.first_name;
-      useridEl.textContent = `${translations[currentLang].id}${user.id}`;
-      winsEl.textContent = `${translations[currentLang].wins}0`;
-    }
+// Показ/сховати профіль
+document.getElementById('avatar-small').onclick = function (e) {
+  e.stopPropagation();
+  document.getElementById('profile-popup').classList.add('active');
+};
+function hideProfile() {
+  document.getElementById('profile-popup').classList.remove('active');
+}
+document.addEventListener('click', function (e) {
+  const popup = document.getElementById('profile-popup');
+  const avatar = document.getElementById('avatar-small');
+  if (!popup.contains(e.target) && e.target !== avatar) {
+    popup.classList.remove('active');
   }
-
-  // Показати профіль
-  if (user) {
-    avatar.src = `https://t.me/i/userpic/320/${user.id}.jpg`;
-    applyLanguage();
-
-    avatar.addEventListener("click", (e) => {
-      e.stopPropagation();
-      popup.classList.toggle("active");
-      langMenu.style.display = "none";
-    });
-
-    document.addEventListener("click", (e) => {
-      if (
-        !popup.contains(e.target) &&
-        e.target !== avatar &&
-        !langMenu.contains(e.target) &&
-        e.target !== langBtn
-      ) {
-        popup.classList.remove("active");
-        langMenu.style.display = "none";
-      }
-    });
-  } else {
-    avatar.style.display = "none";
-  }
-
-  // Перемикання мови
-  langBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    langMenu.style.display = langMenu.style.display === "flex" ? "none" : "flex";
-  });
-
-  langMenu.querySelectorAll("button").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      currentLang = btn.dataset.lang;
-      applyLanguage();
-      langMenu.style.display = "none";
-    });
-  });
 });
+
+// Переклад
+const translations = {
+  en: {
+    wins: "Wins: 0",
+    close: "Close",
+    home: "Home",
+    rules: "Rules",
+    awards: "Awards",
+    support: "Support",
+  },
+  uk: {
+    wins: "Перемоги: 0",
+    close: "Закрити",
+    home: "Головна",
+    rules: "Правила",
+    awards: "Нагороди",
+    support: "Підтримка",
+  },
+  ru: {
+    wins: "Победы: 0",
+    close: "Закрыть",
+    home: "Главная",
+    rules: "Правила",
+    awards: "Награды",
+    support: "Поддержка",
+  },
+};
+
+let currentLang = 'uk';
+
+// Визначити мову з Telegram
+const tgLang = window.Telegram.WebApp.initDataUnsafe?.user?.language_code || 'uk';
+if (tgLang.startsWith('en')) currentLang = 'en';
+else if (tgLang.startsWith('ru')) currentLang = 'ru';
+
+// Встановити переклад
+function setLanguage(lang) {
+  const texts = translations[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (texts[key]) el.textContent = texts[key];
+  });
+  currentLang = lang;
+}
+setLanguage(currentLang);
+
+// Перемикання мови
+function toggleLanguage() {
+  const next = currentLang === 'uk' ? 'ru' : currentLang === 'ru' ? 'en' : 'uk';
+  setLanguage(next);
+}
