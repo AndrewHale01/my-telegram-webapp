@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Telegram WebApp</title>
-  <link rel="stylesheet" href="style.css" />
   <style>
     body {
       margin: 0;
@@ -25,6 +24,7 @@
     .lang-btn {
       font-size: 1.5rem;
       cursor: pointer;
+      user-select: none;
     }
 
     .avatar-small {
@@ -81,6 +81,7 @@
       padding: 6px 12px;
       border-radius: 6px;
       cursor: pointer;
+      user-select: none;
     }
 
     .close-btn:hover {
@@ -107,6 +108,7 @@
       color: #ccc;
       font-size: 0.85rem;
       cursor: pointer;
+      user-select: none;
     }
 
     .nav-item span {
@@ -121,13 +123,13 @@
 </head>
 <body>
   <div class="topbar">
-    <div class="lang-btn" id="langBtn">🌐</div>
-    <img id="avatar" class="avatar-small" src="avatar.png" alt="Avatar">
-    <div id="profilePopup" class="profile-popup">
+    <div class="lang-btn" id="langBtn" title="Change language">🌐</div>
+    <img id="avatar" class="avatar-small" src="avatar.png" alt="Avatar" />
+    <div id="profilePopup" class="profile-popup" role="dialog" aria-modal="true" aria-labelledby="username">
       <div class="username" id="username">Username</div>
       <div class="userid" id="userid">ID: 0</div>
       <div class="wins" id="wins">Перемоги: 0</div>
-      <button class="close-btn" id="closeBtn">Закрити</button>
+      <button class="close-btn" id="closeBtn" aria-label="Close profile popup">Закрити</button>
     </div>
   </div>
 
