@@ -18,6 +18,38 @@
       padding: 16px;
       position: relative;
     }
+
+    .language-selector {
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .language-menu {
+      position: absolute;
+      top: 56px;
+      left: 16px;
+      background: #333;
+      border-radius: 8px;
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      z-index: 20;
+    }
+
+    .language-menu button {
+      background: none;
+      border: none;
+      color: #fff;
+      padding: 8px 12px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .language-menu button:hover {
+      background: #444;
+    }
+
     .avatar-small {
       width: 40px;
       height: 40px;
@@ -25,6 +57,7 @@
       border: 2px solid #00bfae;
       cursor: pointer;
     }
+
     .profile-popup {
       display: none;
       position: absolute;
@@ -39,69 +72,58 @@
       align-items: flex-start;
       min-width: 200px;
     }
+
     .profile-popup.active {
       display: flex;
     }
+
     .username {
       font-size: 1.2rem;
       color: #00bfae;
     }
+
     .userid {
       font-size: 0.9rem;
       color: #ccc;
       margin-bottom: 10px;
     }
+
     .wins {
       background: #00bfae;
       padding: 6px 12px;
       border-radius: 6px;
       color: #000;
     }
-    .language-selector {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      font-size: 1.2rem;
-      cursor: pointer;
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .language-menu {
-      position: absolute;
-      top: 56px;
-      left: 16px;
-      background: #333;
-      border-radius: 8px;
-      overflow: hidden;
-      display: none;
-      flex-direction: column;
-      z-index: 20;
-    }
-    .language-menu button {
-      background: none;
-      border: none;
-      color: #fff;
-      padding: 8px 12px;
-      text-align: left;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .language-menu button:hover {
-      background: #444;
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
     }
   </style>
 </head>
 <body>
   <div class="topbar">
-    <div class="language-selector" id="language-btn">🌐</div>
-    <img id="avatar-small" class="avatar-small" src="" alt="Avatar" />
-    <div id="profile-popup" class="profile-popup">
-      <div class="username" id="username">Username</div>
-      <div class="userid" id="userid">ID: 0</div>
-      <div class="wins" id="wins">Wins: 0</div>
+    <div class="topbar-left">
+      <div class="language-selector" id="language-btn">🌐</div>
+      <div id="language-menu" class="language-menu">
+        <button data-lang="uk">Українська 🇺🇦</button>
+        <button data-lang="ru">Русский 🇷🇺</button>
+        <button data-lang="en">English 🇬🇧</button>
+      </div>
     </div>
-    <div id="language-menu" class="language-menu">
-      <button data-lang="uk">Українська 🇺🇦</button>
-      <button data-lang="ru">Русский 🇷🇺</button>
-      <button data-lang="en">English 🇬🇧</button>
+    <div class="topbar-right">
+      <img id="avatar-small" class="avatar-small" src="" alt="Avatar" />
+      <div id="profile-popup" class="profile-popup">
+        <div class="username" id="username">Username</div>
+        <div class="userid" id="userid">ID: 0</div>
+        <div class="wins" id="wins">Wins: 0</div>
+      </div>
     </div>
   </div>
 
