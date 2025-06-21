@@ -1,15 +1,24 @@
-// Переклади для текстів у popup і нижньому меню
+console.log("app.js запущено");
+
+if (!window.Telegram) {
+  window.Telegram = {
+    WebApp: {
+      initDataUnsafe: {
+        user: {
+          id: 123456,
+          first_name: "Тест",
+          username: "test_user",
+          photo_url: "https://telegram.org/img/t_logo.png"
+        }
+      },
+      ready: () => console.log("Telegram WebApp готовий (мок)")
+    }
+  };
+}
+
+const tg = window.Telegram.WebApp;
+
 const translations = {
-  en: {
-    username: "Username",
-    useridPrefix: "ID: ",
-    winsPrefix: "Wins: ",
-    home: "Home",
-    rules: "Rules",
-    awards: "Awards",
-    support: "Support",
-    closeBtn: "Close",
-  },
   uk: {
     username: "Ім'я користувача",
     useridPrefix: "ID: ",
@@ -20,6 +29,16 @@ const translations = {
     support: "Підтримка",
     closeBtn: "Закрити",
   },
+  en: {
+    username: "Username",
+    useridPrefix: "ID: ",
+    winsPrefix: "Wins: ",
+    home: "Home",
+    rules: "Rules",
+    awards: "Awards",
+    support: "Support",
+    closeBtn: "Close",
+  },
   ru: {
     username: "Имя пользователя",
     useridPrefix: "ID: ",
@@ -29,84 +48,62 @@ const translations = {
     awards: "Награды",
     support: "Поддержка",
     closeBtn: "Закрыть",
-  },
+  }
 };
 
-// Поточна мова за замовчуванням
-let currentLang = 'uk';
+let currentLang = "uk";
 
-// Telegram WebApp API
-const tg = window.Telegram?.WebApp;
+const langBtn = document.getElementById("langBtn");
+const profilePopup = document.getElementById("profilePopup");
+const closeBtn = document.getElementById("closeBtn");
+const avatar = document.getElementById("avatar");
 
-// DOM елементи
-const langBtn = document.getElementById('langBtn');
-const profilePopup = document.getElementById('profilePopup');
-const closeBtn = document.getElementById('closeBtn');
-const avatar = document.getElementById('avatar');
+const usernameEl = document.getElementById("username");
+const useridEl = document.getElementById("userid");
+const winsEl = document.getElementById("wins");
 
-const usernameEl = document.getElementById('username');
-const useridEl = document.getElementById('userid');
-const winsEl = document.getElementById('wins');
+function translate(lang) {
+  const user = tg?.initDataUnsafe?.user || {};
 
-// Логіка перемикання мов
-function translatePage(lang) {
-  currentLang = lang;
+  usernameEl.textContent = user.username || user.first_name || translations[lang].username;
+  useridEl.textContent = translations[lang].useridPrefix + (user.id || 0);
 
-  // Оновлюємо тексти у профілі
-  const user = tg?.initDataUnsafe?.user || null;
-  usernameEl.textContent = user ? user.username || user.first_name || translations[lang].username : translations[lang].username;
-  useridEl.textContent = user ? translations[lang].useridPrefix + user.id : translations[lang].useridPrefix + '0';
-
-  // Для прикладу, кількість перемог з localStorage або 0
-  const winsCount = localStorage.getItem('winsCount') || '0';
+  const winsCount = localStorage.getItem("winsCount") || 5;
   winsEl.textContent = translations[lang].winsPrefix + winsCount;
 
-  // Оновлюємо кнопки в нижньому меню
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
     if (translations[lang][key]) {
       el.textContent = translations[lang][key];
     }
   });
 
-  // Кнопка Закрити
   closeBtn.textContent = translations[lang].closeBtn;
-
-  // Змінимо alt аватару для доступності
-  avatar.alt = user ? (user.first_name || user.username) + " avatar" : "Avatar";
 }
 
-// Показ/схов профіль при кліку на аватар
-avatar.addEventListener('click', () => {
-  profilePopup.classList.toggle('active');
+langBtn.addEventListener("click", () => {
+  if (currentLang === "uk") currentLang = "en";
+  else if (currentLang === "en") currentLang = "ru";
+  else currentLang = "uk";
+
+  translate(currentLang);
 });
 
-// Закриття профілю кнопкою Закрити
-closeBtn.addEventListener('click', () => {
-  profilePopup.classList.remove('active');
+avatar.addEventListener("click", () => {
+  profilePopup.classList.toggle("active");
 });
 
-// Перемикання мов по кнопці (кожен клік — нова мова циклом)
-langBtn.addEventListener('click', () => {
-  if (currentLang === 'uk') currentLang = 'en';
-  else if (currentLang === 'en') currentLang = 'ru';
-  else currentLang = 'uk';
-
-  translatePage(currentLang);
+closeBtn.addEventListener("click", () => {
+  profilePopup.classList.remove("active");
 });
 
-// При завантаженні сторінки
-window.addEventListener('DOMContentLoaded', () => {
-  translatePage(currentLang);
+window.addEventListener("DOMContentLoaded", () => {
+  translate(currentLang);
 
-  // Встановимо аватар, якщо є фото з Telegram
-  const user = tg?.initDataUnsafe?.user || null;
-  if (user && user.photo_url) {
+  const user = tg?.initDataUnsafe?.user;
+  if (user?.photo_url) {
     avatar.src = user.photo_url;
   }
 
-  // Додатково можна ініціалізувати Telegram WebApp:
-  if (tg) {
-    tg.ready();
-  }
+  tg.ready?.();
 });
