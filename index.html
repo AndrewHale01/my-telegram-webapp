@@ -115,10 +115,83 @@
       from { opacity: 0; transform: scale(0.95);}
       to { opacity: 1; transform: scale(1);}
     }
+    .news-section {
+  margin: 0 0 24px 0;
+  padding: 0 16px;
+}
+.news-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #00bfae;
+  letter-spacing: 0.5px;
+}
+.news-list {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+}
+.news-card {
+  min-width: 220px;
+  background: #333;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px #0005;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.news-card h4 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  color: #00bfae;
+}
+.news-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #fff;
+}
+.tournaments-section {
+  margin: 0 0 24px 0;
+  padding: 0 16px;
+}
+.tournaments-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #00bfae;
+  letter-spacing: 0.5px;
+}
+.tournament-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tournament-card {
+  background: #333;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px #0005;
+  display: flex;
+  flex-direction: column;
+}
+.tournament-card h4 {
+  margin: 0 0 6px 0;
+  font-size: 1rem;
+  color: #00bfae;
+}
+.tournament-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #fff;
+}
   </style>
 </head>
 <body>
-  <div class="topbar">
+  <div class="justify-content: space-between">
     <div class="lang-btn" id="langBtn">🌐</div>
     <img id="avatar" class="avatar-small" src="avatar.png" alt="Avatar">
     <div id="profilePopup" class="popup">
@@ -133,6 +206,40 @@
       <button class="lang-option" data-lang="pl">Polski</button>
     </div>
   </div>
+
+  <!-- Новини -->
+<div class="news-section">
+  <div class="news-title" data-i18n="news">Новини</div>
+  <div class="news-list" id="newsList">
+    <div class="news-card">
+      <h4 data-i18n="news1title">Новий турнір!</h4>
+      <p data-i18n="news1desc">Реєстрація на літній турнір вже відкрита!</p>
+    </div>
+    <div class="news-card">
+      <h4 data-i18n="news2title">Оновлення</h4>
+      <p data-i18n="news2desc">Додано підтримку англійської мови.</p>
+    </div>
+    <div class="news-card">
+      <h4 data-i18n="news3title">Вітаємо переможців!</h4>
+      <p data-i18n="news3desc">Дивіться список переможців у розділі "Мої Нагороди".</p>
+    </div>
+  </div>
+</div>
+
+<!-- Турніри -->
+<div class="tournaments-section">
+  <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
+  <div class="tournament-list" id="tournamentList">
+    <div class="tournament-card">
+      <h4>Chess Summer Cup</h4>
+      <p data-i18n="tournament1desc">Початок: 1 липня. Призовий фонд: 5000₴</p>
+    </div>
+    <div class="tournament-card">
+      <h4>Quiz Battle</h4>
+      <p data-i18n="tournament2desc">Початок: 10 липня. Призовий фонд: 2000₴</p>
+    </div>
+  </div>
+</div>
 
   <div class="bottom-nav">
     <div class="nav-item"><span>🏠</span><p data-i18n="home">Головна</p></div>
