@@ -1,7 +1,4 @@
 const tg = window.Telegram.WebApp;
-
-const langSelect = document.getElementById("langSelect");
-const langBtn = document.getElementById("langBtn");
 const avatar = document.getElementById("avatar");
 const profilePopup = document.getElementById("profilePopup");
 const closeBtn = document.getElementById("closeBtn");
@@ -10,49 +7,66 @@ const usernameEl = document.getElementById("username");
 const useridEl = document.getElementById("userid");
 const winsEl = document.getElementById("wins");
 
+const langBtn = document.getElementById("langBtn");
+const langPopup = document.getElementById("langPopup");
+const langOptions = document.querySelectorAll(".lang-option");
+
+// Переклади
 const translations = {
   uk: {
-    username: "Ім'я користувача",
-    useridPrefix: "ID: ",
-    winsPrefix: "Перемоги: ",
     home: "Головна",
     rules: "Правила",
     awards: "Нагороди",
     support: "Підтримка",
-    closeBtn: "Закрити",
+    wins: "Перемоги",
+    close: "Закрити"
   },
   en: {
-    username: "Username",
-    useridPrefix: "ID: ",
-    winsPrefix: "Wins: ",
     home: "Home",
     rules: "Rules",
     awards: "Awards",
     support: "Support",
-    closeBtn: "Close",
+    wins: "Wins",
+    close: "Close"
   },
   ru: {
-    username: "Имя пользователя",
-    useridPrefix: "ID: ",
-    winsPrefix: "Побед: ",
     home: "Главная",
     rules: "Правила",
     awards: "Награды",
     support: "Поддержка",
-    closeBtn: "Закрыть",
+    wins: "Победы",
+    close: "Закрыть"
   }
 };
 
-let currentLang = "uk";
+// Аватар → показати профіль
+avatar.addEventListener("click", () => {
+  profilePopup.classList.toggle("active");
+  langPopup.classList.remove("active");
+});
 
+// Закрити профіль
+closeBtn.addEventListener("click", () => {
+  profilePopup.classList.remove("active");
+});
+
+// Кнопка мови
+langBtn.addEventListener("click", () => {
+  langPopup.classList.toggle("active");
+  profilePopup.classList.remove("active");
+});
+
+// Обробка вибору мови
+langOptions.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const lang = btn.getAttribute("data-lang");
+    applyTranslations(lang);
+    langPopup.classList.remove("active");
+  });
+});
+
+// Функція перекладу
 function applyTranslations(lang) {
-  const user = tg.initDataUnsafe?.user || {};
-  usernameEl.textContent = user.username || user.first_name || translations[lang].username;
-  useridEl.textContent = translations[lang].useridPrefix + (user.id || 0);
-
-  const winsCount = localStorage.getItem("winsCount") || 5;
-  winsEl.textContent = translations[lang].winsPrefix + winsCount;
-
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
     if (translations[lang][key]) {
@@ -60,48 +74,23 @@ function applyTranslations(lang) {
     }
   });
 
-  closeBtn.textContent = translations[lang].closeBtn;
+  winsEl.textContent = `${translations[lang].wins}: ${winsEl.dataset.count || 0}`;
+  closeBtn.textContent = translations[lang].close;
 }
 
-// Toggle profile popup
-avatar.addEventListener("click", () => {
-  profilePopup.classList.toggle("active");
-  langSelect.style.display = "none"; // auto-hide lang menu
-});
-
-// Toggle language menu
-langBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  langSelect.style.display = langSelect.style.display === "flex" ? "none" : "flex";
-  langSelect.style.flexDirection = "column";
-});
-
-// Click outside to close dropdown
-window.addEventListener("click", () => {
-  langSelect.style.display = "none";
-});
-
-// Close profile popup
-closeBtn.addEventListener("click", () => {
-  profilePopup.classList.remove("active");
-});
-
-// Language buttons
-document.querySelectorAll("#langSelect button").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const selectedLang = btn.getAttribute("data-lang");
-    currentLang = selectedLang;
-    applyTranslations(currentLang);
-    langSelect.style.display = "none";
-  });
-});
-
-// Init on load
-window.addEventListener("DOMContentLoaded", () => {
+// Отримати юзера з Telegram WebApp
+function initUserProfile() {
   const user = tg.initDataUnsafe?.user;
-  if (user?.photo_url) {
-    avatar.src = user.photo_url;
+  if (user) {
+    usernameEl.textContent = user.username || `${user.first_name} ${user.last_name || ""}`;
+    useridEl.textContent = `ID: ${user.id}`;
+    winsEl.dataset.count = 0;
+    winsEl.textContent = `Перемоги: 0`;
+  } else {
+    console.warn("Telegram user not found. Open inside Telegram app.");
   }
-  applyTranslations(currentLang);
-  tg.ready?.();
-});
+}
+
+// Запуск
+initUserProfile();
+applyTranslations("uk");
