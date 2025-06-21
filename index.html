@@ -9,12 +9,24 @@
       background: #222;
       color: #fff;
       font-family: 'Segoe UI', Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
       margin: 0;
+      min-height: 100vh;
+    }
+    .topbar {
+      width: 100vw;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 12px 18px 0 0;
+      box-sizing: border-box;
+    }
+    .avatar-small {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #00bfae;
+      object-fit: cover;
+      background: #111;
     }
     .profile {
       margin-top: 40px;
@@ -25,6 +37,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      max-width: 340px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .avatar {
       width: 96px;
@@ -56,6 +71,9 @@
   </style>
 </head>
 <body>
+  <div class="topbar">
+    <img id="avatar-small" class="avatar-small" src="" alt="avatar">
+  </div>
   <div class="profile">
     <img id="avatar" class="avatar" src="" alt="avatar">
     <div class="username" id="username"></div>
@@ -66,13 +84,15 @@
     // Отримати дані користувача з Telegram WebApp
     const user = window.Telegram.WebApp.initDataUnsafe.user;
     if (user) {
-      document.getElementById('avatar').src = `https://t.me/i/userpic/320/${user.id}.jpg`;
+      const avatarUrl = `https://t.me/i/userpic/320/${user.id}.jpg`;
+      document.getElementById('avatar').src = avatarUrl;
+      document.getElementById('avatar-small').src = avatarUrl;
       document.getElementById('username').textContent = user.username ? '@' + user.username : user.first_name;
       document.getElementById('userid').textContent = 'ID: ' + user.id;
-      // Тут можна підставити кількість виграних турнірів з API, зараз просто 0
       document.getElementById('wins').textContent = 'Wins: 0';
     } else {
       document.querySelector('.profile').innerHTML = '<b>Cannot get user info. Please open via Telegram.</b>';
+      document.getElementById('avatar-small').style.display = 'none';
     }
   </script>
 </body>
