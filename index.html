@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Telegram Profile</title>
@@ -12,15 +12,17 @@
       margin: 0;
       min-height: 100vh;
     }
+
     .topbar {
       width: 100vw;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
-      padding: 12px 18px 0 0;
+      padding: 12px 18px 0 18px;
       box-sizing: border-box;
       position: relative;
     }
+
     .avatar-small {
       width: 40px;
       height: 40px;
@@ -31,9 +33,11 @@
       cursor: pointer;
       transition: box-shadow 0.2s;
     }
+
     .avatar-small:hover {
       box-shadow: 0 0 0 4px #00bfae55;
     }
+
     .profile-popup {
       display: none;
       flex-direction: column;
@@ -49,19 +53,23 @@
       min-width: 220px;
       animation: fadeIn 0.2s;
     }
+
     .profile-popup.active {
       display: flex;
     }
+
     .username {
       font-size: 1.2rem;
       margin-bottom: 6px;
       color: #00bfae;
     }
+
     .userid {
       font-size: 1rem;
       margin-bottom: 16px;
       color: #aaa;
     }
+
     .wins {
       font-size: 1.1rem;
       color: #fff;
@@ -70,6 +78,7 @@
       border-radius: 8px;
       margin-top: 10px;
     }
+
     .close-btn {
       margin-top: 18px;
       padding: 6px 18px;
@@ -81,9 +90,56 @@
       font-size: 1rem;
       transition: background 0.2s;
     }
+
     .close-btn:hover {
       background: #222;
     }
+
+    .settings-icon {
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      fill: #00bfae;
+      transition: transform 0.2s;
+    }
+
+    .settings-icon:hover {
+      transform: rotate(20deg);
+    }
+
+    .settings-popup {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 18px;
+      background: #333;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      z-index: 10;
+      flex-direction: column;
+      animation: fadeIn 0.2s;
+    }
+
+    .settings-popup.active {
+      display: flex;
+    }
+
+    .settings-popup button {
+      background: #444;
+      border: none;
+      color: #fff;
+      padding: 8px 12px;
+      margin: 4px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .settings-popup button:hover {
+      background: #555;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95);}
       to { opacity: 1; transform: scale(1);}
@@ -92,57 +148,31 @@
 </head>
 <body>
   <div class="topbar">
-    <img id="avatar-small" class="avatar-small" src="" alt="avatar" title="Tap to view profile">
+    <!-- Гайка -->
+    <svg id="settings-icon" class="settings-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7zm9.43-4.47l-1.42-1.42.36-1.95a.5.5 0 0 0-.64-.59l-1.96.36-1.42-1.42.71-1.91a.5.5 0 0 0-.59-.64l-1.91.71-1.42-1.42.36-1.96a.5.5 0 0 0-.59-.64l-1.95.36L8.97 2.57a.5.5 0 0 0-.64.59l.36 1.96L6.57 6.5 4.66 5.79a.5.5 0 0 0-.64.59l.71 1.91L2.57 9.5a.5.5 0 0 0 0 .71l1.42 1.42-.36 1.96a.5.5 0 0 0 .64.59l1.96-.36 1.42 1.42-.71 1.91a.5.5 0 0 0 .59.64l1.91-.71 1.42 1.42-.36 1.95a.5.5 0 0 0 .59.64l1.95-.36 1.42 1.42a.5.5 0 0 0 .64-.59l-.36-1.96 1.91-.71a.5.5 0 0 0 .59-.64l-.71-1.91 1.42-1.42 1.96.36a.5.5 0 0 0 .64-.59l-.36-1.95 1.42-1.42a.5.5 0 0 0 0-.71z"/>
+    </svg>
+
+    <!-- Аватар -->
+    <img id="avatar-small" class="avatar-small" src="" alt="avatar">
+
+    <!-- Профіль -->
     <div id="profile-popup" class="profile-popup">
       <div class="username" id="username">Loading...</div>
       <div class="userid" id="userid"></div>
-      <div class="wins" id="wins">Wins: 0</div>
-      <button class="close-btn" onclick="hideProfile()">Close</button>
+      <div class="wins" id="wins" data-i18n="wins">Wins: 0</div>
+      <button class="close-btn" id="close-btn" data-i18n="close">Close</button>
+    </div>
+
+    <!-- Мови -->
+    <div id="settings-popup" class="settings-popup">
+      <button onclick="changeLanguage('uk')">Українська</button>
+      <button onclick="changeLanguage('en')">English</button>
     </div>
   </div>
 
+  <!-- Telegram API + JS -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script>
-    // Ініціалізація Telegram WebApp
-    window.Telegram.WebApp.ready();
-
-    const avatar = document.getElementById('avatar-small');
-    const popup = document.getElementById('profile-popup');
-
-    const user = window.Telegram.WebApp.initDataUnsafe?.user;
-
-    if (user) {
-      const avatarUrl = `https://t.me/i/userpic/320/${user.id}.jpg`;
-
-      avatar.src = avatarUrl;
-      avatar.style.display = 'block';
-
-      document.getElementById('username').textContent = user.username 
-        ? '@' + user.username 
-        : `${user.first_name} ${user.last_name || ''}`;
-      document.getElementById('userid').textContent = 'ID: ' + user.id;
-      document.getElementById('wins').textContent = 'Wins: 0'; // Тут можна оновити через API
-    } else {
-      avatar.style.display = 'none';
-      console.warn('Telegram user not found');
-    }
-
-    // Відображення профілю
-    avatar.addEventListener('click', (e) => {
-      e.stopPropagation();
-      popup.classList.add('active');
-    });
-
-    function hideProfile() {
-      popup.classList.remove('active');
-    }
-
-    // Закриття popup по кліку поза межами
-    document.addEventListener('click', function (e) {
-      if (!popup.contains(e.target) && e.target !== avatar) {
-        popup.classList.remove('active');
-      }
-    });
-  </script>
+  <script src="main.js"></script>
 </body>
 </html>
