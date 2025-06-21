@@ -14,7 +14,7 @@
     }
     .topbar {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       padding: 16px;
       position: relative;
@@ -22,8 +22,7 @@
     .lang-btn {
       font-size: 1.5rem;
       cursor: pointer;
-      margin-left: 0;
-      margin-right: 0;
+      margin-right: 16px;
     }
     .avatar-small {
       width: 40px;
@@ -53,89 +52,37 @@
       align-items: center;
       animation: fadeIn 0.2s;
     }
-    #langPopup { left: 0; right: auto; }
-    #profilePopup { right: 0; left: auto; }
-    .popup.active { display: flex; }
-    .username { font-size: 1.2rem; color: #00bfae; margin-bottom: 6px; }
-    .userid { font-size: 0.9rem; color: #ccc; margin-bottom: 10px; }
-    .wins { background: #00bfae; padding: 6px 12px; border-radius: 6px; color: #000; margin-bottom: 10px; }
+    .popup.active {
+      display: flex;
+    }
+    .username {
+      font-size: 1.2rem;
+      color: #00bfae;
+      margin-bottom: 6px;
+    }
+    .userid {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+    .wins {
+      background: #00bfae;
+      padding: 6px 12px;
+      border-radius: 6px;
+      color: #000;
+      margin-bottom: 10px;
+    }
     .lang-option {
-      background: #444; color: #fff; border: none; padding: 6px 12px;
-      border-radius: 6px; cursor: pointer; margin-top: 5px;
-    }
-    .lang-option:hover { background: #555; }
-    .news-section {
-      margin: 0 0 24px 0;
-      padding: 0 16px;
-    }
-    .news-title {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 8px;
-      color: #00bfae;
-      letter-spacing: 0.5px;
-    }
-    .news-list {
-      display: flex;
-      overflow-x: auto;
-      gap: 12px;
-      padding-bottom: 8px;
-      scrollbar-width: thin;
-    }
-    .news-card {
-      min-width: 220px;
-      background: #333;
-      border-radius: 12px;
-      padding: 14px 16px;
-      box-shadow: 0 2px 8px #0005;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .news-card h4 {
-      margin: 0 0 8px 0;
-      font-size: 1rem;
-      color: #00bfae;
-    }
-    .news-card p {
-      margin: 0;
-      font-size: 0.95rem;
+      background: #444;
       color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 5px;
     }
-    .tournaments-section {
-      margin: 0 0 24px 0;
-      padding: 0 16px;
-    }
-    .tournaments-title {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 8px;
-      color: #00bfae;
-      letter-spacing: 0.5px;
-    }
-    .tournament-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .tournament-card {
-      background: #333;
-      border-radius: 12px;
-      padding: 14px 16px;
-      box-shadow: 0 2px 8px #0005;
-      display: flex;
-      flex-direction: column;
-    }
-    .tournament-card h4 {
-      margin: 0 0 6px 0;
-      font-size: 1rem;
-      color: #00bfae;
-    }
-    .tournament-card p {
-      margin: 0;
-      font-size: 0.95rem;
-      color: #fff;
+    .lang-option:hover {
+      background: #555;
     }
     .bottom-nav {
       position: fixed;
@@ -172,62 +119,25 @@
 </head>
 <body>
   <div class="topbar">
-    <div style="position:relative;">
-      <div class="lang-btn" id="langBtn">🌐</div>
-      <div id="langPopup" class="popup">
-        <button class="lang-option" data-lang="uk">Українська</button>
-        <button class="lang-option" data-lang="en">English</button>
-        <button class="lang-option" data-lang="ru">Русский</button>
-      </div>
+    <div class="lang-btn" id="langBtn">🌐</div>
+    <img id="avatar" class="avatar-small" src="avatar.png" alt="Avatar">
+    <div id="profilePopup" class="popup">
+      <div class="username" id="username">Username</div>
+      <div class="userid" id="userid">ID: 0</div>
+      <div class="wins" id="wins" data-count="0">Перемоги: 0</div>
     </div>
-    <div style="position:relative;">
-      <img id="avatar" class="avatar-small" src="avatar.png" alt="Avatar">
-      <div id="profilePopup" class="popup">
-        <div class="username" id="username">Username</div>
-        <div class="userid" id="userid">ID: 0</div>
-        <div class="wins" id="wins" data-count="0">Перемоги: 0</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Новини -->
-  <div class="news-section">
-    <div class="news-title" data-i18n="news">Новини</div>
-    <div class="news-list" id="newsList">
-      <div class="news-card">
-        <h4 data-i18n="news1title">Новий турнір!</h4>
-        <p data-i18n="news1desc">Реєстрація на літній турнір вже відкрита!</p>
-      </div>
-      <div class="news-card">
-        <h4 data-i18n="news2title">Оновлення</h4>
-        <p data-i18n="news2desc">Додано підтримку англійської мови.</p>
-      </div>
-      <div class="news-card">
-        <h4 data-i18n="news3title">Вітаємо переможців!</h4>
-        <p data-i18n="news3desc">Дивіться список переможців у розділі "Мої Нагороди".</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Турніри -->
-  <div class="tournaments-section">
-    <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
-    <div class="tournament-list" id="tournamentList">
-      <div class="tournament-card">
-        <h4>Chess Summer Cup</h4>
-        <p data-i18n="tournament1desc">Початок: 1 липня. Призовий фонд: 5000₴</p>
-      </div>
-      <div class="tournament-card">
-        <h4>Quiz Battle</h4>
-        <p data-i18n="tournament2desc">Початок: 10 липня. Призовий фонд: 2000₴</p>
-      </div>
+    <div id="langPopup" class="popup">
+      <button class="lang-option" data-lang="uk">Українська</button>
+      <button class="lang-option" data-lang="en">English</button>
+      <button class="lang-option" data-lang="ru">Русский</button>
+      <button class="lang-option" data-lang="pl">Polski</button>
     </div>
   </div>
 
   <div class="bottom-nav">
     <div class="nav-item"><span>🏠</span><p data-i18n="home">Головна</p></div>
     <div class="nav-item"><span>📄</span><p data-i18n="rules">Правила</p></div>
-    <div class="nav-item"><span>🏆</span><p data-i18n="myawards">Мої Нагороди</p></div>
+    <div class="nav-item"><span>🏆</span><p data-i18n="awards">Нагороди</p></div>
     <div class="nav-item"><span>🤖</span><p data-i18n="support">Підтримка</p></div>
   </div>
 
@@ -249,66 +159,41 @@
       uk: {
         home: "Головна",
         rules: "Правила",
-        myawards: "Мої Нагороди",
+        awards: "Нагороди",
         support: "Підтримка",
-        wins: "Перемоги",
-        news: "Новини",
-        tournaments: "Турніри",
-        news1title: "Новий турнір!",
-        news1desc: "Реєстрація на літній турнір вже відкрита!",
-        news2title: "Оновлення",
-        news2desc: "Додано підтримку англійської мови.",
-        news3title: "Вітаємо переможців!",
-        news3desc: "Дивіться список переможців у розділі \"Мої Нагороди\".",
-        tournament1desc: "Початок: 1 липня. Призовий фонд: 5000₴",
-        tournament2desc: "Початок: 10 липня. Призовий фонд: 2000₴"
+        wins: "Перемоги"
       },
       en: {
         home: "Home",
         rules: "Rules",
-        myawards: "My Awards",
+        awards: "Awards",
         support: "Support",
-        wins: "Wins",
-        news: "News",
-        tournaments: "Tournaments",
-        news1title: "New Tournament!",
-        news1desc: "Registration for the Summer Cup is open!",
-        news2title: "Update",
-        news2desc: "English language support added.",
-        news3title: "Congratulations to the winners!",
-        news3desc: "See the list of winners in 'My Awards'.",
-        tournament1desc: "Start: July 1. Prize fund: 5000₴",
-        tournament2desc: "Start: July 10. Prize fund: 2000₴"
+        wins: "Wins"
       },
       ru: {
         home: "Главная",
         rules: "Правила",
-        myawards: "Мои Награды",
+        awards: "Награды",
         support: "Поддержка",
-        wins: "Победы",
-        news: "Новости",
-        tournaments: "Турниры",
-        news1title: "Новый турнир!",
-        news1desc: "Регистрация на летний турнир уже открыта!",
-        news2title: "Обновление",
-        news2desc: "Добавлена поддержка английского языка.",
-        news3title: "Поздравляем победителей!",
-        news3desc: "Смотрите список победителей в разделе 'Мои Награды'.",
-        tournament1desc: "Старт: 1 июля. Призовой фонд: 5000₴",
-        tournament2desc: "Старт: 10 июля. Призовой фонд: 2000₴"
+        wins: "Победы"
+      },
+      pl: {
+        home: "Strona główna",
+        rules: "Zasady",
+        awards: "Nagrody",
+        support: "Wsparcie",
+        wins: "Zwycięstwa"
       }
     };
 
     // Показати/сховати профіль
-    avatar.addEventListener("click", (e) => {
-      e.stopPropagation();
+    avatar.addEventListener("click", () => {
       profilePopup.classList.toggle("active");
       langPopup.classList.remove("active");
     });
 
     // Показати/сховати вибір мови
-    langBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
+    langBtn.addEventListener("click", () => {
       langPopup.classList.toggle("active");
       profilePopup.classList.remove("active");
     });
