@@ -12,7 +12,6 @@
       font-family: Arial, sans-serif;
       padding-bottom: 60px;
     }
-
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -20,12 +19,10 @@
       padding: 16px;
       position: relative;
     }
-
     .lang-btn {
       font-size: 1.5rem;
       cursor: pointer;
     }
-
     .avatar-small {
       width: 40px;
       height: 40px;
@@ -35,9 +32,7 @@
       object-fit: cover;
       background: #111;
     }
-
-    .profile-popup,
-    .lang-popup {
+    .popup {
       display: none;
       position: absolute;
       top: 60px;
@@ -50,32 +45,24 @@
       flex-direction: column;
       min-width: 200px;
     }
-
-    .profile-popup.active,
-    .lang-popup.active {
+    .popup.active {
       display: flex;
     }
-
     .username {
       font-size: 1.2rem;
       color: #00bfae;
     }
-
     .userid {
       font-size: 0.9rem;
       color: #ccc;
       margin-bottom: 10px;
     }
-
     .wins {
       background: #00bfae;
       padding: 6px 12px;
       border-radius: 6px;
       color: #000;
-      margin-bottom: 10px;
     }
-
-    .close-btn,
     .lang-option {
       background: #444;
       color: #fff;
@@ -85,12 +72,9 @@
       cursor: pointer;
       margin-top: 5px;
     }
-
-    .close-btn:hover,
     .lang-option:hover {
       background: #555;
     }
-
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -103,7 +87,6 @@
       padding: 8px 0;
       z-index: 100;
     }
-
     .nav-item {
       display: flex;
       flex-direction: column;
@@ -112,12 +95,10 @@
       font-size: 0.85rem;
       cursor: pointer;
     }
-
     .nav-item span {
       font-size: 1.2rem;
       margin-bottom: 2px;
     }
-
     .nav-item:hover {
       color: #00bfae;
     }
@@ -127,13 +108,14 @@
   <div class="topbar">
     <div class="lang-btn" id="langBtn">🌐</div>
     <img id="avatar" class="avatar-small" src="avatar.png" alt="Avatar">
-    <div id="profilePopup" class="profile-popup">
+    
+    <div id="profilePopup" class="popup">
       <div class="username" id="username">Username</div>
       <div class="userid" id="userid">ID: 0</div>
-      <div class="wins" id="wins">Перемоги: 0</div>
-      <button class="close-btn" id="closeBtn">Закрити</button>
+      <div class="wins" id="wins" data-count="0">Перемоги: 0</div>
     </div>
-    <div id="langPopup" class="lang-popup">
+
+    <div id="langPopup" class="popup">
       <button class="lang-option" data-lang="uk">Українська</button>
       <button class="lang-option" data-lang="en">English</button>
       <button class="lang-option" data-lang="ru">Русский</button>
@@ -147,7 +129,6 @@
     <div class="nav-item"><span>🤖</span><p data-i18n="support">Підтримка</p></div>
   </div>
 
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="app.js?v=1.1"></script>
+  <script src="main.js"></script>
 </body>
 </html>
