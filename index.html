@@ -10,7 +10,7 @@
       background: #222;
       color: #fff;
       font-family: Arial, sans-serif;
-      padding-bottom: 60px;
+      min-height: 100vh;
     }
     .topbar {
       display: flex;
@@ -84,33 +84,6 @@
     .lang-option:hover {
       background: #555;
     }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #111;
-      display: flex;
-      justify-content: space-around;
-      border-top: 1px solid #333;
-      padding: 8px 0;
-      z-index: 100;
-    }
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #ccc;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-    .nav-item span {
-      font-size: 1.2rem;
-      margin-bottom: 2px;
-    }
-    .nav-item:hover {
-      color: #00bfae;
-    }
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95);}
       to { opacity: 1; transform: scale(1);}
@@ -133,64 +106,41 @@
     </div>
   </div>
 
-  <div class="bottom-nav">
-    <div class="nav-item"><span>🏠</span><p data-i18n="home">Головна</p></div>
-    <div class="nav-item"><span>📄</span><p data-i18n="rules">Правила</p></div>
-    <div class="nav-item"><span>🏆</span><p data-i18n="awards">Нагороди</p></div>
-    <div class="nav-item"><span>🤖</span><p data-i18n="support">Підтримка</p></div>
-  </div>
-
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
+    // 1. Telegram WebApp об'єкт
     const tg = window.Telegram.WebApp;
 
+    // 2. DOM-елементи
     const avatar = document.getElementById("avatar");
     const profilePopup = document.getElementById("profilePopup");
     const langBtn = document.getElementById("langBtn");
     const langPopup = document.getElementById("langPopup");
     const langOptions = document.querySelectorAll(".lang-option");
-
     const usernameEl = document.getElementById("username");
     const useridEl = document.getElementById("userid");
     const winsEl = document.getElementById("wins");
 
+    // 3. Переклади
     const translations = {
-      uk: {
-        home: "Головна",
-        rules: "Правила",
-        awards: "Нагороди",
-        support: "Підтримка",
-        wins: "Перемоги"
-      },
-      en: {
-        home: "Home",
-        rules: "Rules",
-        awards: "Awards",
-        support: "Support",
-        wins: "Wins"
-      },
-      ru: {
-        home: "Главная",
-        rules: "Правила",
-        awards: "Награды",
-        support: "Поддержка",
-        wins: "Победы"
-      }
+      uk: { wins: "Перемоги" },
+      en: { wins: "Wins" },
+      ru: { wins: "Победы" }
     };
 
-    // Показати/сховати профіль
+    // 4. Показати/сховати профіль
     avatar.addEventListener("click", () => {
       profilePopup.classList.toggle("active");
       langPopup.classList.remove("active");
     });
 
-    // Показати/сховати вибір мови
+    // 5. Показати/сховати вибір мови
     langBtn.addEventListener("click", () => {
       langPopup.classList.toggle("active");
       profilePopup.classList.remove("active");
     });
 
-    // Вибір мови
+    // 6. Вибір мови
     langOptions.forEach(btn => {
       btn.addEventListener("click", () => {
         const lang = btn.dataset.lang;
@@ -200,17 +150,13 @@
       });
     });
 
-    // Переклад
+    // 7. Переклад
     function applyTranslations(lang) {
-      document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.dataset.i18n;
-        el.textContent = translations[lang][key];
-      });
       const count = winsEl.dataset.count || 0;
       winsEl.textContent = `${translations[lang].wins}: ${count}`;
     }
 
-    // ініціалізація користувача та мови
+    // 8. ініціалізація користувача та мови
     window.addEventListener("DOMContentLoaded", () => {
       // Профіль
       if (tg.initDataUnsafe?.user) {
@@ -224,7 +170,7 @@
       applyTranslations(savedLang);
     });
 
-    // Закриття popup по кліку поза ним
+    // 9. Закриття popup по кліку поза ним
     document.addEventListener("click", function(e) {
       if (!profilePopup.contains(e.target) && e.target !== avatar) {
         profilePopup.classList.remove("active");
