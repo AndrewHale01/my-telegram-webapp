@@ -19,6 +19,7 @@
       align-items: center;
       padding: 12px 18px 0 0;
       box-sizing: border-box;
+      position: relative; /* Додаємо для абсолютного позиціонування popup */
     }
     .avatar-small {
       width: 40px;
@@ -43,7 +44,7 @@
       padding: 24px 32px;
       position: absolute;
       top: 60px;
-      right: 30px;
+      right: 0;
       z-index: 10;
       min-width: 220px;
       animation: fadeIn 0.2s;
