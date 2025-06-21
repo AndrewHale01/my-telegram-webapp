@@ -27,19 +27,29 @@
       border: 2px solid #00bfae;
       object-fit: cover;
       background: #111;
+      cursor: pointer;
+      transition: box-shadow 0.2s;
     }
-    .profile {
-      margin-top: 40px;
-      background: #333;
-      padding: 32px 24px;
-      border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
-      display: flex;
+    .avatar-small:hover {
+      box-shadow: 0 0 0 4px #00bfae55;
+    }
+    .profile-popup {
+      display: none;
       flex-direction: column;
       align-items: center;
-      max-width: 340px;
-      margin-left: auto;
-      margin-right: auto;
+      background: #333;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      padding: 24px 32px;
+      position: absolute;
+      top: 60px;
+      right: 30px;
+      z-index: 10;
+      min-width: 220px;
+      animation: fadeIn 0.2s;
+    }
+    .profile-popup.active {
+      display: flex;
     }
     .username {
       font-size: 1.2rem;
@@ -59,16 +69,35 @@
       border-radius: 8px;
       margin-top: 10px;
     }
+    .close-btn {
+      margin-top: 18px;
+      padding: 6px 18px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .close-btn:hover {
+      background: #222;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95);}
+      to { opacity: 1; transform: scale(1);}
+    }
   </style>
 </head>
 <body>
   <div class="topbar">
-    <img id="avatar-small" class="avatar-small" src="" alt="avatar">
-  </div>
-  <div class="profile">
-    <div class="username" id="username"></div>
-    <div class="userid" id="userid"></div>
-    <div class="wins" id="wins"></div>
+    <img id="avatar-small" class="avatar-small" src="" alt="avatar" title="Tap to view profile">
+    <div id="profile-popup" class="profile-popup">
+      <div class="username" id="username"></div>
+      <div class="userid" id="userid"></div>
+      <div class="wins" id="wins"></div>
+      <button class="close-btn" onclick="hideProfile()">Close</button>
+    </div>
   </div>
   <script>
     // Отримати дані користувача з Telegram WebApp
@@ -80,9 +109,25 @@
       document.getElementById('userid').textContent = 'ID: ' + user.id;
       document.getElementById('wins').textContent = 'Wins: 0';
     } else {
-      document.querySelector('.profile').innerHTML = '<b>Cannot get user info. Please open via Telegram.</b>';
       document.getElementById('avatar-small').style.display = 'none';
     }
+
+    // Показати/сховати профіль при натисканні на аву
+    document.getElementById('avatar-small').onclick = function(e) {
+      e.stopPropagation();
+      document.getElementById('profile-popup').classList.add('active');
+    };
+    function hideProfile() {
+      document.getElementById('profile-popup').classList.remove('active');
+    }
+    // Закриття по кліку поза popup
+    document.addEventListener('click', function(e) {
+      const popup = document.getElementById('profile-popup');
+      const avatar = document.getElementById('avatar-small');
+      if (!popup.contains(e.target) && e.target !== avatar) {
+        popup.classList.remove('active');
+      }
+    });
   </script>
 </body>
 </html>
