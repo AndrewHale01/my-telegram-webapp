@@ -19,7 +19,7 @@
       align-items: center;
       padding: 12px 18px 0 0;
       box-sizing: border-box;
-      position: relative; /* Додаємо для абсолютного позиціонування popup */
+      position: relative;
     }
     .avatar-small {
       width: 40px;
@@ -94,37 +94,51 @@
   <div class="topbar">
     <img id="avatar-small" class="avatar-small" src="" alt="avatar" title="Tap to view profile">
     <div id="profile-popup" class="profile-popup">
-      <div class="username" id="username"></div>
+      <div class="username" id="username">Loading...</div>
       <div class="userid" id="userid"></div>
-      <div class="wins" id="wins"></div>
+      <div class="wins" id="wins">Wins: 0</div>
       <button class="close-btn" onclick="hideProfile()">Close</button>
     </div>
   </div>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
-    // Отримати дані користувача з Telegram WebApp
-    const user = window.Telegram.WebApp.initDataUnsafe.user;
+    // Ініціалізація Telegram WebApp
+    window.Telegram.WebApp.ready();
+
+    const avatar = document.getElementById('avatar-small');
+    const popup = document.getElementById('profile-popup');
+
+    const user = window.Telegram.WebApp.initDataUnsafe?.user;
+
     if (user) {
       const avatarUrl = `https://t.me/i/userpic/320/${user.id}.jpg`;
-      document.getElementById('avatar-small').src = avatarUrl;
-      document.getElementById('username').textContent = user.username ? '@' + user.username : user.first_name;
+
+      avatar.src = avatarUrl;
+      avatar.style.display = 'block';
+
+      document.getElementById('username').textContent = user.username 
+        ? '@' + user.username 
+        : `${user.first_name} ${user.last_name || ''}`;
       document.getElementById('userid').textContent = 'ID: ' + user.id;
-      document.getElementById('wins').textContent = 'Wins: 0';
+      document.getElementById('wins').textContent = 'Wins: 0'; // Тут можна оновити через API
     } else {
-      document.getElementById('avatar-small').style.display = 'none';
+      avatar.style.display = 'none';
+      console.warn('Telegram user not found');
     }
 
-    // Показати/сховати профіль при натисканні на аву
-    document.getElementById('avatar-small').onclick = function(e) {
+    // Відображення профілю
+    avatar.addEventListener('click', (e) => {
       e.stopPropagation();
-      document.getElementById('profile-popup').classList.add('active');
-    };
+      popup.classList.add('active');
+    });
+
     function hideProfile() {
-      document.getElementById('profile-popup').classList.remove('active');
+      popup.classList.remove('active');
     }
-    // Закриття по кліку поза popup
-    document.addEventListener('click', function(e) {
-      const popup = document.getElementById('profile-popup');
-      const avatar = document.getElementById('avatar-small');
+
+    // Закриття popup по кліку поза межами
+    document.addEventListener('click', function (e) {
       if (!popup.contains(e.target) && e.target !== avatar) {
         popup.classList.remove('active');
       }
