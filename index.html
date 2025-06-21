@@ -24,6 +24,32 @@
     .lang-btn {
       font-size: 1.5rem;
       cursor: pointer;
+      position: relative;
+    }
+
+    .lang-select {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background: #333;
+      border: 1px solid #555;
+      border-radius: 6px;
+      display: none;
+      flex-direction: column;
+      z-index: 10;
+    }
+
+    .lang-select button {
+      background: none;
+      border: none;
+      color: #fff;
+      padding: 8px 16px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .lang-select button:hover {
+      background: #444;
     }
 
     .avatar-small {
@@ -120,24 +146,16 @@
 </head>
 <body>
   <div class="topbar">
-    <div class="lang-btn" id="langBtn">🌐</div>
+    <div class="lang-btn" id="langBtn">
+      🌐
+      <div class="lang-select" id="langSelect">
+        <button data-lang="uk">Українська</button>
+        <button data-lang="en">English</button>
+        <button data-lang="ru">Русский</button>
+      </div>
+    </div>
     <img id="avatar" class="avatar-small" src="avatar.png" alt="Avatar">
     <div id="profilePopup" class="profile-popup">
       <div class="username" id="username">Username</div>
       <div class="userid" id="userid">ID: 0</div>
-      <div class="wins" id="wins">Перемоги: 0</div>
-      <button class="close-btn" id="closeBtn">Закрити</button>
-    </div>
-  </div>
-
-  <div class="bottom-nav">
-    <div class="nav-item"><span>🏠</span><p data-i18n="home">Головна</p></div>
-    <div class="nav-item"><span>📄</span><p data-i18n="rules">Правила</p></div>
-    <div class="nav-item"><span>🏆</span><p data-i18n="awards">Нагороди</p></div>
-    <div class="nav-item"><span>🤖</span><p data-i18n="support">Підтримка</p></div>
-  </div>
-
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="app.js"></script>
-</body>
-</html>
+      <div class="wins" id="wins">Перемог
