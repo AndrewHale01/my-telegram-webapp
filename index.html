@@ -167,6 +167,45 @@
   font-size: 0.95rem;
   color: #fff;
 }
+.disciplines-section {
+  margin: 0 0 24px 0;
+  padding: 0 16px;
+}
+.disciplines-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #00bfae;
+  letter-spacing: 0.5px;
+}
+.disciplines-list {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.discipline-card {
+  background: #333;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 8px #0005;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 120px;
+}
+.discipline-img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: #222;
+}
+.discipline-name {
+  color: #fff;
+  font-size: 1rem;
+  text-align: center;
+}
 .tournaments-section {
   margin: 0 0 24px 0;
   padding: 0 16px;
@@ -236,6 +275,19 @@
   </div>
 </div>
 
+
+<!-- Дисципліни -->
+<div class="disciplines-section">
+  <div class="disciplines-title" data-i18n="disciplines">Дисципліни</div>
+  <div class="disciplines-list">
+    <div class="discipline-card">
+      <img src="Standoff2.jpg" alt="Standoff 2" class="discipline-img">
+      <div class="discipline-name">Standoff 2</div>
+    </div>
+  </div>
+</div>
+
+
 <!-- Турніри -->
 <div class="tournaments-section">
   <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
@@ -284,7 +336,8 @@
         news4title: "Підтримка польської!",
         news4desc: "Тепер в нашому додатку з'явилася\n підтримка польської мови.",
         news5title: "Оновлення турнірів!",
-        news5desc: "Розділ \"Турніри\" оновлено!"
+        news5desc: "Розділ \"Турніри\" оновлено!",
+        disciplines: "Дисципліни",
       },
       en: {
         home: "Home",
@@ -297,7 +350,8 @@
         news4title: "Polish Support!",
         news4desc: "Our app now supports Polish language.",
         news5title: "Tournaments Update!",
-        news5desc: "The 'Tournaments' section has been updated!"
+        news5desc: "The 'Tournaments' section has been updated!",
+        disciplines: "Disciplines",
       },
       ru: {
         home: "Главная",
@@ -310,7 +364,8 @@
         news4title: "Поддержка польского!",
         news4desc: "Теперь в нашем приложении появилась поддержка польского языка.",
         news5title: "Обновление турниров!",
-        news5desc: "Раздел \"Турниры\" обновлен!"
+        news5desc: "Раздел \"Турниры\" обновлен!",
+        disciplines: "Дисциплины",
       },
       pl: {
         home: "Strona główna",
@@ -323,7 +378,8 @@
         news4title: "Wsparcie polskiego!",
         news4desc: "Nasza aplikacja teraz obsługuje język polski.",
         news5title: "Aktualizacja turniejów!",
-        news5desc: "Sekcja \"Turnieje\" została zaktualizowana!"
+        news5desc: "Sekcja \"Turnieje\" została zaktualizowana!",
+        disciplines: "Dyscypliny",
       }
     };
 
