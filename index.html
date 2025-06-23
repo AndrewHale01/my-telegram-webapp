@@ -293,6 +293,9 @@
       color: #fff;
     }
   </style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <div class="topbar">
@@ -397,6 +400,19 @@
     const profileNick = document.getElementById("profileNick");
     const profileId = document.getElementById("profileId");
     const profileTg = document.getElementById("profileTg");
+
+    // --- FIREBASE CONFIG ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyB0Rnu3hUGvkQKTL6dNgaI_nyvXJE-q7VY",
+      authDomain: "telegram-web-app-7cbee.firebaseapp.com",
+      projectId: "telegram-web-app-7cbee",
+      storageBucket: "telegram-web-app-7cbee.appspot.com",
+      messagingSenderId: "164841160041",
+      appId: "1:164841160041:web:ae736eecd493ec934011f8",
+      measurementId: "G-TZN665FNYF"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
     // Переклади
     const translations = {
@@ -585,7 +601,19 @@
       localStorage.setItem('profileNick', standoffNickInput.value);
       localStorage.setItem('profileId', standoffIdInput.value);
       localStorage.setItem('profileTg', tgUserInput.value);
-      showPlayerProfile();
+
+      // Додаємо користувача у Firestore
+      db.collection("users").add({
+        nick: standoffNickInput.value,
+        id: standoffIdInput.value,
+        tg: tgUserInput.value,
+        date: new Date().toISOString()
+      }).then(() => {
+        showPlayerProfile();
+      }).catch((error) => {
+        alert("Помилка збереження у базу: " + error.message);
+        showPlayerProfile();
+      });
     });
 
     // Клік "Створити команду"
