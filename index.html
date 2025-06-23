@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Telegram WebApp</title>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZN665FNYF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TZN665FNYF');
+  </script>
   <style>
     body {
       margin: 0;
@@ -244,18 +252,22 @@
       flex-direction: column;
       align-items: center;
       min-width: 320px;
+      max-width: 320px;
+      border: 4px solid #00bfae;
     }
     .discipline-img {
       width: 320px;
       height: 320px;
-      object-fit: contain;
-      border-radius: 8px;
+      object-fit: cover;
+      border-radius: 12px;
       margin-bottom: 8px;
       background: #222;
+      border: none;
+      display: block;
     }
     .discipline-name {
       color: #fff;
-      font-size: 1rem;
+      font-size: 1.1rem;
       text-align: center;
     }
     .tournaments-section {
@@ -293,9 +305,6 @@
       color: #fff;
     }
   </style>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <div class="topbar">
@@ -400,19 +409,6 @@
     const profileNick = document.getElementById("profileNick");
     const profileId = document.getElementById("profileId");
     const profileTg = document.getElementById("profileTg");
-
-    // --- FIREBASE CONFIG ---
-    const firebaseConfig = {
-      apiKey: "AIzaSyB0Rnu3hUGvkQKTL6dNgaI_nyvXJE-q7VY",
-      authDomain: "telegram-web-app-7cbee.firebaseapp.com",
-      projectId: "telegram-web-app-7cbee",
-      storageBucket: "telegram-web-app-7cbee.appspot.com",
-      messagingSenderId: "164841160041",
-      appId: "1:164841160041:web:ae736eecd493ec934011f8",
-      measurementId: "G-TZN665FNYF"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
 
     // Переклади
     const translations = {
@@ -601,24 +597,21 @@
       localStorage.setItem('profileNick', standoffNickInput.value);
       localStorage.setItem('profileId', standoffIdInput.value);
       localStorage.setItem('profileTg', tgUserInput.value);
-
-      // Додаємо користувача у Firestore
-      db.collection("users").add({
-        nick: standoffNickInput.value,
-        id: standoffIdInput.value,
-        tg: tgUserInput.value,
-        date: new Date().toISOString()
-      }).then(() => {
-        showPlayerProfile();
-      }).catch((error) => {
-        alert("Помилка збереження у базу: " + error.message);
-        showPlayerProfile();
+      showPlayerProfile();
+      // Google Analytics event (реєстрація)
+      gtag('event', 'register', {
+        'event_category': 'Profile',
+        'event_label': standoffNickInput.value
       });
     });
 
     // Клік "Створити команду"
     createTeamBtn.addEventListener("click", () => {
       alert("Функція створення команди у розробці!");
+      // Google Analytics event (створення команди)
+      gtag('event', 'create_team', {
+        'event_category': 'Team'
+      });
     });
 
     // ініціалізація користувача та мови
