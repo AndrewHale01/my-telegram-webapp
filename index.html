@@ -418,12 +418,6 @@
     // ініціалізація користувача та мови
     window.addEventListener("DOMContentLoaded", () => {
       // Профіль
-      if (tg.initDataUnsafe?.user) {
-        const user = tg.initDataUnsafe.user;
-        avatar.src = `https://t.me/i/userpic/320/${user.id}.jpg`;
-        usernameEl.textContent = user.username || `${user.first_name} ${user.last_name || ''}`;
-        useridEl.textContent = "ID: " + user.id;
-      }
       // Мова
       const savedLang = localStorage.getItem('lang') || 'uk';
       applyTranslations(savedLang);
