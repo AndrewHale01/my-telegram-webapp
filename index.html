@@ -43,34 +43,91 @@
       top: 60px;
       right: 0;
       background: #333;
-      padding: 16px;
-      border-radius: 12px;
+      padding: 24px 20px 20px 20px;
+      border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       z-index: 10;
       flex-direction: column;
-      min-width: 200px;
+      min-width: 260px;
       align-items: center;
       animation: fadeIn 0.2s;
     }
     .popup.active {
       display: flex;
     }
-    .username {
-      font-size: 1.2rem;
-      color: #00bfae;
-      margin-bottom: 6px;
+    .register-btn, .done-btn, .create-team-btn {
+      background: #2196f3;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 8px 0;
+      transition: background 0.2s;
+      width: 100%;
+      max-width: 220px;
     }
-    .userid {
-      font-size: 0.9rem;
-      color: #ccc;
-      margin-bottom: 10px;
+    .register-btn:hover, .done-btn:hover, .create-team-btn:hover {
+      background: #1976d2;
     }
-    .wins {
-      background: #00bfae;
-      padding: 6px 12px;
+    .profile-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 220px;
+      margin-top: 8px;
+    }
+    .profile-form label {
+      font-size: 0.95rem;
+      color: #bbb;
+      margin-bottom: 2px;
+    }
+    .profile-form input {
+      padding: 8px;
       border-radius: 6px;
-      color: #000;
-      margin-bottom: 10px;
+      border: 1px solid #555;
+      background: #222;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      width: 100%;
+    }
+    .profile-form input[readonly] {
+      background: #222;
+      color: #aaa;
+      border: 1px solid #444;
+    }
+    .success-message {
+      color: #00bfae;
+      font-size: 1rem;
+      margin: 10px 0 0 0;
+      text-align: center;
+    }
+    .player-profile {
+      width: 100%;
+      max-width: 220px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      background: #222;
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 1rem;
+      box-sizing: border-box;
+      display: none;
+    }
+    .player-profile-title {
+      margin-bottom: 8px;
+      color: #00bfae;
+      font-weight: bold;
+      font-size: 1.05rem;
+    }
+    .player-profile-row {
+      margin-bottom: 4px;
+      word-break: break-word;
     }
     .lang-option {
       background: #444;
@@ -85,10 +142,10 @@
       background: #555;
     }
     #langPopup {
-    left: 0;
-    right: auto;
+      left: 0;
+      right: auto;
     }
-      .bottom-nav {
+    .bottom-nav {
       position: fixed;
       bottom: 0;
       left: 0;
@@ -120,136 +177,146 @@
       to { opacity: 1; transform: scale(1);}
     }
     .news-section {
-  margin: 0 0 24px 0;
-  padding: 0 16px;
-}
-.news-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #00bfae;
-  letter-spacing: 0.5px;
-}
-.news-list {
-  display: flex;
-  overflow-x: auto;
-  gap: 12px;
-  padding-bottom: 8px;
-  scrollbar-width: thin;
-}
-.news-card {
-  min-width: 220px;
-  background: #333;
-  border-radius: 12px;
-  padding: 14px 16px;
-  box-shadow: 0 2px 8px #0005;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.news-card p {
-  margin: 0;
-  font-size: 0.95rem;
-  color: #fff;
-  word-break: break-word;
-  white-space: normal;
-  overflow-wrap: break-word;
-  max-width: 100%;
-}
-.news-card h4 {
-  margin: 0 0 8px 0;
-  font-size: 1rem;
-  color: #00bfae;
-}
-.news-card p {
-  margin: 0;
-  font-size: 0.95rem;
-  color: #fff;
-}
-.disciplines-section {
-  margin: 0 0 24px 0;
-  padding: 0 16px;
-}
-.disciplines-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #00bfae;
-  letter-spacing: 0.5px;
-}
-.disciplines-list {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-.discipline-card {
-  background: #333;
-  border-radius: 12px;
-  padding: 10px 14px;
-  box-shadow: 0 2px 8px #0005;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 320px;
-}
-.discipline-img {
-  width: 320px;
-  height: 320px;
-  object-fit: contain;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  background: #222;
-}
-.discipline-name {
-  color: #fff;
-  font-size: 1rem;
-  text-align: center;
-}
-.tournaments-section {
-  margin: 0 0 24px 0;
-  padding: 0 16px;
-}
-.tournaments-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #00bfae;
-  letter-spacing: 0.5px;
-}
-.tournament-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.tournament-card {
-  background: #333;
-  border-radius: 12px;
-  padding: 14px 16px;
-  box-shadow: 0 2px 8px #0005;
-  display: flex;
-  flex-direction: column;
-}
-.tournament-card h4 {
-  margin: 0 0 6px 0;
-  font-size: 1rem;
-  color: #00bfae;
-}
-.tournament-card p {
-  margin: 0;
-  font-size: 0.95rem;
-  color: #fff;
-}
+      margin: 0 0 24px 0;
+      padding: 0 16px;
+    }
+    .news-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #00bfae;
+      letter-spacing: 0.5px;
+    }
+    .news-list {
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+    }
+    .news-card {
+      min-width: 220px;
+      background: #333;
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 8px #0005;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .news-card p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #fff;
+      word-break: break-word;
+      white-space: normal;
+      overflow-wrap: break-word;
+      max-width: 100%;
+    }
+    .news-card h4 {
+      margin: 0 0 8px 0;
+      font-size: 1rem;
+      color: #00bfae;
+    }
+    .disciplines-section {
+      margin: 0 0 24px 0;
+      padding: 0 16px;
+    }
+    .disciplines-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #00bfae;
+      letter-spacing: 0.5px;
+    }
+    .disciplines-list {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .discipline-card {
+      background: #333;
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 2px 8px #0005;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 120px;
+    }
+    .discipline-img {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: #222;
+    }
+    .discipline-name {
+      color: #fff;
+      font-size: 1rem;
+      text-align: center;
+    }
+    .tournaments-section {
+      margin: 0 0 24px 0;
+      padding: 0 16px;
+    }
+    .tournaments-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #00bfae;
+      letter-spacing: 0.5px;
+    }
+    .tournament-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tournament-card {
+      background: #333;
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 8px #0005;
+      display: flex;
+      flex-direction: column;
+    }
+    .tournament-card h4 {
+      margin: 0 0 6px 0;
+      font-size: 1rem;
+      color: #00bfae;
+    }
+    .tournament-card p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
-  <div class="justify-content: space-between topbar">
+  <div class="topbar">
     <div class="lang-btn" id="langBtn">🌐</div>
-    <img id="avatar" class="avatar-small" src="avatar.jpg" alt="Avatar">
+    <img id="avatar" class="avatar-small" src="avatar.png" alt="Avatar">
     <div id="profilePopup" class="popup">
-      <div class="username" id="username">Username</div>
-      <div class="userid" id="userid">ID: 0</div>
-      <div class="wins" id="wins" data-count="0">Перемоги: 0</div>
+      <button class="register-btn" id="registerBtn" data-i18n="register">Зареєструватись</button>
+      <form class="profile-form" id="profileForm" style="display:none;">
+        <label for="standoffNick" data-i18n="standoff_nick">Нік в Standoff</label>
+        <input type="text" id="standoffNick" name="standoffNick" required maxlength="32" autocomplete="off">
+        <label for="standoffId" data-i18n="standoff_id">ID в Standoff</label>
+        <input type="text" id="standoffId" name="standoffId" required maxlength="32" autocomplete="off">
+        <label for="tgUser" data-i18n="tg_user">Telegram</label>
+        <input type="text" id="tgUser" name="tgUser" readonly>
+        <button type="submit" class="done-btn" id="doneBtn" data-i18n="done">Готово</button>
+      </form>
+      <div class="player-profile" id="playerProfile">
+        <div class="player-profile-title" data-i18n="profile">Профіль гравця</div>
+        <div class="player-profile-row"><span data-i18n="standoff_nick">Нік в Standoff</span>: <span id="profileNick"></span></div>
+        <div class="player-profile-row"><span data-i18n="standoff_id">ID в Standoff</span>: <span id="profileId"></span></div>
+        <div class="player-profile-row"><span data-i18n="tg_user">Telegram</span>: <span id="profileTg"></span></div>
+      </div>
+      <button class="create-team-btn" id="createTeamBtn" style="display:none;" data-i18n="create_team">Створити команду</button>
+      <div class="success-message" id="successMsg" style="display:none;" data-i18n="profile_saved">Профіль збережено!</div>
     </div>
     <div id="langPopup" class="popup">
       <button class="lang-option" data-lang="uk">Українська</button>
@@ -260,48 +327,45 @@
   </div>
 
   <!-- Новини -->
-<div class="news-section">
   <div class="news-section">
-  <div class="news-title" data-i18n="news">Новини</div>
-  <div class="news-list" id="newsList">
-    <div class="news-card">
-      <h4 data-i18n="news4title">Підтримка польської!</h4>
-      <p data-i18n="news4desc">Тепер в нашому додатку з'явилася підтримка польської мови.</p>
-    </div>
-    <div class="news-card">
-      <h4 data-i18n="news5title">Оновлення турнірів!</h4>
-      <p data-i18n="news5desc">Розділ "Турніри" оновлено!</p>
-    </div>
-  </div>
-</div>
-
-
-<!-- Дисципліни -->
-<div class="disciplines-section">
-  <div class="disciplines-title" data-i18n="disciplines">Дисципліни</div>
-  <div class="disciplines-list">
-    <div class="discipline-card">
-      <img src="Standoff2.jpg" alt="Standoff 2" class="discipline-img">
-      <div class="discipline-name">Standoff 2</div>
+    <div class="news-title" data-i18n="news">Новини</div>
+    <div class="news-list" id="newsList">
+      <div class="news-card">
+        <h4 data-i18n="news4title">Підтримка польської!</h4>
+        <p data-i18n="news4desc">Тепер в нашому додатку з'явилася підтримка польської мови.</p>
+      </div>
+      <div class="news-card">
+        <h4 data-i18n="news5title">Оновлення турнірів!</h4>
+        <p data-i18n="news5desc">Розділ "Турніри" оновлено!</p>
+      </div>
     </div>
   </div>
-</div>
 
-
-<!-- Турніри -->
-<div class="tournaments-section">
-  <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
-  <div class="tournament-list" id="tournamentList">
-    <div class="tournament-card">
-      <h4>RFORZ Grad Prix Season 1</h4>
-      <p data-i18n="tournament1desc">Початок: 1 липня. Призовий фонд: 5000₴</p>
-    </div>
-    <div class="tournament-card">
-      <h4>Quiz Battle</h4>
-      <p data-i18n="tournament2desc">Початок: 10 липня. Призовий фонд: 2000₴</p>
+  <!-- Дисципліни -->
+  <div class="disciplines-section">
+    <div class="disciplines-title" data-i18n="disciplines">Дисципліни</div>
+    <div class="disciplines-list">
+      <div class="discipline-card">
+        <img src="Standoff2.jpg" alt="Standoff 2" class="discipline-img">
+        <div class="discipline-name">Standoff 2</div>
+      </div>
     </div>
   </div>
-</div>
+
+  <!-- Турніри -->
+  <div class="tournaments-section">
+    <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
+    <div class="tournament-list" id="tournamentList">
+      <div class="tournament-card">
+        <h4>RFORZ Grad Prix Season 1</h4>
+        <p data-i18n="tournament1desc">Початок: 1 липня. Призовий фонд: 5000₴</p>
+      </div>
+      <div class="tournament-card">
+        <h4>Quiz Battle</h4>
+        <p data-i18n="tournament2desc">Початок: 10 липня. Призовий фонд: 2000₴</p>
+      </div>
+    </div>
+  </div>
 
   <div class="bottom-nav">
     <div class="nav-item"><span>🏠</span><p data-i18n="home">Головна</p></div>
@@ -320,10 +384,21 @@
     const langPopup = document.getElementById("langPopup");
     const langOptions = document.querySelectorAll(".lang-option");
 
-    const usernameEl = document.getElementById("username");
-    const useridEl = document.getElementById("userid");
-    const winsEl = document.getElementById("wins");
+    // Profile elements
+    const registerBtn = document.getElementById("registerBtn");
+    const profileForm = document.getElementById("profileForm");
+    const doneBtn = document.getElementById("doneBtn");
+    const createTeamBtn = document.getElementById("createTeamBtn");
+    const successMsg = document.getElementById("successMsg");
+    const tgUserInput = document.getElementById("tgUser");
+    const standoffNickInput = document.getElementById("standoffNick");
+    const standoffIdInput = document.getElementById("standoffId");
+    const playerProfile = document.getElementById("playerProfile");
+    const profileNick = document.getElementById("profileNick");
+    const profileId = document.getElementById("profileId");
+    const profileTg = document.getElementById("profileTg");
 
+    // Переклади
     const translations = {
       uk: {
         home: "Головна",
@@ -333,11 +408,21 @@
         wins: "Перемоги",
         news: "Новини",
         tournaments: "Турніри",
+        disciplines: "Дисципліни",
+        register: "Зареєструватись",
+        standoff_nick: "Нік в Standoff",
+        standoff_id: "ID в Standoff",
+        tg_user: "Telegram",
+        done: "Готово",
+        create_team: "Створити команду",
+        profile_saved: "Профіль збережено!",
+        profile: "Профіль гравця",
         news4title: "Підтримка польської!",
-        news4desc: "В нашому додатку з'явилася польська мова.",
+        news4desc: "Тепер в нашому додатку з'явилася\nпідтримка польської мови.",
         news5title: "Оновлення турнірів!",
         news5desc: "Розділ \"Турніри\" оновлено!",
-        disciplines: "Дисципліни",
+        tournament1desc: "Початок: 1 липня. Призовий фонд: 5000₴",
+        tournament2desc: "Початок: 10 липня. Призовий фонд: 2000₴"
       },
       en: {
         home: "Home",
@@ -347,11 +432,21 @@
         wins: "Wins",
         news: "News",
         tournaments: "Tournaments",
+        disciplines: "Disciplines",
+        register: "Register",
+        standoff_nick: "Standoff Nick",
+        standoff_id: "Standoff ID",
+        tg_user: "Telegram",
+        done: "Done",
+        create_team: "Create Team",
+        profile_saved: "Profile saved!",
+        profile: "Player Profile",
         news4title: "Polish Support!",
-        news4desc: "Our app now supports Polish language.",
+        news4desc: "Our app now supports\nPolish language.",
         news5title: "Tournaments Update!",
         news5desc: "The 'Tournaments' section has been updated!",
-        disciplines: "Disciplines",
+        tournament1desc: "Start: July 1. Prize fund: 5000₴",
+        tournament2desc: "Start: July 10. Prize fund: 2000₴"
       },
       ru: {
         home: "Главная",
@@ -361,11 +456,21 @@
         wins: "Победы",
         news: "Новости",
         tournaments: "Турниры",
+        disciplines: "Дисциплины",
+        register: "Зарегистрироваться",
+        standoff_nick: "Ник в Standoff",
+        standoff_id: "ID в Standoff",
+        tg_user: "Telegram",
+        done: "Готово",
+        create_team: "Создать команду",
+        profile_saved: "Профиль сохранён!",
+        profile: "Профиль игрока",
         news4title: "Поддержка польского!",
-        news4desc: "В нашем приложении появился польский язык.",
+        news4desc: "Теперь в нашем приложении появилась\nподдержка польского языка.",
         news5title: "Обновление турниров!",
         news5desc: "Раздел \"Турниры\" обновлен!",
-        disciplines: "Дисциплины",
+        tournament1desc: "Старт: 1 июля. Призовой фонд: 5000₴",
+        tournament2desc: "Старт: 10 июля. Призовой фонд: 2000₴"
       },
       pl: {
         home: "Strona główna",
@@ -375,11 +480,21 @@
         wins: "Zwycięstwa",
         news: "Aktualności",
         tournaments: "Turnieje",
+        disciplines: "Dyscypliny",
+        register: "Zarejestruj się",
+        standoff_nick: "Nick w Standoff",
+        standoff_id: "ID w Standoff",
+        tg_user: "Telegram",
+        done: "Gotowe",
+        create_team: "Utwórz drużynę",
+        profile_saved: "Profil zapisany!",
+        profile: "Profil gracza",
         news4title: "Wsparcie polskiego!",
-        news4desc: "Nasza aplikacja teraz obsługuje język polski.",
+        news4desc: "Nasza aplikacja teraz obsługuje\njęzyk polski.",
         news5title: "Aktualizacja turniejów!",
         news5desc: "Sekcja \"Turnieje\" została zaktualizowana!",
-        disciplines: "Dyscypliny",
+        tournament1desc: "Start: 1 lipca. Fundusz nagród: 5000₴",
+        tournament2desc: "Start: 10 lipca. Fundusz nagród: 2000₴"
       }
     };
 
@@ -387,6 +502,12 @@
     avatar.addEventListener("click", () => {
       profilePopup.classList.toggle("active");
       langPopup.classList.remove("active");
+      // Скидаємо стан форми при кожному відкритті
+      if (!localStorage.getItem('profileSaved')) {
+        showRegisterState();
+      } else {
+        showPlayerProfile();
+      }
     });
 
     // Показати/сховати вибір мови
@@ -409,18 +530,80 @@
     function applyTranslations(lang) {
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.dataset.i18n;
-        el.textContent = translations[lang][key];
+        let text = translations[lang][key];
+        if (text) {
+          el.innerHTML = text.replace(/\n/g, "<br>");
+        }
       });
-      const count = winsEl.dataset.count || 0;
-      winsEl.textContent = `${translations[lang].wins}: ${count}`;
     }
+
+    // Скидання стану профілю
+    function showRegisterState() {
+      registerBtn.style.display = "block";
+      profileForm.style.display = "none";
+      playerProfile.style.display = "none";
+      createTeamBtn.style.display = "none";
+      successMsg.style.display = "none";
+    }
+
+    // Показати профіль гравця
+    function showPlayerProfile() {
+      registerBtn.style.display = "none";
+      profileForm.style.display = "none";
+      playerProfile.style.display = "block";
+      createTeamBtn.style.display = "block";
+      successMsg.style.display = "block";
+      // Підставити дані з localStorage
+      profileNick.textContent = localStorage.getItem('profileNick') || "";
+      profileId.textContent = localStorage.getItem('profileId') || "";
+      profileTg.textContent = localStorage.getItem('profileTg') || "";
+    }
+
+    // Клік "Зареєструватись"
+    registerBtn.addEventListener("click", () => {
+      registerBtn.style.display = "none";
+      profileForm.style.display = "flex";
+      playerProfile.style.display = "none";
+      createTeamBtn.style.display = "none";
+      successMsg.style.display = "none";
+      // Заповнюємо поле Telegram
+      if (tg.initDataUnsafe?.user) {
+        const user = tg.initDataUnsafe.user;
+        tgUserInput.value = user.username
+          ? "@" + user.username
+          : (user.first_name || "") + " " + (user.last_name || "");
+      } else {
+        tgUserInput.value = "";
+      }
+    });
+
+    // Клік "Готово" (submit форми)
+    profileForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      // Зберігаємо дані у localStorage
+      localStorage.setItem('profileSaved', '1');
+      localStorage.setItem('profileNick', standoffNickInput.value);
+      localStorage.setItem('profileId', standoffIdInput.value);
+      localStorage.setItem('profileTg', tgUserInput.value);
+      showPlayerProfile();
+    });
+
+    // Клік "Створити команду"
+    createTeamBtn.addEventListener("click", () => {
+      alert("Функція створення команди у розробці!");
+    });
 
     // ініціалізація користувача та мови
     window.addEventListener("DOMContentLoaded", () => {
-      // Профіль
       // Мова
       const savedLang = localStorage.getItem('lang') || 'uk';
       applyTranslations(savedLang);
+      // Профіль
+      if (localStorage.getItem('profileSaved')) {
+        showPlayerProfile();
+      } else {
+        showRegisterState();
+      }
     });
 
     // Закриття popup по кліку поза ним
