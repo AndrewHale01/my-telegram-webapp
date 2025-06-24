@@ -314,7 +314,7 @@
     .dropdown {
       margin: 18px 0;
       width: 100%;
-      max-width: 400px;
+      max-width: 600px;
     }
     .dropdown summary {
       background: #222;
@@ -496,7 +496,7 @@
         profile_saved: "Профіль збережено!",
         profile: "Профіль гравця",
         news4title: "Підтримка польської!",
-        news4desc: "Тепер в нашому додатку з'явилася\nпідтримка польської мови.",
+        news4desc: "Тепер в нашому додатку з'явилася<br>підтримка польської мови.",
         news5title: "Оновлення турнірів!",
         news5desc: "Розділ \"Турніри\" оновлено!",
         tournament1desc: "Початок: 1 липня. Призовий фонд: 5000₴",
@@ -506,7 +506,41 @@
         rule2x2_title: "Турнір 2х2",
         rule2x2: "<b>Правила для турніру 2х2:</b><br>1. Грають дві команди по 2 гравці.<br>2. Переможець — команда, що виграла більше раундів.<br>3. Заборонено використання стороннього ПЗ.<br>4. Інші правила за рішенням організаторів.",
         rule5x5_title: "Турнір 5х5",
-        rule5x5: "<b>Правила для турніру 5х5:</b><br>1. Грають дві команди по 5 гравців.<br>2. Переможець — команда, що виграла більше раундів.<br>3. Заборонено використання стороннього ПЗ.<br>4. Інші правила за рішенням організаторів."
+        rule5x5: `<b>Правила турніру Standoff 2 (5 на 5):</b><br>
+1. <b>Загальні положення:</b><br>
+Турнір проводиться з дисципліни Standoff 2.<br>
+Формат матчів: 5 на 5.<br>
+Всі учасники зобов'язані дотримуватись правил чесної гри та поважати інших гравців і суддів.<br>
+2. <b>Участь і реєстрація:</b><br>
+Команда складається з 5 основних гравців і до 2 запасних.<br>
+Регіони: Польща, Нідерланди, Франція.<br>
+Максимально допустимий пінг — 100 мс. Гравці з більшим пінгом можуть бути відсторонені.<br>
+Реєстрація проходить через платформу або форму, вказану організаторами.<br>
+3. <b>Технічні вимоги:</b><br>
+Гра проводиться лише на мобільних пристроях. Використання емуляторів заборонено.<br>
+Перевірка пінгу перед кожним матчем.<br>
+Використання VPN, проксі та інших засобів для зміни регіону/пінгу суворо заборонено.<br>
+4. <b>Формат турніру:</b><br>
+Матчі групового етапу — Best of 2 (BO2). Півфінал — Best of 3 (BO3).<br>
+Фінал – Best of 5 (BO5).<br>
+Перемога — команда, що першою виграла 13 раундів.<br>
+Карти обираються методом “ban/pick”.<br>
+Перерва між половинами — 1 хвилина. Перемикання сторін після 12 раундів.<br>
+5. <b>Поведінка гравців:</b><br>
+Заборонено використання стороннього ПЗ, читів і багів.<br>
+Образи, токсична поведінка та провокації заборонені.<br>
+Усі спірні ситуації вирішує суддя. Рішення адміністрації остаточні.<br>
+6. <b>Переривання матчу:</b><br>
+При виліті гравця матч продовжується, якщо ситуація не критична.<br>
+У разі технічних проблем команда має повідомити адміністратора протягом 2 хвилин.<br>
+Дозволяється 1 технічна пауза на матч до 5 хвилин (за погодженням із суддею).<br>
+7. <b>Санкції:</b><br>
+1-е порушення — попередження.<br>
+2-е — дискваліфікація гравця або команди залежно від тяжкості.<br>
+Повторні порушення — негайне зняття з турніру.<br>
+8. <b>Призи та нагороди:</b><br>
+Призовий фонд і розподіл місць оголошуються перед початком турніру.<br>
+Призи розподіляються всередині команди самостійно або порівну (за замовчуванням).`
       },
       en: {
         home: "Home",
@@ -526,7 +560,7 @@
         profile_saved: "Profile saved!",
         profile: "Player Profile",
         news4title: "Polish Support!",
-        news4desc: "Our app now supports\nPolish language.",
+        news4desc: "Our app now supports<br>Polish language.",
         news5title: "Tournaments Update!",
         news5desc: "The 'Tournaments' section has been updated!",
         tournament1desc: "Start: July 1. Prize fund: 5000₴",
@@ -536,7 +570,41 @@
         rule2x2_title: "2v2 Tournament",
         rule2x2: "<b>Rules for 2v2 tournament:</b><br>1. Two teams of 2 players each.<br>2. The winner is the team that wins more rounds.<br>3. Third-party software is prohibited.<br>4. Other rules at the discretion of the organizers.",
         rule5x5_title: "5v5 Tournament",
-        rule5x5: "<b>Rules for 5v5 tournament:</b><br>1. Two teams of 5 players each.<br>2. The winner is the team that wins more rounds.<br>3. Third-party software is prohibited.<br>4. Other rules at the discretion of the organizers."
+        rule5x5: `<b>Standoff 2 Tournament Rules (5v5):</b><br>
+1. <b>General:</b><br>
+The tournament is held in Standoff 2.<br>
+Match format: 5 vs 5.<br>
+All participants must follow fair play and respect other players and referees.<br>
+2. <b>Participation & Registration:</b><br>
+A team consists of 5 main players and up to 2 substitutes.<br>
+Regions: Poland, Netherlands, France.<br>
+Max allowed ping — 100 ms. Players exceeding this may be removed.<br>
+Registration is via the platform or form specified by organizers.<br>
+3. <b>Technical Requirements:</b><br>
+Only mobile devices allowed. Emulators are forbidden.<br>
+Ping is checked before each match.<br>
+VPN, proxy, or any means to change region/ping are strictly forbidden.<br>
+4. <b>Tournament Format:</b><br>
+Group stage matches — Best of 2 (BO2). Semifinal — Best of 3 (BO3).<br>
+Final – Best of 5 (BO5).<br>
+Victory: first team to win 13 rounds.<br>
+Maps are chosen by “ban/pick”.<br>
+Break between halves — 1 minute. Sides switch after 12 rounds.<br>
+5. <b>Player Conduct:</b><br>
+Third-party software, cheats, and bugs are forbidden.<br>
+Insults, toxic behavior, and provocations are forbidden.<br>
+All disputes are resolved by the referee. Admin decisions are final.<br>
+6. <b>Match Interruptions:</b><br>
+If a player disconnects, the match continues unless critical.<br>
+For technical issues, the team must notify the admin within 2 minutes.<br>
+One technical pause per match up to 5 minutes (with referee approval).<br>
+7. <b>Sanctions:</b><br>
+1st violation — warning.<br>
+2nd — disqualification of player or team depending on severity.<br>
+Repeated violations — immediate removal from the tournament.<br>
+8. <b>Prizes & Awards:</b><br>
+Prize pool and placement are announced before the tournament.<br>
+Prizes are distributed within the team or equally (by default).`
       },
       ru: {
         home: "Главная",
@@ -556,7 +624,7 @@
         profile_saved: "Профиль сохранён!",
         profile: "Профиль игрока",
         news4title: "Поддержка польского!",
-        news4desc: "Теперь в нашем приложении появилась\nподдержка польского языка.",
+        news4desc: "Теперь в нашем приложении появилась<br>поддержка польского языка.",
         news5title: "Обновление турниров!",
         news5desc: "Раздел \"Турниры\" обновлен!",
         tournament1desc: "Старт: 1 июля. Призовой фонд: 5000₴",
@@ -566,7 +634,41 @@
         rule2x2_title: "Турнир 2х2",
         rule2x2: "<b>Правила для турнира 2х2:</b><br>1. Играют две команды по 2 игрока.<br>2. Побеждает команда, выигравшая больше раундов.<br>3. Запрещено использование стороннего ПО.<br>4. Другие правила по решению организаторов.",
         rule5x5_title: "Турнир 5х5",
-        rule5x5: "<b>Правила для турнира 5х5:</b><br>1. Играют две команды по 5 игроков.<br>2. Побеждает команда, выигравшая больше раундов.<br>3. Запрещено использование стороннего ПО.<br>4. Другие правила по решению организаторов."
+        rule5x5: `<b>Правила турнира по Standoff 2 (5 на 5):</b><br>
+1. <b>Общие положения:</b><br>
+Турнир проводится по дисциплине Standoff 2.<br>
+Формат матчей: 5 на 5.<br>
+Все участники обязаны соблюдать правила честной игры и проявлять уважение к другим игрокам и судьям турнира.<br>
+2. <b>Участие и регистрация:</b><br>
+Команда состоит из 5 основных игроков и до 2 запасных.<br>
+Регионы: Польша, Нидерланды, Франция.<br>
+Максимально допустимый пинг — 100 мс. Игроки с превышением этого значения могут быть отстранены от участия.<br>
+Регистрация проходит через указанную организаторами платформу или форму.<br>
+3. <b>Технические требования:</b><br>
+Игра проводится только на мобильных устройствах. Использование эмуляторов запрещено.<br>
+Проверка пинга производится перед каждым матчем.<br>
+Использование VPN, прокси и любых средств для изменения региона/пинга строго запрещено.<br>
+4. <b>Формат турнира:</b><br>
+Матчи группового этапа проходят  в формате Best of 2 (BO2). Полуфинал — Best of 3 (BO3).<br>
+Финал – Best of 5 (BO5).<br>
+Победа присуждается команде, первой выигравшей 13 раундов.<br>
+Карты выбираются методом “ban/pick” (отказ/выбор).<br>
+Перерывы между половинами — 1 минута. Переключение сторон происходит после 12 раундов.<br>
+5. <b>Поведение игроков:</b><br>
+Запрещено использование стороннего ПО, читов и багов.<br>
+Оскорбления, токсичное поведение и провокации запрещены.<br>
+Все спорные ситуации решаются судьёй матча. Решения администрации окончательны.<br>
+6. <b>Прерывание матча:</b><br>
+При вылете игрока матч продолжается, если ситуация не критична.<br>
+В случае технических проблем команда обязана уведомить администратора в течение 2 минут.<br>
+Допускается 1 техническая пауза на матч продолжительностью до 5 минут (по согласованию с судьёй).<br>
+7. <b>Санкции:</b><br>
+1-е нарушение правил — предупреждение.<br>
+2-е — дисквалификация игрока или всей команды в зависимости от тяжести нарушения.<br>
+Повторяющиеся нарушения — немедленное снятие с турнира.<br>
+8. <b>Призы и награды:</b><br>
+Призовой фонд и распределение мест объявляются перед началом турнира.<br>
+Призы распределяются внутри команды самостоятельно или поровну (по умолчанию).`
       },
       pl: {
         home: "Strona główna",
@@ -586,7 +688,7 @@
         profile_saved: "Profil zapisany!",
         profile: "Profil gracza",
         news4title: "Wsparcie polskiego!",
-        news4desc: "Nasza aplikacja teraz obsługuje\njęzyk polski.",
+        news4desc: "Nasza aplikacja teraz obsługuje<br>język polski.",
         news5title: "Aktualizacja turniejów!",
         news5desc: "Sekcja \"Turnieje\" została zaktualizowana!",
         tournament1desc: "Start: 1 lipca. Fundusz nagród: 5000₴",
@@ -596,7 +698,41 @@
         rule2x2_title: "Turniej 2x2",
         rule2x2: "<b>Zasady turnieju 2x2:</b><br>1. Grają dwie drużyny po 2 graczy.<br>2. Zwycięża drużyna, która wygra więcej rund.<br>3. Zakazane jest używanie oprogramowania firm trzecich.<br>4. Inne zasady według decyzji organizatorów.",
         rule5x5_title: "Turniej 5x5",
-        rule5x5: "<b>Zasady turnieju 5x5:</b><br>1. Grają dwie drużyny po 5 graczy.<br>2. Zwycięża drużyna, która wygra więcej rund.<br>3. Zakazane jest używanie oprogramowania firm trzecich.<br>4. Inne zasady według decyzji organizatorów."
+        rule5x5: `<b>Zasady turnieju Standoff 2 (5 na 5):</b><br>
+1. <b>Postanowienia ogólne:</b><br>
+Turniej odbywa się w grze Standoff 2.<br>
+Format meczów: 5 na 5.<br>
+Wszyscy uczestnicy muszą przestrzegać zasad fair play i szanować innych graczy oraz sędziów.<br>
+2. <b>Udział i rejestracja:</b><br>
+Drużyna składa się z 5 podstawowych graczy i do 2 rezerwowych.<br>
+Regiony: Polska, Holandia, Francja.<br>
+Maksymalny dozwolony ping — 100 ms. Gracze z wyższym pingiem mogą zostać wykluczeni.<br>
+Rejestracja odbywa się przez platformę lub formularz wskazany przez organizatorów.<br>
+3. <b>Wymagania techniczne:</b><br>
+Gra odbywa się tylko na urządzeniach mobilnych. Używanie emulatorów jest zabronione.<br>
+Ping sprawdzany jest przed każdym meczem.<br>
+Używanie VPN, proxy i innych środków do zmiany regionu/pingu jest surowo zabronione.<br>
+4. <b>Format turnieju:</b><br>
+Mecze fazy grupowej — Best of 2 (BO2). Półfinał — Best of 3 (BO3).<br>
+Finał – Best of 5 (BO5).<br>
+Wygrywa drużyna, która pierwsza zdobędzie 13 rund.<br>
+Mapy wybierane są metodą “ban/pick”.<br>
+Przerwa między połowami — 1 minuta. Zmiana stron po 12 rundach.<br>
+5. <b>Zachowanie graczy:</b><br>
+Zakazane jest używanie oprogramowania firm trzecich, cheatów i bugów.<br>
+Obraźliwe, toksyczne zachowanie i prowokacje są zabronione.<br>
+Wszelkie sporne sytuacje rozstrzyga sędzia. Decyzje administracji są ostateczne.<br>
+6. <b>Przerwanie meczu:</b><br>
+W przypadku rozłączenia gracza mecz trwa dalej, jeśli sytuacja nie jest krytyczna.<br>
+W przypadku problemów technicznych drużyna musi powiadomić administratora w ciągu 2 minut.<br>
+Dozwolona 1 przerwa techniczna na mecz do 5 minut (za zgodą sędziego).<br>
+7. <b>Sankcje:</b><br>
+1. naruszenie — ostrzeżenie.<br>
+2. — dyskwalifikacja gracza lub drużyny w zależności od wagi przewinienia.<br>
+Powtarzające się naruszenia — natychmiastowe usunięcie z turnieju.<br>
+8. <b>Nagrody:</b><br>
+Pula nagród i podział miejsc ogłaszane są przed rozpoczęciem turnieju.<br>
+Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
       }
     };
 
