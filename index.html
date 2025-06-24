@@ -153,6 +153,13 @@
       left: 0;
       right: auto;
     }
+    .main-section, .rules-section, .awards-section, .support-section {
+      display: none;
+      padding: 0 16px;
+    }
+    .main-section.active, .rules-section.active, .awards-section.active, .support-section.active {
+      display: block;
+    }
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -177,7 +184,7 @@
       font-size: 1.2rem;
       margin-bottom: 2px;
     }
-    .nav-item:hover {
+    .nav-item.active, .nav-item:hover {
       color: #00bfae;
     }
     @keyframes fadeIn {
@@ -304,6 +311,36 @@
       font-size: 0.95rem;
       color: #fff;
     }
+    .dropdown {
+      margin: 18px 0;
+      width: 100%;
+      max-width: 400px;
+    }
+    .dropdown summary {
+      background: #222;
+      color: #00bfae;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 12px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      outline: none;
+      border: 2px solid #00bfae;
+      margin-bottom: 6px;
+      user-select: none;
+    }
+    .dropdown[open] summary {
+      background: #00bfae;
+      color: #222;
+    }
+    .dropdown-content {
+      background: #333;
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 0 0 8px 8px;
+      font-size: 1rem;
+      border-top: 1px solid #00bfae;
+    }
   </style>
 </head>
 <body>
@@ -338,52 +375,71 @@
     </div>
   </div>
 
-  <!-- Новини -->
-  <div class="news-section">
-    <div class="news-title" data-i18n="news">Новини</div>
-    <div class="news-list" id="newsList">
-      <div class="news-card">
-        <h4 data-i18n="news4title">Підтримка польської!</h4>
-        <p data-i18n="news4desc">Тепер в нашому додатку з'явилася підтримка польської мови.</p>
+  <!-- ГОЛОВНА -->
+  <div class="main-section active" id="mainSection">
+    <div class="news-section">
+      <div class="news-title" data-i18n="news">Новини</div>
+      <div class="news-list" id="newsList">
+        <div class="news-card">
+          <h4 data-i18n="news4title">Підтримка польської!</h4>
+          <p data-i18n="news4desc">Тепер в нашому додатку з'явилася підтримка польської мови.</p>
+        </div>
+        <div class="news-card">
+          <h4 data-i18n="news5title">Оновлення турнірів!</h4>
+          <p data-i18n="news5desc">Розділ "Турніри" оновлено!</p>
+        </div>
       </div>
-      <div class="news-card">
-        <h4 data-i18n="news5title">Оновлення турнірів!</h4>
-        <p data-i18n="news5desc">Розділ "Турніри" оновлено!</p>
+    </div>
+    <div class="disciplines-section">
+      <div class="disciplines-title" data-i18n="disciplines">Дисципліни</div>
+      <div class="disciplines-list">
+        <div class="discipline-card">
+          <img src="Standoff2.jpg" alt="Standoff 2" class="discipline-img">
+          <div class="discipline-name">Standoff 2</div>
+        </div>
+      </div>
+    </div>
+    <div class="tournaments-section">
+      <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
+      <div class="tournament-list" id="tournamentList">
+        <div class="tournament-card">
+          <h4>RFORZ Grad Prix Season 1</h4>
+          <p data-i18n="tournament1desc">Початок: 1 липня. Призовий фонд: 5000₴</p>
+        </div>
+        <div class="tournament-card">
+          <h4>Quiz Battle</h4>
+          <p data-i18n="tournament2desc">Початок: 10 липня. Призовий фонд: 2000₴</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Дисципліни -->
-  <div class="disciplines-section">
-    <div class="disciplines-title" data-i18n="disciplines">Дисципліни</div>
-    <div class="disciplines-list">
-      <div class="discipline-card">
-        <img src="Standoff2.jpg" alt="Standoff 2" class="discipline-img">
-        <div class="discipline-name">Standoff 2</div>
-      </div>
-    </div>
+  <!-- ПРАВИЛА -->
+  <div class="rules-section" id="rulesSection">
+    <details class="dropdown">
+      <summary id="rule1x1Title"></summary>
+      <div class="dropdown-content" id="rule1x1Content"></div>
+    </details>
+    <details class="dropdown">
+      <summary id="rule2x2Title"></summary>
+      <div class="dropdown-content" id="rule2x2Content"></div>
+    </details>
+    <details class="dropdown">
+      <summary id="rule5x5Title"></summary>
+      <div class="dropdown-content" id="rule5x5Content"></div>
+    </details>
   </div>
 
-  <!-- Турніри -->
-  <div class="tournaments-section">
-    <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
-    <div class="tournament-list" id="tournamentList">
-      <div class="tournament-card">
-        <h4>RFORZ Grad Prix Season 1</h4>
-        <p data-i18n="tournament1desc">Початок: 1 липня. Призовий фонд: 5000₴</p>
-      </div>
-      <div class="tournament-card">
-        <h4>Quiz Battle</h4>
-        <p data-i18n="tournament2desc">Початок: 10 липня. Призовий фонд: 2000₴</p>
-      </div>
-    </div>
-  </div>
+  <!-- НАГОРОДИ -->
+  <div class="awards-section" id="awardsSection"></div>
+  <!-- ПІДТРИМКА -->
+  <div class="support-section" id="supportSection"></div>
 
   <div class="bottom-nav">
-    <div class="nav-item"><span>🏠</span><p data-i18n="home">Головна</p></div>
-    <div class="nav-item"><span>📄</span><p data-i18n="rules">Правила</p></div>
-    <div class="nav-item"><span>🏆</span><p data-i18n="awards">Нагороди</p></div>
-    <div class="nav-item"><span>🤖</span><p data-i18n="support">Підтримка</p></div>
+    <div class="nav-item active" id="navHome"><span>🏠</span><p data-i18n="home">Головна</p></div>
+    <div class="nav-item" id="navRules"><span>📄</span><p data-i18n="rules">Правила</p></div>
+    <div class="nav-item" id="navAwards"><span>🏆</span><p data-i18n="awards">Нагороди</p></div>
+    <div class="nav-item" id="navSupport"><span>🤖</span><p data-i18n="support">Підтримка</p></div>
   </div>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -410,6 +466,16 @@
     const profileId = document.getElementById("profileId");
     const profileTg = document.getElementById("profileTg");
 
+    // Навігація
+    const navHome = document.getElementById("navHome");
+    const navRules = document.getElementById("navRules");
+    const navAwards = document.getElementById("navAwards");
+    const navSupport = document.getElementById("navSupport");
+    const mainSection = document.getElementById("mainSection");
+    const rulesSection = document.getElementById("rulesSection");
+    const awardsSection = document.getElementById("awardsSection");
+    const supportSection = document.getElementById("supportSection");
+
     // Переклади
     const translations = {
       uk: {
@@ -434,7 +500,13 @@
         news5title: "Оновлення турнірів!",
         news5desc: "Розділ \"Турніри\" оновлено!",
         tournament1desc: "Початок: 1 липня. Призовий фонд: 5000₴",
-        tournament2desc: "Початок: 10 липня. Призовий фонд: 2000₴"
+        tournament2desc: "Початок: 10 липня. Призовий фонд: 2000₴",
+        rule1x1_title: "Турнір 1х1",
+        rule1x1: "<b>Правила для турніру 1х1:</b><br>1. Гра проходить між двома гравцями.<br>2. Переможець визначається за кількістю виграних раундів.<br>3. Заборонено використання стороннього ПЗ.<br>4. Інші правила за рішенням організаторів.",
+        rule2x2_title: "Турнір 2х2",
+        rule2x2: "<b>Правила для турніру 2х2:</b><br>1. Грають дві команди по 2 гравці.<br>2. Переможець — команда, що виграла більше раундів.<br>3. Заборонено використання стороннього ПЗ.<br>4. Інші правила за рішенням організаторів.",
+        rule5x5_title: "Турнір 5х5",
+        rule5x5: "<b>Правила для турніру 5х5:</b><br>1. Грають дві команди по 5 гравців.<br>2. Переможець — команда, що виграла більше раундів.<br>3. Заборонено використання стороннього ПЗ.<br>4. Інші правила за рішенням організаторів."
       },
       en: {
         home: "Home",
@@ -458,7 +530,13 @@
         news5title: "Tournaments Update!",
         news5desc: "The 'Tournaments' section has been updated!",
         tournament1desc: "Start: July 1. Prize fund: 5000₴",
-        tournament2desc: "Start: July 10. Prize fund: 2000₴"
+        tournament2desc: "Start: July 10. Prize fund: 2000₴",
+        rule1x1_title: "1v1 Tournament",
+        rule1x1: "<b>Rules for 1v1 tournament:</b><br>1. The game is played between two players.<br>2. The winner is determined by the number of rounds won.<br>3. Third-party software is prohibited.<br>4. Other rules at the discretion of the organizers.",
+        rule2x2_title: "2v2 Tournament",
+        rule2x2: "<b>Rules for 2v2 tournament:</b><br>1. Two teams of 2 players each.<br>2. The winner is the team that wins more rounds.<br>3. Third-party software is prohibited.<br>4. Other rules at the discretion of the organizers.",
+        rule5x5_title: "5v5 Tournament",
+        rule5x5: "<b>Rules for 5v5 tournament:</b><br>1. Two teams of 5 players each.<br>2. The winner is the team that wins more rounds.<br>3. Third-party software is prohibited.<br>4. Other rules at the discretion of the organizers."
       },
       ru: {
         home: "Главная",
@@ -482,7 +560,13 @@
         news5title: "Обновление турниров!",
         news5desc: "Раздел \"Турниры\" обновлен!",
         tournament1desc: "Старт: 1 июля. Призовой фонд: 5000₴",
-        tournament2desc: "Старт: 10 июля. Призовой фонд: 2000₴"
+        tournament2desc: "Старт: 10 июля. Призовой фонд: 2000₴",
+        rule1x1_title: "Турнир 1х1",
+        rule1x1: "<b>Правила для турнира 1х1:</b><br>1. Игра между двумя игроками.<br>2. Победитель определяется по количеству выигранных раундов.<br>3. Запрещено использование стороннего ПО.<br>4. Другие правила по решению организаторов.",
+        rule2x2_title: "Турнир 2х2",
+        rule2x2: "<b>Правила для турнира 2х2:</b><br>1. Играют две команды по 2 игрока.<br>2. Побеждает команда, выигравшая больше раундов.<br>3. Запрещено использование стороннего ПО.<br>4. Другие правила по решению организаторов.",
+        rule5x5_title: "Турнир 5х5",
+        rule5x5: "<b>Правила для турнира 5х5:</b><br>1. Играют две команды по 5 игроков.<br>2. Побеждает команда, выигравшая больше раундов.<br>3. Запрещено использование стороннего ПО.<br>4. Другие правила по решению организаторов."
       },
       pl: {
         home: "Strona główna",
@@ -506,15 +590,72 @@
         news5title: "Aktualizacja turniejów!",
         news5desc: "Sekcja \"Turnieje\" została zaktualizowana!",
         tournament1desc: "Start: 1 lipca. Fundusz nagród: 5000₴",
-        tournament2desc: "Start: 10 lipca. Fundusz nagród: 2000₴"
+        tournament2desc: "Start: 10 lipca. Fundusz nagród: 2000₴",
+        rule1x1_title: "Turniej 1x1",
+        rule1x1: "<b>Zasady turnieju 1x1:</b><br>1. Gra pomiędzy dwoma graczami.<br>2. Zwycięzca to ten, kto wygra więcej rund.<br>3. Zakazane jest używanie oprogramowania firm trzecich.<br>4. Inne zasady według decyzji organizatorów.",
+        rule2x2_title: "Turniej 2x2",
+        rule2x2: "<b>Zasady turnieju 2x2:</b><br>1. Grają dwie drużyny po 2 graczy.<br>2. Zwycięża drużyna, która wygra więcej rund.<br>3. Zakazane jest używanie oprogramowania firm trzecich.<br>4. Inne zasady według decyzji organizatorów.",
+        rule5x5_title: "Turniej 5x5",
+        rule5x5: "<b>Zasady turnieju 5x5:</b><br>1. Grają dwie drużyny po 5 graczy.<br>2. Zwycięża drużyna, która wygra więcej rund.<br>3. Zakazane jest używanie oprogramowania firm trzecich.<br>4. Inne zasady według decyzji organizatorów."
       }
     };
+
+    // Динамічний переклад для правил
+    function translateRules(lang) {
+      document.getElementById('rule1x1Title').innerHTML = translations[lang].rule1x1_title;
+      document.getElementById('rule1x1Content').innerHTML = translations[lang].rule1x1;
+      document.getElementById('rule2x2Title').innerHTML = translations[lang].rule2x2_title;
+      document.getElementById('rule2x2Content').innerHTML = translations[lang].rule2x2;
+      document.getElementById('rule5x5Title').innerHTML = translations[lang].rule5x5_title;
+      document.getElementById('rule5x5Content').innerHTML = translations[lang].rule5x5;
+    }
+
+    // Зберігаємо мову при переходах
+    function applyTranslations(lang) {
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        let text = translations[lang][key];
+        if (text) {
+          el.innerHTML = text.replace(/\n/g, "<br>");
+        }
+      });
+      localStorage.setItem('lang', lang);
+      translateRules(lang);
+    }
+
+    navHome.addEventListener('click', () => showSection('main'));
+    navRules.addEventListener('click', () => showSection('rules'));
+    navAwards.addEventListener('click', () => showSection('awards'));
+    navSupport.addEventListener('click', () => showSection('support'));
+
+    function showSection(section) {
+      mainSection.classList.remove('active');
+      rulesSection.classList.remove('active');
+      awardsSection.classList.remove('active');
+      supportSection.classList.remove('active');
+      navHome.classList.remove('active');
+      navRules.classList.remove('active');
+      navAwards.classList.remove('active');
+      navSupport.classList.remove('active');
+      if (section === 'main') {
+        mainSection.classList.add('active');
+        navHome.classList.add('active');
+      } else if (section === 'rules') {
+        rulesSection.classList.add('active');
+        navRules.classList.add('active');
+      } else if (section === 'awards') {
+        awardsSection.classList.add('active');
+        navAwards.classList.add('active');
+      } else if (section === 'support') {
+        supportSection.classList.add('active');
+        navSupport.classList.add('active');
+      }
+    }
 
     // Показати/сховати профіль
     avatar.addEventListener("click", () => {
       profilePopup.classList.toggle("active");
       langPopup.classList.remove("active");
-      // Скидаємо стан форми при кожному відкритті
       if (!localStorage.getItem('profileSaved')) {
         showRegisterState();
       } else {
@@ -529,25 +670,14 @@
     });
 
     // Вибір мови
+    let currentLang = localStorage.getItem('lang') || 'uk';
     langOptions.forEach(btn => {
       btn.addEventListener("click", () => {
         const lang = btn.dataset.lang;
+        currentLang = lang;
         applyTranslations(lang);
-        localStorage.setItem('lang', lang);
-        langPopup.classList.remove("active");
       });
     });
-
-    // Переклад
-    function applyTranslations(lang) {
-      document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.dataset.i18n;
-        let text = translations[lang][key];
-        if (text) {
-          el.innerHTML = text.replace(/\n/g, "<br>");
-        }
-      });
-    }
 
     // Скидання стану профілю
     function showRegisterState() {
@@ -565,7 +695,6 @@
       playerProfile.style.display = "block";
       createTeamBtn.style.display = "block";
       successMsg.style.display = "block";
-      // Підставити дані з localStorage
       profileNick.textContent = localStorage.getItem('profileNick') || "";
       profileId.textContent = localStorage.getItem('profileId') || "";
       profileTg.textContent = localStorage.getItem('profileTg') || "";
@@ -578,7 +707,6 @@
       playerProfile.style.display = "none";
       createTeamBtn.style.display = "none";
       successMsg.style.display = "none";
-      // Заповнюємо поле Telegram
       if (tg.initDataUnsafe?.user) {
         const user = tg.initDataUnsafe.user;
         tgUserInput.value = user.username
@@ -592,13 +720,11 @@
     // Клік "Готово" (submit форми)
     profileForm.addEventListener("submit", function(e) {
       e.preventDefault();
-      // Зберігаємо дані у localStorage
       localStorage.setItem('profileSaved', '1');
       localStorage.setItem('profileNick', standoffNickInput.value);
       localStorage.setItem('profileId', standoffIdInput.value);
       localStorage.setItem('profileTg', tgUserInput.value);
       showPlayerProfile();
-      // Google Analytics event (реєстрація)
       gtag('event', 'register', {
         'event_category': 'Profile',
         'event_label': standoffNickInput.value
@@ -608,7 +734,6 @@
     // Клік "Створити команду"
     createTeamBtn.addEventListener("click", () => {
       alert("Функція створення команди у розробці!");
-      // Google Analytics event (створення команди)
       gtag('event', 'create_team', {
         'event_category': 'Team'
       });
@@ -616,15 +741,13 @@
 
     // ініціалізація користувача та мови
     window.addEventListener("DOMContentLoaded", () => {
-      // Мова
-      const savedLang = localStorage.getItem('lang') || 'uk';
-      applyTranslations(savedLang);
-      // Профіль
+      applyTranslations(currentLang);
       if (localStorage.getItem('profileSaved')) {
         showPlayerProfile();
       } else {
         showRegisterState();
       }
+      showSection('main');
     });
 
     // Закриття popup по кліку поза ним
