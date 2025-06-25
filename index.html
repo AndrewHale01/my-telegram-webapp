@@ -407,22 +407,70 @@
     </div>
   </div>
 
-  <!-- ГОЛОВНА -->
   <div class="main-section active" id="mainSection">
-    <!-- ...залишаємо як було... -->
-    <!-- ... -->
+    <div class="news-section">
+      <div class="news-title" data-i18n="news">Новини</div>
+      <div class="news-list" id="newsList">
+        <div class="news-card">
+          <h4 data-i18n="news4title">Підтримка польської!</h4>
+          <p data-i18n="news4desc">Тепер в нашому додатку з'явилася підтримка польської мови.</p>
+        </div>
+        <div class="news-card">
+          <h4 data-i18n="news5title">Оновлення турнірів!</h4>
+          <p data-i18n="news5desc">Розділ "Турніри" оновлено!</p>
+        </div>
+      </div>
+    </div>
+    <div class="disciplines-section">
+      <div class="disciplines-title" data-i18n="disciplines">Дисципліни</div>
+      <div class="disciplines-list">
+        <div class="discipline-card">
+          <img src="Standoff2.jpg" alt="Standoff 2" class="discipline-img">
+          <div class="discipline-name">Standoff 2</div>
+        </div>
+      </div>
+    </div>
+    <div class="tournaments-section">
+      <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
+      <div class="tournament-list" id="tournamentList">
+        <div class="tournament-card">
+          <h4>RFORZ Grad Prix Season 1</h4>
+          <p data-i18n="tournament1desc">Початок: 1 липня. Призовий фонд: 5000₴</p>
+        </div>
+        <div class="tournament-card">
+          <h4>Quiz Battle</h4>
+          <p data-i18n="tournament2desc">Початок: 10 липня. Призовий фонд: 2000₴</p>
+        </div>
+      </div>
+    </div>
   </div>
+
   <!-- ПРАВИЛА -->
   <div class="rules-section" id="rulesSection">
-    <!-- ...залишаємо як було... -->
-    <!-- ... -->
+    <details class="dropdown">
+      <summary id="rule1x1Title"></summary>
+      <div class="dropdown-content" id="rule1x1Content"></div>
+    </details>
+    <details class="dropdown">
+      <summary id="rule2x2Title"></summary>
+      <div class="dropdown-content" id="rule2x2Content"></div>
+    </details>
+    <details class="dropdown">
+      <summary id="rule5x5Title"></summary>
+      <div class="dropdown-content" id="rule5x5Content"></div>
+    </details>
   </div>
+
   <!-- НАГОРОДИ -->
   <div class="awards-section" id="awardsSection"></div>
   <!-- ПІДТРИМКА -->
   <div class="support-section" id="supportSection"></div>
+
   <div class="bottom-nav">
-    <!-- ...залишаємо як було... -->
+    <div class="nav-item active" id="navHome"><span>🏠</span><p data-i18n="home">Головна</p></div>
+    <div class="nav-item" id="navRules"><span>📄</span><p data-i18n="rules">Правила</p></div>
+    <div class="nav-item" id="navAwards"><span>🏆</span><p data-i18n="awards">Нагороди</p></div>
+    <div class="nav-item" id="navSupport"><span>🤖</span><p data-i18n="support">Підтримка</p></div>
   </div>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
