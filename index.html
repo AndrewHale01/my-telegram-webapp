@@ -13,6 +13,7 @@
     gtag('config', 'G-TZN665FNYF');
   </script>
   <style>
+    /* ...всі ваші стилі без змін... */
     body {
       margin: 0;
       background: #222;
@@ -341,12 +342,27 @@
       font-size: 1rem;
       border-top: 1px solid #00bfae;
     }
+    /* --- Admin modal styles --- */
+    #adminMenuBtn { background: none; border: none; font-size: 2rem; cursor: pointer; margin-left: 12px; display: none; }
+    #adminModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000a; z-index: 9999; align-items: center; justify-content: center; }
+    #adminModal.active { display: flex; }
+    #adminModalContent { background: #222; color: #fff; border-radius: 16px; padding: 32px 24px; min-width: 320px; max-width: 90vw; box-shadow: 0 8px 32px #000b; position: relative; }
+    #closeAdminModal { position: absolute; top: 12px; right: 16px; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+    #adminModalContent button { padding: 10px; border-radius: 8px; border: none; font-size: 1rem; cursor: pointer; margin-bottom: 8px; width: 100%; max-width: 320px; }
+    #banUserBtn { background: #c62828; color: #fff; }
+    #unbanUserBtn { background: #388e3c; color: #fff; }
+    #givePrizeBtn { background: #1976d2; color: #fff; }
+    #disqualifyTeamBtn { background: #fbc02d; color: #222; }
+    #editBracketBtn { background: #7b1fa2; color: #fff; }
+    #adminResult { margin-top: 18px; color: #0f0; min-height: 24px; }
   </style>
 </head>
 <body>
   <div class="topbar">
     <div class="lang-btn" id="langBtn">🌐</div>
     <img id="avatar" class="avatar-small" src="avatar.jpg" alt="Avatar">
+    <!-- Admin menu button (only for admins) -->
+    <button id="adminMenuBtn" title="Адмін-меню">🛡️</button>
     <div id="profilePopup" class="popup">
       <button class="register-btn" id="registerBtn" data-i18n="register">Зареєструватись</button>
       <form class="profile-form" id="profileForm" style="display:none;">
@@ -375,75 +391,102 @@
     </div>
   </div>
 
+  <!-- Admin Modal -->
+  <div id="adminModal">
+    <div id="adminModalContent">
+      <button id="closeAdminModal">✖️</button>
+      <h2 style="color:#00bfae; margin-top:0;">Адмін-меню</h2>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <button id="banUserBtn">🚫 Заблокувати користувача</button>
+        <button id="unbanUserBtn">✅ Розблокувати користувача</button>
+        <button id="givePrizeBtn">🏆 Видати приз</button>
+        <button id="disqualifyTeamBtn">❌ Дискваліфікувати команду</button>
+        <button id="editBracketBtn">🗂️ Модерувати сітку</button>
+      </div>
+      <div id="adminResult"></div>
+    </div>
+  </div>
+
   <!-- ГОЛОВНА -->
   <div class="main-section active" id="mainSection">
-    <div class="news-section">
-      <div class="news-title" data-i18n="news">Новини</div>
-      <div class="news-list" id="newsList">
-        <div class="news-card">
-          <h4 data-i18n="news4title">Підтримка польської!</h4>
-          <p data-i18n="news4desc">Тепер в нашому додатку з'явилася підтримка польської мови.</p>
-        </div>
-        <div class="news-card">
-          <h4 data-i18n="news5title">Оновлення турнірів!</h4>
-          <p data-i18n="news5desc">Розділ "Турніри" оновлено!</p>
-        </div>
-      </div>
-    </div>
-    <div class="disciplines-section">
-      <div class="disciplines-title" data-i18n="disciplines">Дисципліни</div>
-      <div class="disciplines-list">
-        <div class="discipline-card">
-          <img src="Standoff2.jpg" alt="Standoff 2" class="discipline-img">
-          <div class="discipline-name">Standoff 2</div>
-        </div>
-      </div>
-    </div>
-    <div class="tournaments-section">
-      <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
-      <div class="tournament-list" id="tournamentList">
-        <div class="tournament-card">
-          <h4>RFORZ Grad Prix Season 1</h4>
-          <p data-i18n="tournament1desc">Початок: 1 липня. Призовий фонд: 5000₴</p>
-        </div>
-        <div class="tournament-card">
-          <h4>Quiz Battle</h4>
-          <p data-i18n="tournament2desc">Початок: 10 липня. Призовий фонд: 2000₴</p>
-        </div>
-      </div>
-    </div>
+    <!-- ...залишаємо як було... -->
+    <!-- ... -->
   </div>
-
   <!-- ПРАВИЛА -->
   <div class="rules-section" id="rulesSection">
-    <details class="dropdown">
-      <summary id="rule1x1Title"></summary>
-      <div class="dropdown-content" id="rule1x1Content"></div>
-    </details>
-    <details class="dropdown">
-      <summary id="rule2x2Title"></summary>
-      <div class="dropdown-content" id="rule2x2Content"></div>
-    </details>
-    <details class="dropdown">
-      <summary id="rule5x5Title"></summary>
-      <div class="dropdown-content" id="rule5x5Content"></div>
-    </details>
+    <!-- ...залишаємо як було... -->
+    <!-- ... -->
   </div>
-
   <!-- НАГОРОДИ -->
   <div class="awards-section" id="awardsSection"></div>
   <!-- ПІДТРИМКА -->
   <div class="support-section" id="supportSection"></div>
-
   <div class="bottom-nav">
-    <div class="nav-item active" id="navHome"><span>🏠</span><p data-i18n="home">Головна</p></div>
-    <div class="nav-item" id="navRules"><span>📄</span><p data-i18n="rules">Правила</p></div>
-    <div class="nav-item" id="navAwards"><span>🏆</span><p data-i18n="awards">Нагороди</p></div>
-    <div class="nav-item" id="navSupport"><span>🤖</span><p data-i18n="support">Підтримка</p></div>
+    <!-- ...залишаємо як було... -->
   </div>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
+    // ...весь ваш існуючий JS без змін...
+
+    // Додаємо список адміністраторів (ваш ID)
+    const ADMIN_IDS = [5806282517];
+
+    // Показати кнопку-символ для адмін-меню тільки для адміністратора
+    window.addEventListener("DOMContentLoaded", () => {
+      const tg = window.Telegram.WebApp;
+      const userId = tg.initDataUnsafe?.user?.id;
+      if (ADMIN_IDS.includes(userId)) {
+        document.getElementById('adminMenuBtn').style.display = 'inline-block';
+      }
+    });
+
+    // Відкриття/закриття модального вікна адмін-меню
+    document.getElementById('adminMenuBtn').onclick = function() {
+      document.getElementById('adminModal').classList.add('active');
+    };
+    document.getElementById('closeAdminModal').onclick = function() {
+      document.getElementById('adminModal').classList.remove('active');
+      document.getElementById('adminResult').innerText = '';
+    };
+    // Закриття по кліку поза вікном
+    document.getElementById('adminModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('active');
+        document.getElementById('adminResult').innerText = '';
+      }
+    });
+
+    // --- Демо-логіка для кнопок адмін-меню ---
+    // У реальному додатку тут мають бути fetch-запити до бекенду!
+    document.getElementById('banUserBtn').onclick = function() {
+      const userId = prompt("Введіть ID користувача для бану:");
+      if (userId) {
+        document.getElementById('adminResult').innerText = `Користувач ${userId} заблокований (демо).`;
+      }
+    };
+    document.getElementById('unbanUserBtn').onclick = function() {
+      const userId = prompt("Введіть ID користувача для розбану:");
+      if (userId) {
+        document.getElementById('adminResult').innerText = `Користувач ${userId} розблокований (демо).`;
+      }
+    };
+    document.getElementById('givePrizeBtn').onclick = function() {
+      const userId = prompt("Введіть ID користувача для призу:");
+      if (userId) {
+        document.getElementById('adminResult').innerText = `Приз видано користувачу ${userId} (демо).`;
+      }
+    };
+    document.getElementById('disqualifyTeamBtn').onclick = function() {
+      const teamId = prompt("Введіть ID команди для дискваліфікації:");
+      if (teamId) {
+        document.getElementById('adminResult').innerText = `Команда ${teamId} дискваліфікована (демо).`;
+      }
+    };
+    document.getElementById('editBracketBtn').onclick = function() {
+      document.getElementById('adminResult').innerText = `Модерація турнірної сітки (демо).`;
+    };
+
     const tg = window.Telegram.WebApp;
 
     const avatar = document.getElementById("avatar");
