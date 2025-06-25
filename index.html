@@ -13,7 +13,6 @@
     gtag('config', 'G-TZN665FNYF');
   </script>
   <style>
-    /* ...всі ваші стилі без змін... */
     body {
       margin: 0;
       background: #222;
@@ -342,7 +341,6 @@
       font-size: 1rem;
       border-top: 1px solid #00bfae;
     }
-    /* --- Admin modal styles --- */
     #adminMenuBtn { background: none; border: none; font-size: 2rem; cursor: pointer; margin-left: 12px; display: none; }
     #adminModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000a; z-index: 9999; align-items: center; justify-content: center; }
     #adminModal.active { display: flex; }
@@ -361,7 +359,6 @@
   <div class="topbar">
     <div class="lang-btn" id="langBtn">🌐</div>
     <img id="avatar" class="avatar-small" src="avatar.jpg" alt="Avatar">
-    <!-- Admin menu button (only for admins) -->
     <button id="adminMenuBtn" title="Адмін-меню">🛡️</button>
     <div id="profilePopup" class="popup">
       <button class="register-btn" id="registerBtn" data-i18n="register">Зареєструватись</button>
@@ -391,17 +388,16 @@
     </div>
   </div>
 
-  <!-- Admin Modal -->
   <div id="adminModal">
     <div id="adminModalContent">
       <button id="closeAdminModal">✖️</button>
-      <h2 style="color:#00bfae; margin-top:0;">Адмін-меню</h2>
+      <h2 id="adminMenuTitle" style="color:#00bfae; margin-top:0;">Адмін-меню</h2>
       <div style="display:flex; flex-direction:column; gap:12px;">
-        <button id="banUserBtn">🚫 Заблокувати користувача</button>
-        <button id="unbanUserBtn">✅ Розблокувати користувача</button>
-        <button id="givePrizeBtn">🏆 Видати приз</button>
-        <button id="disqualifyTeamBtn">❌ Дискваліфікувати команду</button>
-        <button id="editBracketBtn">🗂️ Модерувати сітку</button>
+        <button id="banUserBtn" data-i18n="ban_user">🚫 Заблокувати користувача</button>
+        <button id="unbanUserBtn" data-i18n="unban_user">✅ Розблокувати користувача</button>
+        <button id="givePrizeBtn" data-i18n="give_prize">🏆 Видати приз</button>
+        <button id="disqualifyTeamBtn" data-i18n="disqualify_team">❌ Дискваліфікувати команду</button>
+        <button id="editBracketBtn" data-i18n="edit_bracket">🗂️ Модерувати сітку</button>
       </div>
       <div id="adminResult"></div>
     </div>
@@ -445,7 +441,6 @@
     </div>
   </div>
 
-  <!-- ПРАВИЛА -->
   <div class="rules-section" id="rulesSection">
     <details class="dropdown">
       <summary id="rule1x1Title"></summary>
@@ -461,9 +456,7 @@
     </details>
   </div>
 
-  <!-- НАГОРОДИ -->
   <div class="awards-section" id="awardsSection"></div>
-  <!-- ПІДТРИМКА -->
   <div class="support-section" id="supportSection"></div>
 
   <div class="bottom-nav">
@@ -475,12 +468,8 @@
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
-    // ...весь ваш існуючий JS без змін...
-
-    // Додаємо список адміністраторів (ваш ID)
     const ADMIN_IDS = [5806282517];
 
-    // Показати кнопку-символ для адмін-меню тільки для адміністратора
     window.addEventListener("DOMContentLoaded", () => {
       const tg = window.Telegram.WebApp;
       const userId = tg.initDataUnsafe?.user?.id;
@@ -489,7 +478,6 @@
       }
     });
 
-    // Відкриття/закриття модального вікна адмін-меню
     document.getElementById('adminMenuBtn').onclick = function() {
       document.getElementById('adminModal').classList.add('active');
     };
@@ -497,7 +485,6 @@
       document.getElementById('adminModal').classList.remove('active');
       document.getElementById('adminResult').innerText = '';
     };
-    // Закриття по кліку поза вікном
     document.getElementById('adminModal').addEventListener('click', function(e) {
       if (e.target === this) {
         this.classList.remove('active');
@@ -505,8 +492,6 @@
       }
     });
 
-    // --- Демо-логіка для кнопок адмін-меню ---
-    // У реальному додатку тут мають бути fetch-запити до бекенду!
     document.getElementById('banUserBtn').onclick = function() {
       const userId = prompt("Введіть ID користувача для бану:");
       if (userId) {
@@ -543,7 +528,6 @@
     const langPopup = document.getElementById("langPopup");
     const langOptions = document.querySelectorAll(".lang-option");
 
-    // Profile elements
     const registerBtn = document.getElementById("registerBtn");
     const profileForm = document.getElementById("profileForm");
     const doneBtn = document.getElementById("doneBtn");
@@ -557,7 +541,6 @@
     const profileId = document.getElementById("profileId");
     const profileTg = document.getElementById("profileTg");
 
-    // Навігація
     const navHome = document.getElementById("navHome");
     const navRules = document.getElementById("navRules");
     const navAwards = document.getElementById("navAwards");
@@ -567,7 +550,6 @@
     const awardsSection = document.getElementById("awardsSection");
     const supportSection = document.getElementById("supportSection");
 
-    // Переклади
     const translations = {
       uk: {
         home: "Головна",
@@ -631,7 +613,13 @@
 Повторні порушення — негайне зняття з турніру.<br>
 8. <b>Призи та нагороди:</b><br>
 Призовий фонд і розподіл місць оголошуються перед початком турніру.<br>
-Призи розподіляються всередині команди самостійно або порівну (за замовчуванням).`
+Призи розподіляються всередині команди самостійно або порівну (за замовчуванням).`,
+        admin_menu: "Адмін-меню",
+        ban_user: "🚫 Заблокувати користувача",
+        unban_user: "✅ Розблокувати користувача",
+        give_prize: "🏆 Видати приз",
+        disqualify_team: "❌ Дискваліфікувати команду",
+        edit_bracket: "🗂️ Модерувати сітку"
       },
       en: {
         home: "Home",
@@ -695,7 +683,13 @@ One technical pause per match up to 5 minutes (with referee approval).<br>
 Repeated violations — immediate removal from the tournament.<br>
 8. <b>Prizes & Awards:</b><br>
 Prize pool and placement are announced before the tournament.<br>
-Prizes are distributed within the team or equally (by default).`
+Prizes are distributed within the team or equally (by default).`,
+        admin_menu: "Admin Menu",
+        ban_user: "🚫 Ban user",
+        unban_user: "✅ Unban user",
+        give_prize: "🏆 Give prize",
+        disqualify_team: "❌ Disqualify team",
+        edit_bracket: "🗂️ Edit bracket"
       },
       ru: {
         home: "Главная",
@@ -759,7 +753,13 @@ Prizes are distributed within the team or equally (by default).`
 Повторяющиеся нарушения — немедленное снятие с турнира.<br>
 8. <b>Призы и награды:</b><br>
 Призовой фонд и распределение мест объявляются перед началом турнира.<br>
-Призы распределяются внутри команды самостоятельно или поровну (по умолчанию).`
+Призы распределяются внутри команды самостоятельно или поровну (по умолчанию).`,
+        admin_menu: "Админ-меню",
+        ban_user: "🚫 Заблокировать пользователя",
+        unban_user: "✅ Разблокировать пользователя",
+        give_prize: "🏆 Выдать приз",
+        disqualify_team: "❌ Дисквалифицировать команду",
+        edit_bracket: "🗂️ Модерировать сетку"
       },
       pl: {
         home: "Strona główna",
@@ -823,11 +823,16 @@ Dozwolona 1 przerwa techniczna na mecz do 5 minut (za zgodą sędziego).<br>
 Powtarzające się naruszenia — natychmiastowe usunięcie z turnieju.<br>
 8. <b>Nagrody:</b><br>
 Pula nagród i podział miejsc ogłaszane są przed rozpoczęciem turnieju.<br>
-Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
+Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
+        admin_menu: "Panel admina",
+        ban_user: "🚫 Zablokuj użytkownika",
+        unban_user: "✅ Odblokuj użytkownika",
+        give_prize: "🏆 Przyznaj nagrodę",
+        disqualify_team: "❌ Dyskwalifikuj drużynę",
+        edit_bracket: "🗂️ Moderuj drabinkę"
       }
     };
 
-    // Динамічний переклад для правил
     function translateRules(lang) {
       document.getElementById('rule1x1Title').innerHTML = translations[lang].rule1x1_title;
       document.getElementById('rule1x1Content').innerHTML = translations[lang].rule1x1;
@@ -837,7 +842,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
       document.getElementById('rule5x5Content').innerHTML = translations[lang].rule5x5;
     }
 
-    // Зберігаємо мову при переходах
     function applyTranslations(lang) {
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.dataset.i18n;
@@ -846,6 +850,9 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
           el.innerHTML = text.replace(/\n/g, "<br>");
         }
       });
+      if (document.getElementById('adminMenuTitle')) {
+        document.getElementById('adminMenuTitle').innerHTML = translations[lang].admin_menu;
+      }
       localStorage.setItem('lang', lang);
       translateRules(lang);
     }
@@ -879,7 +886,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
       }
     }
 
-    // Показати/сховати профіль
     avatar.addEventListener("click", () => {
       profilePopup.classList.toggle("active");
       langPopup.classList.remove("active");
@@ -890,13 +896,11 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
       }
     });
 
-    // Показати/сховати вибір мови
     langBtn.addEventListener("click", () => {
       langPopup.classList.toggle("active");
       profilePopup.classList.remove("active");
     });
 
-    // Вибір мови
     let currentLang = localStorage.getItem('lang') || 'uk';
     langOptions.forEach(btn => {
       btn.addEventListener("click", () => {
@@ -906,7 +910,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
       });
     });
 
-    // Скидання стану профілю
     function showRegisterState() {
       registerBtn.style.display = "block";
       profileForm.style.display = "none";
@@ -915,7 +918,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
       successMsg.style.display = "none";
     }
 
-    // Показати профіль гравця
     function showPlayerProfile() {
       registerBtn.style.display = "none";
       profileForm.style.display = "none";
@@ -927,7 +929,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
       profileTg.textContent = localStorage.getItem('profileTg') || "";
     }
 
-    // Клік "Зареєструватись"
     registerBtn.addEventListener("click", () => {
       registerBtn.style.display = "none";
       profileForm.style.display = "flex";
@@ -944,7 +945,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
       }
     });
 
-    // Клік "Готово" (submit форми)
     profileForm.addEventListener("submit", function(e) {
       e.preventDefault();
       localStorage.setItem('profileSaved', '1');
@@ -958,7 +958,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
       });
     });
 
-    // Клік "Створити команду"
     createTeamBtn.addEventListener("click", () => {
       alert("Функція створення команди у розробці!");
       gtag('event', 'create_team', {
@@ -966,7 +965,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
       });
     });
 
-    // ініціалізація користувача та мови
     window.addEventListener("DOMContentLoaded", () => {
       applyTranslations(currentLang);
       if (localStorage.getItem('profileSaved')) {
@@ -977,7 +975,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`
       showSection('main');
     });
 
-    // Закриття popup по кліку поза ним
     document.addEventListener("click", function(e) {
       if (!profilePopup.contains(e.target) && e.target !== avatar) {
         profilePopup.classList.remove("active");
