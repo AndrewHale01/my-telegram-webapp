@@ -353,7 +353,6 @@
     #disqualifyTeamBtn { background: #fbc02d; color: #222; }
     #editBracketBtn { background: #7b1fa2; color: #fff; }
     #adminResult { margin-top: 18px; color: #0f0; min-height: 24px; }
-    /* Notification styles */
     .notification-btn {
       background: none;
       border: none;
@@ -441,14 +440,12 @@
       <button class="lang-option" data-lang="ru">Русский</button>
       <button class="lang-option" data-lang="pl">Polski</button>
     </div>
-    <!-- Notification popup -->
     <div id="notificationPopup" class="popup" style="right:60px; min-width:280px;">
       <div style="font-weight:bold; color:#00bfae; margin-bottom:8px;" id="notificationTitle">Сповіщення</div>
       <div id="notificationList" style="width:100%;"></div>
       <button id="clearNotificationsBtn" class="done-btn" style="margin-top:10px;">Очистити</button>
     </div>
   </div>
-
   <div id="adminModal">
     <div id="adminModalContent">
       <button id="closeAdminModal">✖️</button>
@@ -463,7 +460,6 @@
       <div id="adminResult"></div>
     </div>
   </div>
-
   <div class="main-section active" id="mainSection">
     <div class="news-section">
       <div class="news-title" data-i18n="news">Новини</div>
@@ -501,7 +497,6 @@
       </div>
     </div>
   </div>
-
   <div class="rules-section" id="rulesSection">
     <details class="dropdown">
       <summary id="rule1x1Title"></summary>
@@ -516,22 +511,17 @@
       <div class="dropdown-content" id="rule5x5Content"></div>
     </details>
   </div>
-
   <div class="awards-section" id="awardsSection"></div>
   <div class="support-section" id="supportSection"></div>
-
   <div class="bottom-nav">
     <div class="nav-item active" id="navHome"><span>🏠</span><p data-i18n="home">Головна</p></div>
     <div class="nav-item" id="navRules"><span>📄</span><p data-i18n="rules">Правила</p></div>
     <div class="nav-item" id="navAwards"><span>🏆</span><p data-i18n="awards">Нагороди</p></div>
     <div class="nav-item" id="navSupport"><span>🤖</span><p data-i18n="support">Підтримка</p></div>
   </div>
-
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
     const ADMIN_IDS = [5806282517];
-    
-
     const notificationTranslations = {
       uk: {
         invite: "Вас запросили в команду.",
@@ -644,7 +634,6 @@
     window.addEventListener("DOMContentLoaded", () => {
       updateNotificationBadge();
     });
-
     window.addEventListener("DOMContentLoaded", () => {
       const tg = window.Telegram.WebApp;
       const userId = tg.initDataUnsafe?.user?.id;
@@ -652,7 +641,6 @@
         document.getElementById('adminMenuBtn').style.display = 'inline-block';
       }
     });
-
     document.getElementById('adminMenuBtn').onclick = function() {
       document.getElementById('adminModal').classList.add('active');
     };
@@ -666,7 +654,6 @@
         document.getElementById('adminResult').innerText = '';
       }
     });
-
     document.getElementById('banUserBtn').onclick = function() {
       const userId = prompt("Введіть ID користувача для бану:");
       if (userId) {
@@ -694,17 +681,12 @@
     document.getElementById('editBracketBtn').onclick = function() {
       document.getElementById('adminResult').innerText = `Модерація турнірної сітки (демо).`;
     };
-
-    
-
     const tg = window.Telegram.WebApp;
-
     const avatar = document.getElementById("avatar");
     const profilePopup = document.getElementById("profilePopup");
     const langBtn = document.getElementById("langBtn");
     const langPopup = document.getElementById("langPopup");
     const langOptions = document.querySelectorAll(".lang-option");
-
     const registerBtn = document.getElementById("registerBtn");
     const profileForm = document.getElementById("profileForm");
     const doneBtn = document.getElementById("doneBtn");
@@ -717,7 +699,6 @@
     const profileNick = document.getElementById("profileNick");
     const profileId = document.getElementById("profileId");
     const profileTg = document.getElementById("profileTg");
-
     const navHome = document.getElementById("navHome");
     const navRules = document.getElementById("navRules");
     const navAwards = document.getElementById("navAwards");
@@ -726,7 +707,6 @@
     const rulesSection = document.getElementById("rulesSection");
     const awardsSection = document.getElementById("awardsSection");
     const supportSection = document.getElementById("supportSection");
-
     const translations = {
       uk: {
         home: "Головна",
@@ -1009,7 +989,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
         edit_bracket: "🗂️ Moderuj drabinkę"
       }
     };
-
     function translateRules(lang) {
       document.getElementById('rule1x1Title').innerHTML = translations[lang].rule1x1_title;
       document.getElementById('rule1x1Content').innerHTML = translations[lang].rule1x1;
@@ -1018,7 +997,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
       document.getElementById('rule5x5Title').innerHTML = translations[lang].rule5x5_title;
       document.getElementById('rule5x5Content').innerHTML = translations[lang].rule5x5;
     }
-
     function applyTranslations(lang) {
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.dataset.i18n;
@@ -1033,12 +1011,10 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
       localStorage.setItem('lang', lang);
       translateRules(lang);
     }
-
     navHome.addEventListener('click', () => showSection('main'));
     navRules.addEventListener('click', () => showSection('rules'));
     navAwards.addEventListener('click', () => showSection('awards'));
     navSupport.addEventListener('click', () => showSection('support'));
-
     function showSection(section) {
       mainSection.classList.remove('active');
       rulesSection.classList.remove('active');
@@ -1062,7 +1038,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
         navSupport.classList.add('active');
       }
     }
-
     avatar.addEventListener("click", () => {
       profilePopup.classList.toggle("active");
       langPopup.classList.remove("active");
@@ -1072,13 +1047,10 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
         showPlayerProfile();
       }
     });
-
     langBtn.addEventListener("click", () => {
       langPopup.classList.toggle("active");
       profilePopup.classList.remove("active");
     });
-
-    let currentLang = localStorage.getItem('lang') || 'uk';
     langOptions.forEach(btn => {
       btn.addEventListener("click", () => {
         const lang = btn.dataset.lang;
@@ -1086,7 +1058,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
         applyTranslations(lang);
       });
     });
-
     function showRegisterState() {
       registerBtn.style.display = "block";
       profileForm.style.display = "none";
@@ -1094,7 +1065,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
       createTeamBtn.style.display = "none";
       successMsg.style.display = "none";
     }
-
     function showPlayerProfile() {
       registerBtn.style.display = "none";
       profileForm.style.display = "none";
@@ -1105,7 +1075,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
       profileId.textContent = localStorage.getItem('profileId') || "";
       profileTg.textContent = localStorage.getItem('profileTg') || "";
     }
-
     registerBtn.addEventListener("click", () => {
       registerBtn.style.display = "none";
       profileForm.style.display = "flex";
@@ -1121,7 +1090,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
         tgUserInput.value = "";
       }
     });
-
     profileForm.addEventListener("submit", function(e) {
       e.preventDefault();
       localStorage.setItem('profileSaved', '1');
@@ -1134,14 +1102,12 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
         'event_label': standoffNickInput.value
       });
     });
-
     createTeamBtn.addEventListener("click", () => {
       alert("Функція створення команди у розробці!");
       gtag('event', 'create_team', {
         'event_category': 'Team'
       });
     });
-
     window.addEventListener("DOMContentLoaded", () => {
       applyTranslations(currentLang);
       if (localStorage.getItem('profileSaved')) {
@@ -1151,7 +1117,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
       }
       showSection('main');
     });
-
     document.addEventListener("click", function(e) {
       if (!profilePopup.contains(e.target) && e.target !== avatar) {
         profilePopup.classList.remove("active");
