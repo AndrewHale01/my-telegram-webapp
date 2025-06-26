@@ -1165,12 +1165,6 @@ Nagrody są rozdzielane w drużynie samodzielnie lub po równo (domyślnie).`,
         'event_label': standoffNickInput.value
       });
     });
-    createTeamBtn.addEventListener("click", () => {
-      alert("Функція створення команди у розробці!");
-      gtag('event', 'create_team', {
-        'event_category': 'Team'
-      });
-    });
     window.addEventListener("DOMContentLoaded", () => {
       applyTranslations(currentLang);
       if (localStorage.getItem('profileSaved')) {
