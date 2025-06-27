@@ -521,6 +521,10 @@
         <button id="editBracketBtn" data-i18n="edit_bracket">🗂️ Модерувати сітку</button>
       </div>
       <div id="adminResult"></div>
+      <div id="logViewer"
+     style="display:none; margin-top:20px; max-height:300px;
+            overflow-y:auto; font-size:0.9rem; color:#ccc; padding:10px;">
+</div>
     </div>
   </div>
   <div class="main-section active" id="mainSection">
@@ -744,6 +748,17 @@
     document.getElementById('editBracketBtn').onclick = function() {
       document.getElementById('adminResult').innerText = `Модерація турнірної сітки (демо).`;
     };
+    document.getElementById('viewUserHistoryBtn').onclick = async function() {
+    const res = await fetch('/api/logs');
+    if (!res.ok) return alert('Не вдалося отримати логи');
+
+    const logs = await res.json();
+    const container = document.getElementById('logViewer');
+    container.innerHTML = logs.map(log =>
+      `<div>📌 <b>@${log.username}</b> → ${log.action} (${log.timestamp})</div>`
+    ).join('');
+    container.style.display = 'block';
+  };
     const tg = window.Telegram.WebApp;
     const avatar = document.getElementById("avatar");
     const profilePopup = document.getElementById("profilePopup");
