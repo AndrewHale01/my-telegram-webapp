@@ -450,7 +450,7 @@
         <label for="teamName" data-i18n="team_name">Назва команди</label>
         <input type="text" id="teamName" maxlength="32" required data-i18n-placeholder="team_name_ph">
         <div class="team-player-block">
-          <div class="team-player-title" data-i18n="main_player1">Гравець 1 (основний)</div>
+          <div class="team-player-title" data-i18n="main_player1">Гравець 1 (капітан)</div>
           <input type="text" placeholder="ID в Standoff 2" id="main1Id" required data-i18n-placeholder="player_id_ph">
           <input type="text" placeholder="Нікнейм" id="main1Nick" required data-i18n-placeholder="player_nick_ph">
           <input type="text" placeholder="Telegram" id="main1Tg" required data-i18n-placeholder="player_tg_ph">
@@ -498,6 +498,8 @@
     <div id="langPopup" class="popup">
       <button class="lang-option" data-lang="uk">Українська</button>
       <button class="lang-option" data-lang="en">English</button>
+      <button class="lang-option" data-lang="ru">Русский</button>
+      <button class="lang-option" data-lang="pl">Polski</button>
     </div>
     <div id="notificationPopup" class="popup">
       <div id="notificationList">
@@ -509,18 +511,30 @@
     <div class="news-section">
       <h3 class="news-title" data-i18n="latest_news">Останні новини</h3>
       <div class="news-list">
+        <div class="news-card">
+          <h4>Підтримка польської!</h4>
+          <p data-i18n="new_tournament">Тепер в нашому додатку з'явилася підтримка польської мови.</p>
         </div>
+        <div class="news-card">
+          <h4>Оновлення турнірів!</h4>
+          <p data-i18n="new_tournament">Розділ "Турніри" оновлено!!</p>
     </div>
 
     <div class="disciplines-section">
       <h3 class="disciplines-title" data-i18n="disciplines">Дисципліни</h3>
       <div class="disciplines-list">
+        <div class="discipline-card">
+          <img class="discipline-img" src="standoff2.jpg" alt="Standoff 2">
+          <h4 class="discipline-name" data-i18n="standoff2">Standoff 2</h4>
         </div>
     </div>
 
     <div class="tournaments-section">
-      <h3 class="tournaments-title" data-i18n="upcoming_tournaments">Найближчі турніри</h3>
+      <h3 class="tournaments-title" data-i18n="upcoming_tournaments">Турніри</h3>
       <div class="tournament-list">
+        <div class="tournament-card">
+          <h4>Турнір "RFORZ Grad Prix Season 1"</h4>
+          <p data-i18n="tournament_date">Дата: 15.10.2023</p>
         </div>
     </div>
   </div>
@@ -529,23 +543,58 @@
     <h3 class="tournaments-title" data-i18n="rules">Правила</h3>
     <div class="dropdown">
       <details>
-        <summary data-i18n="general_rules">Загальні правила</summary>
+        <summary data-i18n="general_rules">Турніри 1х1</summary>
         <div class="dropdown-content">
           <p data-i18n="general_rules_text">
             </p>
         </div>
       </details>
       <details>
-        <summary data-i18n="discipline_specific_rules">Правила по дисциплінах</summary>
+        <summary data-i18n="discipline_specific_rules">Турніри 2х2</summary>
         <div class="dropdown-content">
           <p data-i18n="discipline_specific_rules_text">
             </p>
         </div>
       </details>
       <details>
-        <summary data-i18n="conduct_rules">Правила поведінки</summary>
+        <summary data-i18n="conduct_rules">Турніри 5х5</summary>
         <div class="dropdown-content">
           <p data-i18n="conduct_rules_text">
+            Правила Турнира по Standoff 2 (5 на 5)
+1. Общие положения:
+Турнир проводится по дисциплине Standoff 2.
+Формат матчей: 5 на 5.
+Все участники обязаны соблюдать правила честной игры и проявлять уважение к другим игрокам и судьям турнира.
+2. Участие и регистрация:
+Команда состоит из 5 основных игроков и до 2 запасных.
+Рагионы: Польша, Нидерланды, Франция.
+Максимально допустимый пинг — 100 мс. Игроки с превышением этого значения могут быть отстранены от участия.
+Регистрация проходит через указанную организаторами платформу или форму.
+3. Технические требования:
+Игра проводится только на мобильных устройствах. Использование эмуляторов запрещено.
+Проверка пинга производится перед каждым матчем.
+Использование VPN, прокси и любых средств для изменения региона/пинга строго запрещено.
+4. Формат турнира:
+Матчи группового этапа проходят  в формате Best of 2 (BO2). Полуфинал — Best of 3 (BO3).
+Финал – Best of 5 (BO5).
+Победа присуждается команде, первой выигравшей 13 раундов.
+Карты выбираются методом “ban/pick” (отказ/выбор).
+Перерывы между половинами — 1 минута. Переключение сторон происходит после 12 раундов.
+5. Поведение игроков:
+Запрещено использование стороннего ПО, читов и багов.
+Оскорбления, токсичное поведение и провокации запрещены.
+Все спорные ситуации решаются судьёй матча. Решения администрации окончательны.
+6. Прерывание матча:
+При вылете игрока матч продолжается, если ситуация не критична.
+В случае технических проблем команда обязана уведомить администратора в течение 2 минут.
+Допускается 1 техническая пауза на матч продолжительностью до 5 минут (по согласованию с судьёй).
+7. Санкции:
+1-е нарушение правил — предупреждение.
+2-е — дисквалификация игрока или всей команды в зависимости от тяжести нарушения.
+Повторяющиеся нарушения — немедленное снятие с турнира.
+8. Призы и награды:
+Призовой фонд и распределение мест объявляются перед началом турнира.
+Призи розподіляються всередині команди самостійно або порівну (за замовчуванням).
             </p>
         </div>
       </details>
