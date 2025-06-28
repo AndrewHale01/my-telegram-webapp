@@ -74,6 +74,7 @@
       cursor: pointer;
       text-align: center;
       text-decoration: none;
+      margin-top: 15px; /* Added margin for buttons */
     }
     .btn:hover {
       background-color: #0056b3;
@@ -223,7 +224,7 @@
     <div class="admin-shield-icon" id="adminShieldBtn">🛡️</div>
   </div>
 
-  <div class="container" id="mainContent">
+  <div class="container" id="mainContent" style="display: none;">
     <h1 data-key="create_team_heading">Створити Команду</h1>
     <form id="teamForm">
       <div class="form-group">
@@ -319,6 +320,7 @@
       <span class="close-btn" data-modal="homeModal">&times;</span>
       <h2 data-key="home_modal_title">Головна Сторінка</h2>
       <p data-key="home_modal_content">Тут буде основний вміст вашої головної сторінки.</p>
+      <button class="btn" id="showCreateTeamFormBtn" data-key="show_create_team_form_button">Створити команду</button>
     </div>
   </div>
 
@@ -451,6 +453,7 @@
         'nav_support': 'Підтримка',
         'home_modal_title': 'Головна Сторінка',
         'home_modal_content': 'Тут буде основний вміст вашої головної сторінки.',
+        'show_create_team_form_button': 'Створити команду', // New translation key
         'rules_modal_title': 'Правила Турнірів',
         'tournament_1v1_summary': 'Турніри 1 на 1',
         'tournament_1v1_content': 'Детальні правила для турнірів 1 на 1...',
@@ -495,9 +498,6 @@
         'rewards_modal_title': 'Мої Нагороди',
         'rewards_modal_content': 'Ваші нагороди з\'являться тут.',
         'support_modal_title': 'Підтримка',
-        'support_modal_content1': 'Зв\'яжіться з нами для підтримки.',
-        'support_modal_content2': 'Email: support@example.com',
-        'support_modal_content3': 'Telegram: @YourSupportUsername',
         'admin_modal_title': 'Admin Panel',
         'admin_modal_content': 'Тут будуть доступні функції для адміністраторів.',
         'give_prize_button': 'Видати Приз',
@@ -533,6 +533,7 @@
         'nav_support': 'Support',
         'home_modal_title': 'Home Page',
         'home_modal_content': 'This will be the main content of your home page.',
+        'show_create_team_form_button': 'Create Team', // New translation key
         'rules_modal_title': 'Tournament Rules',
         'tournament_1v1_summary': '1 vs 1 Tournaments',
         'tournament_1v1_content': 'Detailed rules for 1 vs 1 tournaments...',
@@ -615,6 +616,7 @@
         'nav_support': 'Поддержка',
         'home_modal_title': 'Главная Страница',
         'home_modal_content': 'Здесь будет основное содержимое вашей главной страницы.',
+        'show_create_team_form_button': 'Создать команду', // New translation key
         'rules_modal_title': 'Правила Турниров',
         'tournament_1v1_summary': 'Турниры 1 на 1',
         'tournament_1v1_content': 'Подробные правила для турниров 1 на 1...',
@@ -697,6 +699,7 @@
         'nav_support': 'Wsparcie',
         'home_modal_title': 'Strona Główna',
         'home_modal_content': 'Tutaj znajdzie się główna zawartość Twojej strony głównej.',
+        'show_create_team_form_button': 'Stwórz drużynę', // New translation key
         'rules_modal_title': 'Zasady Turniejów',
         'tournament_1v1_summary': 'Turnieje 1 na 1',
         'tournament_1v1_content': 'Szczegółowe zasady turniejów 1 na 1...',
@@ -804,6 +807,8 @@
       const teamAvatarPreview = document.getElementById('teamAvatarPreview');
       const notificationContainer = document.getElementById('notificationContainer');
       const langBtn = document.getElementById('langBtn');
+      const mainContent = document.getElementById('mainContent'); // The team registration form container
+      const showCreateTeamFormBtn = document.getElementById('showCreateTeamFormBtn'); // The new button in home modal
 
 
       // Modals
@@ -836,35 +841,51 @@
         setLanguage(availableLangs[currentLangIndex]);
       });
 
+      // Initially open the home modal when the page loads
+      openModal('homeModal');
+
+      // Event Listener for the new "Create Team" button in Home Modal
+      if (showCreateTeamFormBtn) {
+        showCreateTeamFormBtn.addEventListener('click', () => {
+          closeAllModals(); // Close the home modal
+          mainContent.style.display = 'block'; // Show the team registration form
+        });
+      }
+
 
       // Event Listeners for Nav Items
       homeNavItem.addEventListener('click', (e) => {
         e.preventDefault();
         closeAllModals();
+        mainContent.style.display = 'none'; // Hide main content when nav to home modal
         openModal('homeModal');
       });
 
       rulesNavItem.addEventListener('click', (e) => {
         e.preventDefault();
         closeAllModals();
+        mainContent.style.display = 'none'; // Hide main content
         openModal('rulesModal');
       });
 
       rewardsNavItem.addEventListener('click', (e) => {
         e.preventDefault();
         closeAllModals();
+        mainContent.style.display = 'none'; // Hide main content
         openModal('rewardsModal');
       });
 
       supportNavItem.addEventListener('click', (e) => {
         e.preventDefault();
         closeAllModals();
+        mainContent.style.display = 'none'; // Hide main content
         openModal('supportModal');
       });
 
       adminShieldBtn.addEventListener('click', (e) => {
         e.preventDefault();
         closeAllModals();
+        mainContent.style.display = 'none'; // Hide main content
         openModal('adminModal');
       });
 
