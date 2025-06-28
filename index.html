@@ -583,393 +583,825 @@
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
-    // Ініціалізація Telegram WebApp
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
+    const ADMIN_IDS = [5806282517];
 
-    // Отримання елементів DOM
-    const profilePopup = document.getElementById('profilePopup');
-    const avatar = document.getElementById('avatar');
-    const registerBtn = document.getElementById('registerBtn');
-    const profileForm = document.getElementById('profileForm');
-    const doneBtn = document.getElementById('doneBtn');
-    const standoffNickInput = document.getElementById('standoffNick');
-    const standoffIdInput = document.getElementById('standoffId');
-    const tgUserInput = document.getElementById('tgUser');
-    const playerProfile = document.getElementById('playerProfile');
-    const profileNick = document.getElementById('profileNick');
-    const profileId = document.getElementById('profileId');
-    const profileTg = document.getElementById('profileTg');
-    const successMsg = document.getElementById('successMsg');
-    const langBtn = document.getElementById('langBtn');
-    const langPopup = document.getElementById('langPopup');
-    const navItems = document.querySelectorAll('.nav-item');
-    const adminMenuBtn = document.getElementById('adminMenuBtn');
-    const adminModal = document.getElementById('adminModal');
-    const closeAdminModal = document.getElementById('closeAdminModal');
-    const notificationBtn = document.getElementById('notificationBtn');
-    const notificationPopup = document.getElementById('notificationPopup');
-    const notificationList = document.getElementById('notificationList');
-    const notificationBadge = document.getElementById('notificationBadge');
-    const createTeamBtn = document.getElementById('createTeamBtn');
-    const teamForm = document.getElementById('teamForm');
-    const teamSuccessMsg = document.getElementById('teamSuccessMsg');
-    const teamAvatarInput = document.getElementById('teamAvatar');
-    const teamAvatarPreview = document.getElementById('teamAvatarPreview');
-    const createTeamBtn2 = document.getElementById('createTeamBtn2'); // The submit button inside team form
-
-    let currentLanguage = localStorage.getItem('language') || 'uk';
-    const translations = {
+    const notificationTranslations = {
       uk: {
-        register: "Зареєструватись",
-        standoff_nick: "Нік в Standoff",
-        standoff_id: "ID в Standoff",
-        tg_user: "Telegram",
-        done: "Готово",
-        profile: "Профіль гравця",
-        profile_saved: "Профіль збережено!",
-        latest_news: "Останні новини",
-        disciplines: "Дисципліни",
-        upcoming_tournaments: "Найближчі турніри",
-        home: "Головна",
-        rules: "Правила",
-        awards: "Нагороди",
-        support: "Підтримка",
-        general_rules: "Загальні правила",
-        general_rules_text: "", // Left empty as per instruction
-        discipline_specific_rules: "Правила по дисциплінах",
-        discipline_specific_rules_text: "", // Left empty as per instruction
-        conduct_rules: "Правила поведінки",
-        conduct_rules_text: "", // Left empty as per instruction
-        prizes_info: "Інформація про призи",
-        prizes_info_text: "", // Left empty as per instruction
-        how_to_get_prizes: "Як отримати призи",
-        how_to_get_prizes_text: "", // Left empty as per instruction
-        faq: "Часті запитання",
-        faq_text: "", // Left empty as per instruction
-        contact_us: "Зв'язатися з нами",
-        contact_us_text: "", // Left empty as per instruction
-        team_created: "Команда успішно створена!",
-        team_created_captain: "Ви успішно створили команду \"{teamName}\". Запрошення надіслано гравцям: {invitedUsers}.",
-        create_team: "Створити команду",
-        team_avatar: "Аватарка команди",
-        team_tag: "Тег команди",
-        team_tag_ph: "Наприклад, 'XYZ'",
-        team_name: "Назва команди",
-        team_name_ph: "Наприклад, 'Елітні Воїни'",
-        main_player1: "Гравець 1 (основний)",
-        main_player2: "Гравець 2 (основний)",
-        main_player3: "Гравець 3 (основний)",
-        main_player4: "Гравець 4 (основний)",
-        main_player5: "Гравець 5 (основний)",
-        sub_player1: "Гравець 1 (запасний)",
-        sub_player2: "Гравець 2 (запасний)",
-        player_id_ph: "ID в Standoff 2",
-        player_nick_ph: "Нікнейм",
-        player_tg_ph: "Telegram юзернейм (без @)",
+        invite: "Вас запросили в команду.",
+        joined: "{user} вступив в команду.",
+        prize: "Ви отримали приз за участь в турнірі.",
+        banned: "Ваш аккаунт було заблоковано за використання стороннього ПЗ.",
+        unbanned: "Ваш аккаунт розблоковано.",
+        disqualified: "Ваша команда дискваліфікована з турніру за порушення правил.",
+        title: "Сповіщення",
+        clear: "Очистити",
+        empty: "Немає сповіщень",
+        team_created_captain: "Ви успішно створили команду {teamName} і запросили до неї гравців: {invitedUsers}.",
+        team_invite_player: "Вас запросили до команди {teamName}. Прийняти/Відхилити."
       },
       en: {
-        register: "Register",
-        standoff_nick: "Standoff Nick",
-        standoff_id: "Standoff ID",
-        tg_user: "Telegram",
-        done: "Done",
-        profile: "Player Profile",
-        profile_saved: "Profile saved!",
-        latest_news: "Latest News",
-        disciplines: "Disciplines",
-        upcoming_tournaments: "Upcoming Tournaments",
-        home: "Home",
-        rules: "Rules",
-        awards: "Awards",
-        support: "Support",
-        general_rules: "General Rules",
-        general_rules_text: "", // Left empty as per instruction
-        discipline_specific_rules: "Discipline-Specific Rules",
-        discipline_specific_rules_text: "", // Left empty as per instruction
-        conduct_rules: "Conduct Rules",
-        conduct_rules_text: "", // Left empty as per instruction
-        prizes_info: "Prize Information",
-        prizes_info_text: "", // Left empty as per instruction
-        how_to_get_prizes: "How to Get Prizes",
-        how_to_get_prizes_text: "", // Left empty as per instruction
-        faq: "FAQ",
-        faq_text: "", // Left empty as per instruction
-        contact_us: "Contact Us",
-        contact_us_text: "", // Left empty as per instruction
-        team_created: "Team successfully created!",
-        team_created_captain: "You have successfully created the team \"{teamName}\". Invitations sent to players: {invitedUsers}.",
-        create_team: "Create Team",
-        team_avatar: "Team Avatar",
-        team_tag: "Team Tag",
-        team_tag_ph: "e.g., 'XYZ'",
-        team_name: "Team Name",
-        team_name_ph: "e.g., 'Elite Warriors'",
-        main_player1: "Player 1 (Main)",
-        main_player2: "Player 2 (Main)",
-        main_player3: "Player 3 (Main)",
-        main_player4: "Player 4 (Main)",
-        main_player5: "Player 5 (Main)",
-        sub_player1: "Player 1 (Substitute)",
-        sub_player2: "Player 2 (Substitute)",
-        player_id_ph: "Standoff 2 ID",
-        player_nick_ph: "Nickname",
-        player_tg_ph: "Telegram username (without @)",
+        invite: "You have been invited to a team.",
+        joined: "{user} joined the team.",
+        prize: "You received a prize for participating in the tournament.",
+        banned: "Your account has been blocked for using third-party software.",
+        unbanned: "Your account has been unblocked.",
+        disqualified: "Your team has been disqualified from the tournament for violating the rules.",
+        title: "Notifications",
+        clear: "Clear",
+        empty: "No notifications",
+        team_created_captain: "You have successfully created team {teamName} and invited players: {invitedUsers}.",
+        team_invite_player: "You have been invited to team {teamName}. Accept/Decline."
+      },
+      ru: {
+        invite: "Вас пригласили в команду.",
+        joined: "{user} вступил в команду.",
+        prize: "Вы получили приз за участие в турнире.",
+        banned: "Ваш аккаунт был заблокирован за использование стороннего ПО.",
+        unbanned: "Ваш аккаунт разблокирован.",
+        disqualified: "Ваша команда дисквалифицирована из турнира за нарушение правил.",
+        title: "Уведомления",
+        clear: "Очистить",
+        empty: "Нет уведомлений",
+        team_created_captain: "Вы успешно создали команду {teamName} и пригласили в нее игроков: {invitedUsers}.",
+        team_invite_player: "Вас пригласили в команду {teamName}. Принять/Отклонить."
+      },
+      pl: {
+        invite: "Zostałeś zaproszony do drużyny.",
+        joined: "{user} dołączył do drużyny.",
+        prize: "Otrzymałeś nagrodę za udział w turnieju.",
+        banned: "Twoje konto zostało zablokowane za używanie nieautoryzowanego oprogramowania.",
+        unbanned: "Twoje konto zostało odblokowane.",
+        disqualified: "Twoja drużyna została zdyskwalifikowana z turnieju za naruszenie zasad.",
+        title: "Powiadomienia",
+        clear: "Wyczyść",
+        empty: "Brak powiadomień",
+        team_created_captain: "Pomyślnie utworzyłeś drużynę {teamName} i zaprosiłeś graczy: {invitedUsers}.",
+        team_invite_player: "Zostałeś zaproszony do drużyny {teamName}. Akceptuj/Odrzuć."
       }
     };
 
-    function translatePage() {
+    const rulesTranslations = {
+      uk: {
+        "1x1": {
+          title: "Правила 1x1",
+          content: `
+            <h3>Загальні правила</h3>
+            <ul>
+              <li>Матчі проходять у форматі 1х1.</li>
+              <li>Дозволено використовувати будь-яку зброю та спорядження.</li>
+              <li>Заборонено використовувати стороннє програмне забезпечення.</li>
+              <li>Заборонено використовувати баги гри.</li>
+            </ul>
+            <h3>Формат матчу</h3>
+            <ul>
+              <li>Мапа: Sandstone</li>
+              <li>Режим: Закладка бомби</li>
+              <li>Кількість раундів: 16 (до 8 перемог)</li>
+              <li>Час раунду: 2:00 хв</li>
+            </ul>
+            <h3>Дії гравців</h3>
+            <ul>
+              <li>Перед початком матчу гравці повинні перевірити з'єднання та пінг.</li>
+              <li>У разі роз'єднання гравця або технічних проблем матч призупиняється та відновлюється з того ж раунду.</li>
+            </ul>
+            <h3>Штрафи</h3>
+            <ul>
+              <li>Використання читів – бан назавжди.</li>
+              <li>Використання багів – технічна поразка.</li>
+              <li>Образи – попередження, при повторі – технічна поразка.</li>
+            </ul>
+          `
+        },
+        "2x2": {
+          title: "Правила 2x2",
+          content: `
+            <h3>Загальні правила</h3>
+            <ul>
+              <li>Матчі проходять у форматі 2х2.</li>
+              <li>Дозволено використовувати будь-яку зброю та спорядження.</li>
+              <li>Заборонено використовувати стороннє програмне забезпечення.</li>
+              <li>Заборонено використовувати баги гри.</li>
+            </ul>
+            <h3>Формат матчу</h3>
+            <ul>
+              <li>Мапа: Province</li>
+              <li>Режим: Закладка бомби</li>
+              <li>Кількість раундів: 20 (до 10 перемог)</li>
+              <li>Час раунду: 2:15 хв</li>
+            </ul>
+            <h3>Дії гравців</h3>
+            <ul>
+              <li>Перед початком матчу гравці повинні перевірити з'єднання та пінг.</li>
+              <li>У разі роз'єднання гравця або технічних проблем матч призупиняється та відновлюється з того ж раунду.</li>
+            </ul>
+            <h3>Штрафи</h3>
+            <ul>
+              <li>Використання читів – бан назавжди.</li>
+              <li>Використання багів – технічна поразка.</li>
+              <li>Образи – попередження, при повторі – технічна поразка.</li>
+            </ul>
+          `
+        },
+        "5x5": {
+          title: "Правила 5x5",
+          content: `
+            <h3>Загальні правила</h3>
+            <ul>
+              <li>Матчі проходять у форматі 5х5.</li>
+              <li>Дозволено використовувати будь-яку зброю та спорядження.</li>
+              <li>Заборонено використовувати стороннє програмне забезпечення.</li>
+              <li>Заборонено використовувати баги гри.</li>
+            </ul>
+            <h3>Формат матчу</h3>
+            <ul>
+              <li>Мапа: Training Outside</li>
+              <li>Режим: Закладка бомби</li>
+              <li>Кількість раундів: 24 (до 13 перемог)</li>
+              <li>Час раунду: 2:30 хв</li>
+            </ul>
+            <h3>Дії гравців</h3>
+            <ul>
+              <li>Перед початком матчу гравці повинні перевірити з'єднання та пінг.</li>
+              <li>У разі роз'єднання гравця або технічних проблем матч призупиняється та відновлюється з того ж раунду.</li>
+            </ul>
+            <h3>Штрафи</h3>
+            <ul>
+              <li>Використання читів – бан назавжди.</li>
+              <li>Використання багів – технічна поразка.</li>
+              <li>Образи – попередження, при повторі – технічна поразка.</li>
+            </ul>
+          `
+        }
+      },
+      en: {
+        "1x1": {
+          title: "1x1 Rules",
+          content: `
+            <h3>General Rules</h3>
+            <ul>
+              <li>Matches are played in 1x1 format.</li>
+              <li>Any weapon and equipment are allowed.</li>
+              <li>Use of third-party software is prohibited.</li>
+              <li>Exploiting game bugs is prohibited.</li>
+            </ul>
+            <h3>Match Format</h3>
+            <ul>
+              <li>Map: Sandstone</li>
+              <li>Mode: Bomb Defuse</li>
+              <li>Number of rounds: 16 (up to 8 wins)</li>
+              <li>Round time: 2:00 min</li>
+            </ul>
+            <h3>Player Actions</h3>
+            <ul>
+              <li>Before the match, players must check their connection and ping.</li>
+              <li>In case of player disconnection or technical problems, the match is paused and resumed from the same round.</li>
+            </ul>
+            <h3>Penalties</h3>
+            <ul>
+              <li>Using cheats - permanent ban.</li>
+              <li>Exploiting bugs - technical defeat.</li>
+              <li>Insults - warning, repeated - technical defeat.</li>
+            </ul>
+          `
+        },
+        "2x2": {
+          title: "2x2 Rules",
+          content: `
+            <h3>General Rules</h3>
+            <ul>
+              <li>Matches are played in 2x2 format.</li>
+              <li>Any weapon and equipment are allowed.</li>
+              <li>Use of third-party software is prohibited.</li>
+              <li>Exploiting game bugs is prohibited.</li>
+            </ul>
+            <h3>Match Format</h3>
+            <ul>
+              <li>Map: Province</li>
+              <li>Mode: Bomb Defuse</li>
+              <li>Number of rounds: 20 (up to 10 wins)</li>
+              <li>Round time: 2:15 min</li>
+            </ul>
+            <h3>Player Actions</h3>
+            <ul>
+              <li>Before the match, players must check their connection and ping.</li>
+              <li>In case of player disconnection or technical problems, the match is paused and resumed from the same round.</li>
+            </ul>
+            <h3>Penalties</h3>
+            <ul>
+              <li>Using cheats - permanent ban.</li>
+              <li>Exploiting bugs - technical defeat.</li>
+              <li>Insults - warning, repeated - technical defeat.</li>
+            </ul>
+          `
+        },
+        "5x5": {
+          title: "5x5 Rules",
+          content: `
+            <h3>General Rules</h3>
+            <ul>
+              <li>Matches are played in 5x5 format.</li>
+              <li>Any weapon and equipment are allowed.</li>
+              <li>Use of third-party software is prohibited.</li>
+              <li>Exploiting game bugs is prohibited.</li>
+            </ul>
+            <h3>Match Format</h3>
+            <ul>
+              <li>Map: Training Outside</li>
+              <li>Mode: Bomb Defuse</li>
+              <li>Number of rounds: 24 (up to 13 wins)</li>
+              <li>Round time: 2:30 min</li>
+            </ul>
+            <h3>Player Actions</h3>
+            <ul>
+              <li>Before the match, players must check their connection and ping.</li>
+              <li>In case of player disconnection or technical problems, the match is paused and resumed from the same round.</li>
+            </ul>
+            <h3>Penalties</h3>
+            <ul>
+              <li>Using cheats - permanent ban.</li>
+              <li>Exploiting bugs - technical defeat.</li>
+              <li>Insults - warning, repeated - technical defeat.</li>
+            </ul>
+          `
+        }
+      },
+      ru: {
+        "1x1": {
+          title: "Правила 1x1",
+          content: `
+            <h3>Общие правила</h3>
+            <ul>
+              <li>Матчи проходят в формате 1х1.</li>
+              <li>Разрешено использовать любое оружие и снаряжение.</li>
+              <li>Запрещено использовать стороннее программное обеспечение.</li>
+              <li>Запрещено использовать баги игры.</li>
+            </ul>
+            <h3>Формат матча</h3>
+            <ul>
+              <li>Карта: Sandstone</li>
+              <li>Режим: Закладка бомбы</li>
+              <li>Количество раундов: 16 (до 8 побед)</li>
+              <li>Время раунда: 2:00 мин</li>
+            </ul>
+            <h3>Действия игроков</h3>
+            <ul>
+              <li>Перед началом матча игроки должны проверить соединение и пинг.</li>
+              <li>В случае разъединения игрока или технических проблем матч приостанавливается и возобновляется с того же раунда.</li>
+            </ul>
+            <h3>Штрафы</h3>
+            <ul>
+              <li>Использование читов – бан навсегда.</li>
+              <li>Использование багов – техническое поражение.</li>
+              <li>Оскорбления – предупреждение, при повторе – техническое поражение.</li>
+            </ul>
+          `
+        },
+        "2x2": {
+          title: "Правила 2x2",
+          content: `
+            <h3>Общие правила</h3>
+            <ul>
+              <li>Матчи проходят в формате 2х2.</li>
+              <li>Разрешено использовать любое оружие и снаряжение.</li>
+              <li>Запрещено использовать стороннее программное обеспечение.</li>
+              <li>Запрещено использовать баги игры.</li>
+            </ul>
+            <h3>Формат матча</h3>
+            <ul>
+              <li>Карта: Province</li>
+              <li>Режим: Закладка бомбы</li>
+              <li>Количество раундов: 20 (до 10 побег)</li>
+              <li>Время раунда: 2:15 мин</li>
+            </ul>
+            <h3>Действия игроков</h3>
+            <ul>
+              <li>Перед началом матча игроки должны проверить соединение и пинг.</li>
+              <li>В случае разъединения игрока или технических проблем матч приостанавливается и возобновляется с того же раунда.</li>
+            </ul>
+            <h3>Штрафы</h3>
+            <ul>
+              <li>Использование читов – бан навсегда.</li>
+              <li>Использование багов – техническое поражение.</li>
+              <li>Оскорбления – предупреждение, при повторе – техническое поражение.</li>
+            </ul>
+          `
+        },
+        "5x5": {
+          title: "Правила 5x5",
+          content: `
+            <h3>Общие правила</h3>
+            <ul>
+              <li>Матчи проходят в формате 5х5.</li>
+              <li>Разрешено использовать любое оружие и снаряжение.</li>
+              <li>Запрещено использовать стороннее программное обеспечение.</li>
+              <li>Запрещено использовать баги игры.</li>
+            </ul>
+            <h3>Формат матча</h3>
+            <ul>
+              <li>Карта: Training Outside</li>
+              <li>Режим: Закладка бомбы</li>
+              <li>Количество раундов: 24 (до 13 побед)</li>
+              <li>Время раунда: 2:30 мин</li>
+            </ul>
+            <h3>Действия игроков</h3>
+            <ul>
+              <li>Перед началом матча игроки должны проверить соединение и пинг.</li>
+              <li>В случае разъединения игрока или технических проблем матч приостанавливается и возобновляется с того же раунда.</li>
+            </ul>
+            <h3>Штрафы</h3>
+            <ul>
+              <li>Использование читов – бан навсегда.</li>
+              <li>Использование багов – техническое поражение.</li>
+              <li>Оскорбления – предупреждение, при повторе – техническое поражение.</li>
+            </ul>
+          `
+        }
+      },
+      pl: {
+        "1x1": {
+          title: "Zasady 1x1",
+          content: `
+            <h3>Zasady ogólne</h3>
+            <ul>
+              <li>Mecze rozgrywane są w formacie 1x1.</li>
+              <li>Dozwolone jest używanie dowolnej broni i sprzętu.</li>
+              <li>Zabrania się używania oprogramowania osób trzecich.</li>
+              <li>Zabrania się wykorzystywania błędów w grze.</li>
+            </ul>
+            <h3>Format meczu</h3>
+            <ul>
+              <li>Mapa: Sandstone</li>
+              <li>Tryb: Podkładanie bomby</li>
+              <li>Liczba rund: 16 (do 8 zwycięstw)</li>
+              <li>Czas rundy: 2:00 min</li>
+            </ul>
+            <h3>Działania graczy</h3>
+            <ul>
+              <li>Przed meczem gracze muszą sprawdzić swoje połączenie i ping.</li>
+              <li>W przypadku rozłączenia gracza lub problemów technicznych mecz zostaje wstrzymany i wznowiony od tej samej rundy.</li>
+            </ul>
+            <h3>Kary</h3>
+            <ul>
+              <li>Używanie cheatów - ban na zawsze.</li>
+              <li>Wykorzystywanie błędów - porażka techniczna.</li>
+              <li>Obraźliwe zachowanie - ostrzeżenie, powtórne - porażka techniczna.</li>
+            </ul>
+          `
+        },
+        "2x2": {
+          title: "Zasady 2x2",
+          content: `
+            <h3>Zasady ogólne</h3>
+            <ul>
+              <li>Mecze rozgrywane są w formacie 2x2.</li>
+              <li>Dozwolone jest używanie dowolnej broni i sprzętu.</li>
+              <li>Zabrania się używania oprogramowania osób trzecich.</li>
+              <li>Zabrania się wykorzystywania błędów w grze.</li>
+            </ul>
+            <h3>Format meczu</h3>
+            <ul>
+              <li>Mapa: Province</li>
+              <li>Tryb: Podkładanie bomby</li>
+              <li>Liczba rund: 20 (do 10 zwycięstw)</li>
+              <li>Czas rundy: 2:15 min</li>
+            </ul>
+            <h3>Działania graczy</h3>
+            <ul>
+              <li>Przed meczem gracze muszą sprawdzić swoje połączenie i ping.</li>
+              <li>W przypadku rozłączenia gracza lub problemów technicznych mecz zostaje wstrzymany i wznowiony od tej samej rundy.</li>
+            </ul>
+            <h3>Kary</h3>
+            <ul>
+              <li>Używanie cheatów - ban na zawsze.</li>
+              <li>Wykorzystywanie błędów - porażka techniczna.</li>
+              <li>Obraźliwe zachowanie - ostrzeżenie, powtórne - porażka techniczna.</li>
+            </ul>
+          `
+        },
+        "5x5": {
+          title: "Zasady 5x5",
+          content: `
+            <h3>Zasady ogólne</h3>
+            <ul>
+              <li>Mecze rozgrywane są w formacie 5x5.</li>
+              <li>Dozwolone jest używanie dowolnej broni i sprzętu.</li>
+              <li>Zabrania się używania oprogramowania osób trzecich.</li>
+              <li>Zabrania się wykorzystywania błędów w grze.</li>
+            </ul>
+            <h3>Format meczu</h3>
+            <ul>
+              <li>Mapa: Training Outside</li>
+              <li>Tryb: Podkładanie bomby</li>
+              <li>Liczba rund: 24 (do 13 zwycięstw)</li>
+              <li>Czas rundy: 2:30 min</li>
+            </ul>
+            <h3>Działania graczy</h3>
+            <ul>
+              <li>Przed meczem gracze muszą sprawdzić swoje połączenie i ping.</li>
+              <li>W przypadku rozłączenia gracza lub problemów technicznych mecz zostaje wstrzymany i wznowiony od tej samej rundy.</li>
+            </ul>
+            <h3>Kary</h3>
+            <ul>
+              <li>Używanie cheatów - ban na zawsze.</li>
+              <li>Wykorzystywanie błędów - porażka techniczna.</li>
+              <li>Obraźliwe zachowanie - ostrzeżenie, powtórne - porażka techniczna.</li>
+            </ul>
+          `
+        }
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'uk';
+    const webApp = window.Telegram.WebApp;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      webApp.ready();
+      webApp.expand();
+      updateContent();
+      loadProfile();
+      loadNotifications();
+
+      // Telegram User Data
+      const tgUser = webApp.initDataUnsafe.user;
+      if (tgUser) {
+        document.getElementById('tgUser').value = `@${tgUser.username}`;
+        document.getElementById('profileTg').textContent = `@${tgUser.username}`;
+        checkAdminStatus(tgUser.id);
+      }
+
+      // Event Listeners
+      document.getElementById('avatar').addEventListener('click', toggleProfilePopup);
+      document.getElementById('langBtn').addEventListener('click', toggleLangPopup);
+      document.getElementById('registerBtn').addEventListener('click', showProfileForm);
+      document.getElementById('profileForm').addEventListener('submit', saveProfile);
+      document.getElementById('createTeamBtn').addEventListener('click', showTeamForm);
+      document.getElementById('teamForm').addEventListener('submit', createTeam);
+      document.getElementById('teamAvatar').addEventListener('change', previewTeamAvatar);
+
+      // Admin menu
+      document.getElementById('adminMenuBtn').addEventListener('click', toggleAdminModal);
+      document.getElementById('closeAdminModal').addEventListener('click', () => {
+        document.getElementById('adminModal').classList.remove('active');
+        document.getElementById('adminResult').textContent = '';
+      });
+      document.getElementById('banUserBtn').addEventListener('click', banUser);
+      document.getElementById('unbanUserBtn').addEventListener('click', unbanUser);
+      document.getElementById('givePrizeBtn').addEventListener('click', givePrize);
+
+      // Notification button
+      document.getElementById('notificationBtn').addEventListener('click', toggleNotificationPopup);
+      document.getElementById('clearNotificationsBtn').addEventListener('click', clearAllNotifications);
+
+      // Language options
+      document.querySelectorAll('.lang-option').forEach(button => {
+        button.addEventListener('click', (event) => {
+          currentLang = event.target.dataset.lang;
+          localStorage.setItem('lang', currentLang);
+          updateContent();
+          toggleLangPopup();
+        });
+      });
+
+      // Navigation
+      document.getElementById('navHome').addEventListener('click', () => showSection('mainSection', 'navHome'));
+      document.getElementById('navRules').addEventListener('click', () => showSection('rulesSection', 'navRules'));
+      document.getElementById('navAwards').addEventListener('click', () => showSection('awardsSection', 'navAwards'));
+      document.getElementById('navSupport').addEventListener('click', () => showSection('supportSection', 'navSupport'));
+    });
+
+    function updateContent() {
+      // Update elements with data-i18n attribute
       document.querySelectorAll('[data-i18n]').forEach(element => {
         const key = element.dataset.i18n;
-        if (translations[currentLanguage][key]) {
-          element.textContent = translations[currentLanguage][key];
+        if (i18n[currentLang] && i18n[currentLang][key]) {
+          element.textContent = i18n[currentLang][key];
         }
       });
+
+      // Update input placeholders with data-i18n-placeholder attribute
       document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-        const key = element.dataset.i18nPlaceholder;
-        if (translations[currentLanguage][key]) {
-          element.placeholder = translations[currentLanguage][key];
+        const key = element.dataset.i18nPlaceholder; // Corrected to match HTML
+        if (i18n[currentLang] && i18n[currentLang][key]) {
+          element.placeholder = i18n[currentLang][key];
         }
       });
-    }
 
-    // Admin validation logic (kept as previously discussed)
-    document.addEventListener('DOMContentLoaded', () => {
-      // ЗАМІНІТЬ ЦІ ID НА СПРАВЖНІ ID АДМІНІВ!
-      const ADMIN_IDS = new Set([
-        123456789, // Приклад ID адміністратора 1
-        987654321, // Приклад ID адміністратора 2
-        // Додайте інші Telegram ID адміністраторів тут
-      ]);
-
-      if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        const telegramUserId = tg.initDataUnsafe.user.id;
-        console.log("Telegram User ID:", telegramUserId); // Для дебагу
-        if (ADMIN_IDS.has(telegramUserId)) {
-          adminMenuBtn.style.display = 'block'; // Показуємо кнопку адмін-меню
-          console.log("User is an admin!");
-        } else {
-          console.log("User is NOT an admin.");
-        }
-      } else {
-        console.log("Telegram WebApp initDataUnsafe.user not available. Cannot determine admin status.");
+      // Update rules section
+      for (const ruleType in rulesTranslations[currentLang]) {
+        const rule = rulesTranslations[currentLang][ruleType];
+        const titleElement = document.getElementById(`rule${ruleType}Title`);
+        const contentElement = document.getElementById(`rule${ruleType}Content`);
+        if (titleElement) titleElement.textContent = rule.title;
+        if (contentElement) contentElement.innerHTML = rule.content;
       }
-    });
 
-    adminMenuBtn.addEventListener('click', () => {
-      adminModal.classList.add('active');
-    });
-
-    closeAdminModal.addEventListener('click', () => {
-      adminModal.classList.remove('active');
-    });
-
-    adminModal.addEventListener('click', (e) => {
-      if (e.target === adminModal) {
-        adminModal.classList.remove('active');
+      // Update notification title
+      const notificationTitle = document.getElementById('notificationTitle');
+      if (notificationTitle) {
+        notificationTitle.textContent = notificationTranslations[currentLang].title;
       }
-    });
-
-    // Dummy admin functions (replace with actual backend calls)
-    document.getElementById('banUserBtn').addEventListener('click', () => {
-      document.getElementById('adminResult').textContent = 'Користувач заблокований (симуляція)';
-    });
-    document.getElementById('unbanUserBtn').addEventListener('click', () => {
-      document.getElementById('adminResult').textContent = 'Користувач розблокований (симуляція)';
-    });
-    document.getElementById('givePrizeBtn').addEventListener('click', () => {
-      document.getElementById('adminResult').textContent = 'Приз нараховано (симуляція)';
-    });
-    document.getElementById('disqualifyTeamBtn').addEventListener('click', () => {
-      document.getElementById('adminResult').textContent = 'Команда дискваліфікована (симуляція)';
-    });
-    document.getElementById('editBracketBtn').addEventListener('click', () => {
-      document.getElementById('adminResult').textContent = 'Сітка турніру відредагована (симуляція)';
-    });
-
-    // Populate Telegram user in profile form
-    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-      tgUserInput.value = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name || 'N/A';
-    } else {
-      tgUserInput.value = 'Недоступно';
-    }
-
-    // Profile Popup Logic
-    avatar.addEventListener('click', () => {
-      profilePopup.classList.toggle('active');
-      // Hide other popups
-      langPopup.classList.remove('active');
-      notificationPopup.classList.remove('active');
-    });
-
-    // Close popups when clicking outside
-    document.addEventListener('click', (event) => {
-      if (!profilePopup.contains(event.target) && event.target !== avatar) {
-        profilePopup.classList.remove('active');
+      const clearNotificationsBtn = document.getElementById('clearNotificationsBtn');
+      if (clearNotificationsBtn) {
+        clearNotificationsBtn.textContent = notificationTranslations[currentLang].clear;
       }
-      if (!langPopup.contains(event.target) && event.target !== langBtn) {
-        langPopup.classList.remove('active');
-      }
-      if (!notificationPopup.contains(event.target) && event.target !== notificationBtn && !notificationBadge.contains(event.target)) {
-        notificationPopup.classList.remove('active');
-      }
-    });
 
-    // Registration and Profile Display
-    const savedProfile = localStorage.getItem('userProfile');
-    if (savedProfile) {
-      const profileData = JSON.parse(savedProfile);
-      displayProfile(profileData);
-      registerBtn.style.display = 'none';
-      createTeamBtn.style.display = 'block'; // Show create team button if profile exists
-    } else {
-      registerBtn.style.display = 'block';
-      profileForm.style.display = 'none';
-      playerProfile.style.display = 'none';
-      createTeamBtn.style.display = 'none'; // Hide create team button if no profile
-    }
-
-    registerBtn.addEventListener('click', () => {
-      registerBtn.style.display = 'none';
-      profileForm.style.display = 'flex';
-      playerProfile.style.display = 'none';
-      successMsg.style.display = 'none';
-      createTeamBtn.style.display = 'none'; // Hide create team button during registration
-    });
-
-    profileForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const standoffNick = standoffNickInput.value;
-      const standoffId = standoffIdInput.value;
-      const tgUser = tgUserInput.value;
-
-      const userProfile = { standoffNick, standoffId, tgUser };
-      localStorage.setItem('userProfile', JSON.stringify(userProfile));
-      displayProfile(userProfile);
-
-      profileForm.style.display = 'none';
-      successMsg.style.display = 'block';
-      createTeamBtn.style.display = 'block'; // Show create team button after profile saved
-    });
-
-    function displayProfile(profileData) {
-      profileNick.textContent = profileData.standoffNick;
-      profileId.textContent = profileData.standoffId;
-      profileTg.textContent = profileData.tgUser;
-      playerProfile.style.display = 'block';
-    }
-
-    // Language switcher
-    langBtn.addEventListener('click', () => {
-      langPopup.classList.toggle('active');
-      // Hide other popups
-      profilePopup.classList.remove('active');
-      notificationPopup.classList.remove('active');
-    });
-
-    document.querySelectorAll('.lang-option').forEach(button => {
-      button.addEventListener('click', (event) => {
-        currentLanguage = event.target.dataset.lang;
-        localStorage.setItem('language', currentLanguage);
-        translatePage(); // Use this function to re-render content
-        langPopup.classList.remove('active');
-      });
-    });
-
-    // Navigation logic
-    navItems.forEach(item => {
-      item.addEventListener('click', () => {
-        navItems.forEach(nav => nav.classList.remove('active'));
-        item.classList.add('active');
-
-        document.querySelectorAll('.main-section, .rules-section, .awards-section, .support-section').forEach(section => {
-          section.classList.remove('active');
-        });
-        document.getElementById(item.dataset.target).classList.add('active');
-      });
-    });
-
-    // Initial translation on load
-    translatePage();
-
-    // Notification Logic (kept as previously discussed)
-    let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-
-    function renderNotifications() {
-      notificationList.innerHTML = '';
-      if (notifications.length === 0) {
-        notificationList.innerHTML = '<div class="notification-item" data-i18n="no_new_notifications">Немає нових сповіщень.</div>'; // Added data-i18n
-        notificationBadge.style.display = 'none';
-      } else {
-        // Sort notifications by timestamp in descending order (latest first)
-        const sortedNotifications = [...notifications].sort((a, b) => b.timestamp - a.timestamp);
-
-        sortedNotifications.forEach((notification, index) => {
-          const item = document.createElement('div');
-          item.className = 'notification-item';
-
-          let message = translations[currentLanguage][notification.type] || notification.type;
-          for (const key in notification.data) {
-            message = message.replace(`{${key}}`, notification.data[key]);
-          }
-          item.textContent = message;
-          notificationList.appendChild(item);
-        });
-        notificationBadge.textContent = notifications.length;
-        notificationBadge.style.display = 'flex';
-      }
-    }
-
-    function addNotification(type, data = {}) {
-      const newNotification = { type, data, timestamp: Date.now() };
-      notifications.push(newNotification);
-      localStorage.setItem('notifications', JSON.stringify(notifications));
       renderNotifications();
     }
 
-    notificationBtn.addEventListener('click', () => {
-      notificationPopup.classList.toggle('active');
-      // Hide other popups
-      profilePopup.classList.remove('active');
-      langPopup.classList.remove('active');
-    });
+    function showSection(sectionId, navItemId) {
+      document.querySelectorAll('.main-section, .rules-section, .awards-section, .support-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(sectionId).classList.add('active');
 
-    // Initial render of notifications
-    renderNotifications();
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      document.getElementById(navItemId).classList.add('active');
 
-    // Team Creation Logic (kept as previously discussed due to backend files)
-    createTeamBtn.addEventListener('click', () => {
-      teamForm.style.display = 'flex';
-      createTeamBtn.style.display = 'none';
-      teamSuccessMsg.style.display = 'none';
-      profilePopup.classList.remove('active'); // Close profile popup
-    });
+      webApp.scrollTo(0, 0); // Scroll to top when changing sections
+    }
 
-    teamAvatarInput.addEventListener('change', function(event) {
+    function toggleProfilePopup() {
+      document.getElementById('profilePopup').classList.toggle('active');
+      document.getElementById('langPopup').classList.remove('active');
+      document.getElementById('notificationPopup').classList.remove('active');
+    }
+
+    function toggleLangPopup() {
+      document.getElementById('langPopup').classList.toggle('active');
+      document.getElementById('profilePopup').classList.remove('active');
+      document.getElementById('notificationPopup').classList.remove('active');
+    }
+
+    function toggleNotificationPopup() {
+      document.getElementById('notificationPopup').classList.toggle('active');
+      document.getElementById('profilePopup').classList.remove('active');
+      document.getElementById('langPopup').classList.remove('active');
+      updateNotificationBadge();
+    }
+
+    function showProfileForm() {
+      document.getElementById('registerBtn').style.display = 'none';
+      document.getElementById('profileForm').style.display = 'flex';
+      document.getElementById('playerProfile').style.display = 'none';
+      document.getElementById('createTeamBtn').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'none';
+      document.getElementById('teamForm').style.display = 'none';
+      document.getElementById('teamSuccessMsg').style.display = 'none';
+    }
+
+    function saveProfile(event) {
+      event.preventDefault();
+      const standoffNick = document.getElementById('standoffNick').value;
+      const standoffId = document.getElementById('standoffId').value;
+      const tgUser = document.getElementById('tgUser').value;
+
+      const profileData = { standoffNick, standoffId, tgUser };
+      localStorage.setItem('userProfile', JSON.stringify(profileData));
+
+      document.getElementById('profileNick').textContent = standoffNick;
+      document.getElementById('profileId').textContent = standoffId;
+      document.getElementById('profileTg').textContent = tgUser;
+
+      document.getElementById('profileForm').style.display = 'none';
+      document.getElementById('playerProfile').style.display = 'block';
+      document.getElementById('successMsg').style.display = 'block';
+      document.getElementById('createTeamBtn').style.display = 'block';
+    }
+
+    function loadProfile() {
+      const profileData = JSON.parse(localStorage.getItem('userProfile'));
+      if (profileData) {
+        document.getElementById('standoffNick').value = profileData.standoffNick;
+        document.getElementById('standoffId').value = profileData.standoffId;
+        document.getElementById('profileNick').textContent = profileData.standoffNick;
+        document.getElementById('profileId').textContent = profileData.standoffId;
+
+        document.getElementById('registerBtn').style.display = 'none';
+        document.getElementById('profileForm').style.display = 'none';
+        document.getElementById('playerProfile').style.display = 'block';
+        document.getElementById('createTeamBtn').style.display = 'block';
+      } else {
+        document.getElementById('registerBtn').style.display = 'block';
+        document.getElementById('profileForm').style.display = 'none';
+        document.getElementById('playerProfile').style.display = 'none';
+        document.getElementById('createTeamBtn').style.display = 'none';
+      }
+    }
+
+    function checkAdminStatus(userId) {
+      const adminMenuBtn = document.getElementById('adminMenuBtn');
+      if (ADMIN_IDS.includes(userId)) {
+        adminMenuBtn.style.display = 'block';
+      } else {
+        adminMenuBtn.style.display = 'none';
+      }
+    }
+
+    function toggleAdminModal() {
+      document.getElementById('adminModal').classList.toggle('active');
+      document.getElementById('profilePopup').classList.remove('active');
+      document.getElementById('langPopup').classList.remove('active');
+      document.getElementById('notificationPopup').classList.remove('active');
+      document.getElementById('adminResult').textContent = '';
+    }
+
+    async function getUserStatus(username) {
+      try {
+        const response = await fetch(`/api/user_status/${username}`);
+        const data = await response.json();
+        return data.is_banned;
+      } catch (error) {
+        console.error('Error fetching user status:', error);
+        return false;
+      }
+    }
+
+    async function banUser() {
+      const username = prompt("Введіть Telegram юзернейм користувача для блокування (без @):");
+      if (username) {
+        try {
+          const response = await fetch('/api/ban_user', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username }),
+          });
+          const result = await response.json();
+          document.getElementById('adminResult').textContent = result.message;
+          if (result.success) {
+            addNotification('banned', { user: username }, result.user_id);
+          }
+        } catch (error) {
+          console.error('Error banning user:', error);
+          document.getElementById('adminResult').textContent = 'Помилка блокування користувача.';
+        }
+      }
+    }
+
+    async function unbanUser() {
+      const username = prompt("Введіть Telegram юзернейм користувача для розблокування (без @):");
+      if (username) {
+        try {
+          const response = await fetch('/api/unban_user', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username }),
+          });
+          const result = await response.json();
+          document.getElementById('adminResult').textContent = result.message;
+          if (result.success) {
+            addNotification('unbanned', { user: username }, result.user_id);
+          }
+        } catch (error) {
+          console.error('Error unbanning user:', error);
+          document.getElementById('adminResult').textContent = 'Помилка розблокування користувача.';
+        }
+      }
+    }
+
+    async function givePrize() {
+      const username = prompt("Введіть Telegram юзернейм користувача для видачі призу (без @):");
+      if (username) {
+        try {
+          const response = await fetch('/api/give_prize', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username }),
+          });
+          const result = await response.json();
+          document.getElementById('adminResult').textContent = result.message;
+          if (result.success) {
+            addNotification('prize', { user: username }, result.user_id);
+          }
+        } catch (error) {
+          console.error('Error giving prize:', error);
+          document.getElementById('adminResult').textContent = 'Помилка видачі призу.';
+        }
+      }
+    }
+
+    function addNotification(type, data = {}, userId = null) {
+      let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+      const timestamp = new Date().toISOString();
+      notifications.unshift({ type, data, timestamp, userId });
+      localStorage.setItem('notifications', JSON.stringify(notifications));
+      renderNotifications();
+      updateNotificationBadge();
+    }
+
+    function renderNotifications() {
+      const notificationList = document.getElementById('notificationList');
+      notificationList.innerHTML = '';
+      let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+
+      const tgUser = webApp.initDataUnsafe.user;
+      const currentUserId = tgUser ? tgUser.id : null;
+
+      const relevantNotifications = notifications.filter(notification => {
+        if (notification.userId === null || notification.userId === undefined) {
+          return true;
+        }
+        return notification.userId === currentUserId;
+      });
+
+      if (relevantNotifications.length === 0) {
+        notificationList.innerHTML = `<div class="notification-item">${notificationTranslations[currentLang].empty}</div>`;
+        return;
+      }
+
+      relevantNotifications.forEach(notification => {
+        const notificationItem = document.createElement('div');
+        notificationItem.classList.add('notification-item');
+        let message = notificationTranslations[currentLang][notification.type] || "Нове сповіщення";
+
+        for (const key in notification.data) {
+          message = message.replace(`{${key}}`, notification.data[key]);
+        }
+
+        const date = new Date(notification.timestamp);
+        const timeString = date.toLocaleTimeString(currentLang, { hour: '2-digit', minute: '2-digit' });
+        const dateString = date.toLocaleDateString(currentLang);
+
+        notificationItem.innerHTML = `
+          <div>${message}</div>
+          <div style="font-size:0.8em; color:#aaa; margin-top:5px;">${dateString} ${timeString}</div>
+        `;
+        notificationList.appendChild(notificationItem);
+      });
+    }
+
+    function loadNotifications() {
+      renderNotifications();
+      updateNotificationBadge();
+    }
+
+    function clearAllNotifications() {
+      localStorage.removeItem('notifications');
+      renderNotifications();
+      updateNotificationBadge();
+    }
+
+    function updateNotificationBadge() {
+      const notificationBadge = document.getElementById('notificationBadge');
+      const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+
+      const tgUser = webApp.initDataUnsafe.user;
+      const currentUserId = tgUser ? tgUser.id : null;
+
+      const unreadNotificationsCount = notifications.filter(notification => {
+        if (notification.userId === null || notification.userId === undefined) {
+          return true;
+        }
+        return notification.userId === currentUserId;
+      }).length;
+
+      if (unreadNotificationsCount > 0) {
+        notificationBadge.textContent = unreadNotificationsCount;
+        notificationBadge.style.display = 'flex';
+      } else {
+        notificationBadge.style.display = 'none';
+      }
+    }
+
+    function showTeamForm() {
+      document.getElementById('createTeamBtn').style.display = 'none';
+      document.getElementById('teamForm').style.display = 'flex';
+      document.getElementById('teamSuccessMsg').style.display = 'none';
+    }
+
+    function previewTeamAvatar(event) {
+      const preview = document.getElementById('teamAvatarPreview');
       const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = function () {
+        preview.src = reader.result;
+        preview.style.display = 'block';
+      }
+
       if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          teamAvatarPreview.src = e.target.result;
-          teamAvatarPreview.style.display = 'block';
-        };
         reader.readAsDataURL(file);
       } else {
-        teamAvatarPreview.src = '#';
-        teamAvatarPreview.style.display = 'none';
+        preview.src = "";
+        preview.style.display = 'none';
       }
-    });
+    }
 
-    teamForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    async function createTeam(event) {
+      event.preventDefault();
 
       const teamName = document.getElementById('teamName').value;
       const teamTag = document.getElementById('teamTag').value;
-      const captainUsername = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'unknown'; // Get captain's Telegram username
+      const captainUsername = webApp.initDataUnsafe.user.username;
 
       const players = [];
-      // Main players
       for (let i = 1; i <= 5; i++) {
         const id = document.getElementById(`main${i}Id`).value;
         const nick = document.getElementById(`main${i}Nick`).value;
@@ -978,7 +1410,6 @@
           players.push({ id, nick, tg });
         }
       }
-      // Substitute players
       for (let i = 1; i <= 2; i++) {
         const id = document.getElementById(`sub${i}Id`).value;
         const nick = document.getElementById(`sub${i}Nick`).value;
@@ -992,7 +1423,7 @@
         team_name: teamName,
         team_tag: teamTag,
         captain_username: captainUsername,
-        players: players.filter(p => p.tg).map(p => p.tg) // Only send Telegram usernames for invitations
+        players: players.filter(p => p.tg).map(p => p.tg)
       };
 
       try {
@@ -1018,50 +1449,15 @@
 
           document.getElementById('teamForm').style.display = "none";
           document.getElementById('teamSuccessMsg').style.display = "block";
-          document.getElementById('createTeamBtn').style.display = "block"; // Show create team button again
+          document.getElementById('createTeamBtn').style.display = "block";
         } else {
           alert(`Помилка: ${result.message}`);
         }
       } catch (error) {
-        console.error('Помилка при створенні команди:', error);
+        console.error('Error creating team:', error);
         alert('Помилка при створенні команди. Спробуйте ще раз.');
       }
-    });
-
-    // Placeholder functions for content population (removed dummy data)
-    function populateNews() {
-      const newsList = document.querySelector('.news-list');
-      newsList.innerHTML = ''; // Clear existing content
-      // Populate with actual news data from your backend
-      // Example: newsList.innerHTML = `<h4>${data.title}</h4><p>${data.content}</p>`;
     }
-
-    function populateDisciplines() {
-      const disciplinesList = document.querySelector('.disciplines-list');
-      disciplinesList.innerHTML = ''; // Clear existing content
-      // Populate with actual discipline data from your backend
-      // Example: disciplinesList.innerHTML = `<img src="${data.img}" alt="${data.name}" class="discipline-img"><div class="discipline-name">${data.name}</div>`;
-    }
-
-    function populateTournaments() {
-      const tournamentList = document.querySelector('.tournament-list');
-      tournamentList.innerHTML = ''; // Clear existing content
-      // Populate with actual tournament data from your backend
-      // Example: tournamentList.innerHTML = `<h4>${data.title}</h4><p>${data.description}</p>`;
-    }
-
-    // Call populate functions after initial load and translation
-    function updateContentBasedOnLanguage() {
-      populateNews();
-      populateDisciplines();
-      populateTournaments();
-      translatePage();
-      renderNotifications(); // Ensure notifications are re-rendered with current language
-    }
-
-    // Initial content population and translation
-    updateContentBasedOnLanguage();
-
   </script>
 </body>
 </html>
