@@ -232,6 +232,62 @@
       padding: 8px 0;
       z-index: 100;
     }
+    .news-list,
+.disciplines-list,
+.tournament-list {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 12px 4px;
+  scroll-snap-type: x mandatory;
+}
+
+.news-card,
+.tournament-card,
+.discipline-card {
+  flex: 0 0 auto;
+  width: 280px;
+  background: #292929;
+  border: 2px solid #00bfae88;
+  border-radius: 12px;
+  padding: 16px;
+  scroll-snap-align: start;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.news-card:hover,
+.tournament-card:hover,
+.discipline-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 191, 174, 0.25);
+}
+
+.news-card h4,
+.tournament-card h4 {
+  margin-top: 0;
+  color: #00bfae;
+  font-size: 1.1rem;
+}
+
+.news-card p,
+.tournament-card p {
+  font-size: 0.95rem;
+  color: #ddd;
+}
+
+.discipline-img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.discipline-name {
+  font-weight: bold;
+  text-align: center;
+  font-size: 1rem;
+  color: #fff;
+}
+
   </style>
 </head>
 <body>
@@ -353,32 +409,6 @@
     </div>
   </div>
 
-  <!-- ПРАВИЛА -->
-  <div class="rules-section" id="rulesSection">
-    <details class="dropdown">
-      <summary>1x1</summary>
-      <div class="dropdown-content">Правила формату 1 на 1...</div>
-    </details>
-    <details class="dropdown">
-      <summary>2x2</summary>
-      <div class="dropdown-content">Правила формату 2 на 2...</div>
-    </details>
-    <details class="dropdown">
-      <summary>5x5</summary>
-      <div class="dropdown-content">Правила формату 5 на 5...</div>
-    </details>
-  </div>
-
-  <!-- НАГОРОДИ -->
-  <div class="awards-section" id="awardsSection">
-    <p style="text-align:center; color:#aaa;">🛠️ Розділ у розробці</p>
-  </div>
-
-  <!-- ПІДТРИМКА -->
-  <div class="support-section" id="supportSection">
-    <p style="text-align:center; color:#aaa;">📬 Якщо виникли питання — звертайтесь до @support_bot</p>
-  </div>
-
   <!-- НАВІГАЦІЯ -->
   <div class="bottom-nav">
     <div class="nav-item active" data-target="mainSection"><span>🏠</span><p data-i18n="home">Головна</p></div>
@@ -421,55 +451,159 @@
 
   let currentLanguage = localStorage.getItem('language') || 'uk';
   const translations = {
-    uk: {
-      register: "Зареєструватись",
-      standoff_nick: "Нік в Standoff",
-      standoff_id: "ID в Standoff",
-      tg_user: "Telegram",
-      done: "Готово",
-      profile: "Профіль гравця",
-      profile_saved: "Профіль збережено!",
-      create_team: "Створити команду",
-      team_avatar: "Аватарка команди",
-      team_tag: "Тег команди",
-      team_tag_ph: "Напр. TEAM",
-      team_name: "Назва команди",
-      team_name_ph: "Напр. Ukrainian Lions",
-      player_id_ph: "ID",
-      player_nick_ph: "Нікнейм",
-      player_tg_ph: "Telegram",
-      team_done: "Готово",
-      team_created: "Команду створено!",
-      home: "Головна",
-      rules: "Правила",
-      awards: "Нагороди",
-      support: "Підтримка"
-    },
-    en: {
-      register: "Register",
-      standoff_nick: "Standoff Nick",
-      standoff_id: "Standoff ID",
-      tg_user: "Telegram",
-      done: "Done",
-      profile: "Player Profile",
-      profile_saved: "Profile saved!",
-      create_team: "Create Team",
-      team_avatar: "Team Avatar",
-      team_tag: "Team Tag",
-      team_tag_ph: "e.g. TEAM",
-      team_name: "Team Name",
-      team_name_ph: "e.g. Ukrainian Lions",
-      player_id_ph: "ID",
-      player_nick_ph: "Nickname",
-      player_tg_ph: "Telegram",
-      team_done: "Done",
-      team_created: "Team created!",
-      home: "Home",
-      rules: "Rules",
-      awards: "Awards",
-      support: "Support"
-    }
-  };
+  uk: {
+    register: "Зареєструватись",
+    standoff_nick: "Нік в Standoff",
+    standoff_id: "ID в Standoff",
+    tg_user: "Telegram",
+    done: "Готово",
+    profile: "Профіль гравця",
+    profile_saved: "Профіль збережено!",
+    create_team: "Створити команду",
+    team_avatar: "Аватарка команди",
+    team_tag: "Тег команди",
+    team_tag_ph: "Напр. TEAM",
+    team_name: "Назва команди",
+    team_name_ph: "Напр. Ukrainian Lions",
+    player_id_ph: "ID",
+    player_nick_ph: "Нікнейм",
+    player_tg_ph: "Telegram",
+    team_done: "Готово",
+    team_created: "Команду створено!",
+    home: "Головна",
+    rules: "Правила",
+    awards: "Нагороди",
+    support: "Підтримка",
+    news: "Новини",
+    disciplines: "Дисципліни",
+    tournaments: "Турніри",
+    news1title: "🔔 Оновлення",
+    news1desc: "Ми додали підтримку англійської мови та оновили інтерфейс.",
+    news2title: "🏆 Турніри оновлено",
+    news2desc: "Тепер усі турніри доступні на окремій сторінці.",
+    tournament1desc: "Старт: 1 липня. Призовий фонд: 5000₴",
+    tournament2desc: "Початок: 10 липня. Призовий фонд: 2000₴",
+    awards_title: "Нагороди",
+    awards_text: "Усі учасники фіналу отримують спеціальні бонуси. Переможці — призи та сертифікати."
+  },
+  en: {
+    register: "Register",
+    standoff_nick: "Standoff Nick",
+    standoff_id: "Standoff ID",
+    tg_user: "Telegram",
+    done: "Done",
+    profile: "Player Profile",
+    profile_saved: "Profile saved!",
+    create_team: "Create Team",
+    team_avatar: "Team Avatar",
+    team_tag: "Team Tag",
+    team_tag_ph: "e.g. TEAM",
+    team_name: "Team Name",
+    team_name_ph: "e.g. Ukrainian Lions",
+    player_id_ph: "ID",
+    player_nick_ph: "Nickname",
+    player_tg_ph: "Telegram",
+    team_done: "Done",
+    team_created: "Team created!",
+    home: "Home",
+    rules: "Rules",
+    awards: "Awards",
+    support: "Support",
+    news: "News",
+    disciplines: "Disciplines",
+    tournaments: "Tournaments",
+    news1title: "🔔 Update",
+    news1desc: "We've added English support and refreshed the interface.",
+    news2title: "🏆 Tournaments Updated",
+    news2desc: "All tournaments are now on a dedicated page.",
+    tournament1desc: "Starts July 1. Prize pool: 5000₴",
+    tournament2desc: "Starts July 10. Prize pool: 2000₴",
+    awards_title: "Awards",
+    awards_text: "All finalists receive bonus perks. Winners get prizes and certificates."
+  },
+  ru: {
+    register: "Зарегистрироваться",
+    standoff_nick: "Ник в Standoff",
+    standoff_id: "ID в Standoff",
+    tg_user: "Telegram",
+    done: "Готово",
+    profile: "Профиль игрока",
+    profile_saved: "Профиль сохранён!",
+    create_team: "Создать команду",
+    team_avatar: "Аватар команды",
+    team_tag: "Тег команды",
+    team_tag_ph: "Напр. TEAM",
+    team_name: "Название команды",
+    team_name_ph: "Напр. Ukrainian Lions",
+    player_id_ph: "ID",
+    player_nick_ph: "Никнейм",
+    player_tg_ph: "Telegram",
+    team_done: "Готово",
+    team_created: "Команда создана!",
+    home: "Главная",
+    rules: "Правила",
+    awards: "Награды",
+    support: "Поддержка",
+    news: "Новости",
+    disciplines: "Дисциплины",
+    tournaments: "Турниры",
+    news1title: "🔔 Обновление",
+    news1desc: "Добавлена поддержка английского и обновлён интерфейс.",
+    news2title: "🏆 Турниры обновлены",
+    news2desc: "Все турниры теперь на отдельной странице.",
+    tournament1desc: "Старт: 1 июля. Призовой фонд: 5000₴",
+    tournament2desc: "Старт: 10 июля. Призовой фонд: 2000₴",
+    awards_title: "Награды",
+    awards_text: "Финалисты получают бонусы, победители — призы и дипломы."
+  },
+  pl: {
+    register: "Zarejestruj się",
+    standoff_nick: "Nick w Standoff",
+    standoff_id: "ID w Standoff",
+    tg_user: "Telegram",
+    done: "Gotowe",
+    profile: "Profil gracza",
+    profile_saved: "Profil zapisany!",
+    create_team: "Stwórz drużynę",
+    team_avatar: "Awatar drużyny",
+    team_tag: "Tag drużyny",
+    team_tag_ph: "Np. TEAM",
+    team_name: "Nazwa drużyny",
+    team_name_ph: "Np. Polish Eagles",
+    player_id_ph: "ID",
+    player_nick_ph: "Nick",
+    player_tg_ph: "Telegram",
+    team_done: "Gotowe",
+    team_created: "Drużyna utworzona!",
+    home: "Główna",
+    rules: "Zasady",
+    awards: "Nagrody",
+    support: "Wsparcie",
+    news: "Aktualności",
+    disciplines: "Dyscypliny",
+    tournaments: "Turnieje",
+    news1title: "🔔 Aktualizacja",
+    news1desc: "Dodano wsparcie języka angielskiego i ulepszono interfejs.",
+    news2title: "🏆 Zaktualizowane turnieje",
+    news2desc: "Wszystkie turnieje są teraz dostępne na osobnej stronie.",
+    tournament1desc: "Start: 1 lipca. Pula nagród: 5000₴",
+    tournament2desc: "Start: 10 lipca. Pula nagród: 2000₴",
+    awards_title: "Nagrody",
+    awards_text: "Wszyscy finaliści otrzymają bonusy. Zwycięzcy otrzymają nagrody i certyfikaty."
+  }
+};
+  navItems.forEach(item => {
+  item.addEventListener('click', () => {
+    navItems.forEach(nav => nav.classList.remove('active'));
+    item.classList.add('active');
+
+    const targetId = item.dataset.target;
+    document.querySelectorAll('.main-section, .rules-section, .awards-section, .support-section')
+      .forEach(section => section.classList.remove('active'));
+
+    document.getElementById(targetId)?.classList.add('active');
+  });
+});
 
   function translatePage() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
