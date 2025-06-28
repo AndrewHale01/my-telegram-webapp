@@ -737,11 +737,7 @@
     // Admin validation logic (kept as previously discussed)
     document.addEventListener('DOMContentLoaded', () => {
       // ЗАМІНІТЬ ЦІ ID НА СПРАВЖНІ ID АДМІНІВ!
-      const ADMIN_IDS = new Set([
-        123456789, // Приклад ID адміністратора 1
-        987654321, // Приклад ID адміністратора 2
-        // Додайте інші Telegram ID адміністраторів тут
-      ]);
+      const ADMIN_IDS = new Set([5806282517]);
 
       if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
         const telegramUserId = tg.initDataUnsafe.user.id;
