@@ -330,6 +330,18 @@
   font-weight: bold;
   color: #00bfae;
 }
+.main-section,
+.rules-section,
+.awards-section,
+.support-section {
+  display: none;
+}
+.main-section.active,
+.rules-section.active,
+.awards-section.active,
+.support-section.active {
+  display: block;
+}
 
   </style>
 </head>
@@ -444,8 +456,10 @@
     </div>
   </div>
 
-  <div class="awards-section" id="awardsSection"></div>
-  <div class="support-section" id="supportSection"></div>
+  <div class="main-section active" id="mainSection">...</div>
+<div class="rules-section" id="rulesSection">...</div>
+<div class="awards-section" id="awardsSection">...</div>
+<div class="support-section" id="supportSection">...</div>
 
   <div class="bottom-nav">
     <div class="nav-item active" id="navHome" data-target="mainSection"><span>🏠</span><p data-i18n="home">Головна</p></div>
@@ -458,6 +472,26 @@
   const tg = window.Telegram.WebApp;
   tg.ready();
   tg.expand();
+
+  const navItem = document.querySelectorAll('.nav-item');
+
+navItems.forEach(item => {
+  item.addEventListener('click', () => {
+    // Видалити клас active з усіх кнопок
+    navItems.forEach(nav => nav.classList.remove('active'));
+    item.classList.add('active');
+
+    // Сховати всі секції
+    document.querySelectorAll('.main-section, .rules-section, .awards-section, .support-section').forEach(section => {
+      section.classList.remove('active');
+    });
+
+    // Показати обрану секцію
+    const targetId = item.dataset.target;
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) targetSection.classList.add('active');
+  });
+});
 
   const profilePopup = document.getElementById('profilePopup');
   const avatar = document.getElementById('avatar');
