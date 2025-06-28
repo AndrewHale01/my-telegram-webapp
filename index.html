@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title data-key="app_title">Telegram WebApp</title>
+  <title>Telegram WebApp</title>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZN665FNYF"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -35,1015 +35,1428 @@
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      border: 2px solid #007bff;
+      border: 2px solid #00bfae;
       cursor: pointer;
+      object-fit: cover;
+      background: #111;
+      transition: box-shadow 0.2s;
     }
-    .container {
-      padding: 16px;
+    .avatar-small:hover {
+      box-shadow: 0 0 0 4px #00bfae55;
     }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    .form-group input[type="text"],
-    .form-group input[type="file"] {
-      width: calc(100% - 20px);
-      padding: 10px;
-      border: 1px solid #444;
-      border-radius: 5px;
+    .popup {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 0;
       background: #333;
+      padding: 24px 20px 20px 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      z-index: 10;
+      flex-direction: column;
+      min-width: 260px;
+      align-items: center;
+      animation: fadeIn 0.2s;
+    }
+    .popup.active {
+      display: flex;
+    }
+    .register-btn, .done-btn, .create-team-btn {
+      background: #2196f3;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 8px 0;
+      transition: background 0.2s;
+      width: 100%;
+      max-width: 220px;
+    }
+    .register-btn:hover, .done-btn:hover, .create-team-btn:hover {
+      background: #1976d2;
+    }
+    .profile-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 220px;
+      margin-top: 8px;
+    }
+    .profile-form label {
+      font-size: 0.95rem;
+      color: #bbb;
+      margin-bottom: 2px;
+    }
+    .profile-form input {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #222;
       color: #fff;
       font-size: 1rem;
-    }
-    .form-group input[type="file"] {
-      padding: 5px;
-    }
-    .btn {
-      display: block;
+      outline: none;
       width: 100%;
-      padding: 12px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      margin-top: 15px; /* Added margin for buttons */
     }
-    .btn:hover {
-      background-color: #0056b3;
+    .profile-form input[readonly] {
+      background: #222;
+      color: #aaa;
+      border: 1px solid #444;
     }
-    .success-msg {
+    .success-message {
+      color: #00bfae;
+      font-size: 1rem;
+      margin: 10px 0 0 0;
       text-align: center;
-      color: #28a745;
-      font-size: 1.2rem;
-      margin-top: 20px;
+    }
+    .player-profile {
+      width: 100%;
+      max-width: 220px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      background: #222;
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 1rem;
+      box-sizing: border-box;
       display: none;
     }
+    .player-profile-title {
+      margin-bottom: 8px;
+      color: #00bfae;
+      font-weight: bold;
+      font-size: 1.05rem;
+    }
+    .player-profile-row {
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+    .lang-option {
+      background: #444;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    .lang-option:hover {
+      background: #555;
+    }
+    #langPopup {
+      left: 0;
+      right: auto;
+    }
+    .main-section, .rules-section, .awards-section, .support-section {
+      display: none;
+      padding: 0 16px;
+    }
+    .main-section.active, .rules-section.active, .awards-section.active, .support-section.active {
+      display: block;
+    }
     .bottom-nav {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      padding: 10px 0;
-      background-color: #1a1a1a;
       position: fixed;
       bottom: 0;
       left: 0;
+      width: 100%;
+      background: #111;
+      display: flex;
+      justify-content: space-around;
       border-top: 1px solid #333;
-      z-index: 1000;
+      padding: 8px 0;
+      z-index: 100;
     }
     .nav-item {
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.9rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px;
+      color: #ccc;
+      font-size: 0.85rem;
+      cursor: pointer;
     }
-    .nav-item i {
+    .nav-item span {
       font-size: 1.2rem;
+      margin-bottom: 2px;
     }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1001;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.8);
-    }
-    .modal-content {
-      background-color: #2e2e2e;
-      margin: 10% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 90%;
-      max-width: 600px;
-      border-radius: 10px;
-      position: relative;
-      color: #fff;
-    }
-    .close-btn {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      cursor: pointer;
-    }
-    .close-btn:hover,
-    .close-btn:focus {
-      color: #fff;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .team-avatar-preview {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 15px;
-      background-color: #444;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      border: 2px solid #007bff;
-    }
-    .team-member-field {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .team-member-field input {
-      flex-grow: 1;
-    }
-    .notification-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
-    }
-    .notification {
-      background-color: #333;
-      color: #fff;
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      max-width: 300px;
-      opacity: 0;
-      transform: translateY(-20px);
-      animation: fadeIn 0.5s forwards;
+    .nav-item.active, .nav-item:hover {
+      color: #00bfae;
     }
     @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: scale(0.95);}
+      to { opacity: 1; transform: scale(1);}
     }
-    .notification-close {
-      float: right;
-      cursor: pointer;
+    .news-section {
+      margin: 0 0 24px 0;
+      padding: 0 16px;
+    }
+    .news-title {
+      font-size: 1.1rem;
       font-weight: bold;
+      margin-bottom: 8px;
+      color: #00bfae;
+      letter-spacing: 0.5px;
     }
-    .admin-shield-icon {
-      font-size: 1.8rem;
+    .news-list {
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+    }
+    .news-card {
+      min-width: 220px;
+      background: #333;
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 8px #0005;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .news-card p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #fff;
+      word-break: break-word;
+      white-space: normal;
+      overflow-wrap: break-word;
+      max-width: 100%;
+    }
+    .news-card h4 {
+      margin: 0 0 8px 0;
+      font-size: 1rem;
+      color: #00bfae;
+    }
+    .disciplines-section {
+      margin: 0 0 24px 0;
+      padding: 0 16px;
+    }
+    .disciplines-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #00bfae;
+      letter-spacing: 0.5px;
+    }
+    .disciplines-list {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .discipline-card {
+      background: #333;
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 2px 8px #0005;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 320px;
+      max-width: 320px;
+      border: 4px solid #00bfae;
+    }
+    .discipline-img {
+      width: 320px;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      background: #222;
+      border: none;
+      display: block;
+    }
+    .discipline-name {
+      color: #fff;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+    .tournaments-section {
+      margin: 0 0 24px 0;
+      padding: 0 16px;
+    }
+    .tournaments-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #00bfae;
+      letter-spacing: 0.5px;
+    }
+    .tournament-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tournament-card {
+      background: #333;
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 8px #0005;
+      display: flex;
+      flex-direction: column;
+    }
+    .tournament-card h4 {
+      margin: 0 0 6px 0;
+      font-size: 1rem;
+      color: #00bfae;
+    }
+    .tournament-card p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+    .dropdown {
+      margin: 18px 0;
+      width: 100%;
+      max-width: 600px;
+    }
+    .dropdown summary {
+      background: #222;
+      color: #00bfae;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 12px 18px;
+      border-radius: 8px;
       cursor: pointer;
-      color: #007bff; /* Adjust color as needed */
+      outline: none;
+      border: 2px solid #00bfae;
+      margin-bottom: 6px;
+      user-select: none;
     }
-    .award-item {
-        background-color: #333;
-        border: 1px solid #555;
-        border-radius: 8px;
-        padding: 10px;
-        margin-bottom: 10px;
-        text-align: center;
+    .dropdown[open] summary {
+      background: #00bfae;
+      color: #222;
     }
-    .award-item img {
-        max-width: 80px;
-        height: auto;
-        margin-bottom: 5px;
+    .dropdown-content {
+      background: #333;
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 0 0 8px 8px;
+      font-size: 1rem;
+      border-top: 1px solid #00bfae;
     }
+    #adminMenuBtn { background: none; border: none; font-size: 2rem; cursor: pointer; margin-left: 12px; display: none; }
+    #adminModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000a; z-index: 9999; align-items: center; justify-content: center; }
+    #adminModal.active { display: flex; }
+    #adminModalContent { background: #222; color: #fff; border-radius: 16px; padding: 32px 24px; min-width: 320px; max-width: 90vw; box-shadow: 0 8px 32px #000b; position: relative; }
+    #closeAdminModal { position: absolute; top: 12px; right: 16px; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+    #adminModalContent button { padding: 10px; border-radius: 8px; border: none; font-size: 1rem; cursor: pointer; margin-bottom: 8px; width: 100%; max-width: 320px; }
+    #banUserBtn { background: #c62828; color: #fff; }
+    #unbanUserBtn { background: #388e3c; color: #fff; }
+    #givePrizeBtn { background: #1976d2; color: #fff; }
+    #disqualifyTeamBtn { background: #fbc02d; color: #222; }
+    #editBracketBtn { background: #7b1fa2; color: #fff; }
+    #adminResult { margin-top: 18px; color: #0f0; min-height: 24px; }
+    .notification-btn {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      position: relative;
+      margin-left: 8px;
+      color: #fff;
+    }
+    .notification-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: #e53935;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      min-width: 20px;
+      min-height: 20px;
+      padding: 0 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      border: 2px solid #222;
+      box-sizing: border-box;
+      z-index: 2;
+    }
+    #notificationPopup {
+      right: 60px;
+      left: auto;
+      min-width: 280px;
+      max-width: 340px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    #notificationList {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .notification-item {
+      background: #292929;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #fff;
+      font-size: 0.98rem;
+      box-shadow: 0 1px 4px #0004;
+      word-break: break-word;
+    }
+    /* Додаємо стилі для форми команди */
+    .team-form { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin-top: 8px; align-items: center; }
+    .team-form label { font-size: 0.95rem; color: #bbb; margin-bottom: 2px; align-self: flex-start; }
+    .team-form input[type="text"] { padding: 8px; border-radius: 6px; border: 1px solid #555; background: #222; color: #fff; font-size: 1rem; outline: none; width: 100%; }
+    .team-form input[type="file"] { color: #fff; margin-bottom: 8px; align-self: flex-start; }
+    .team-avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #00bfae; margin-bottom: 8px; background: #111; display: none; }
+    .team-player-block { background: #292929; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; width: 100%; box-sizing: border-box; }
+    .team-player-title { color: #00bfae; font-weight: bold; margin-bottom: 4px; font-size: 1rem; }
+    .team-success-message { color: #00bfae; font-size: 1rem; margin: 10px 0 0 0; text-align: center; }
   </style>
 </head>
 <body>
   <div class="topbar">
-    <div class="lang-btn" id="langBtn" data-lang-flag="🇺🇦">🇺🇦</div>
-    <div class="title" data-key="app_header_title">Telegram WebApp</div>
-    <div class="admin-shield-icon" id="adminShieldBtn">🛡️</div>
-  </div>
-
-  <div class="container" id="mainContent" style="display: none;">
-    <h1 data-key="create_team_heading">Створити Команду</h1>
-    <form id="teamForm">
-      <div class="form-group">
-        <label for="teamName" data-key="team_name_label">Назва команди</label>
-        <input type="text" id="teamName" placeholder="Введіть назву команди" required data-key="team_name_placeholder">
+    <div class="lang-btn" id="langBtn">🌐</div>
+    <img id="avatar" class="avatar-small" src="avatar.jpg" alt="Avatar">
+    <button id="notificationBtn" class="notification-btn" title="Сповіщення">
+      🔔
+      <span id="notificationBadge" class="notification-badge" style="display:none;">0</span>
+    </button>
+    <button id="adminMenuBtn" title="Адмін-меню">🛡️</button>
+    <div id="profilePopup" class="popup">
+      <button class="register-btn" id="registerBtn" data-i18n="register">Зареєструватись</button>
+      <form class="profile-form" id="profileForm" style="display:none;">
+        <label for="standoffNick" data-i18n="standoff_nick">Нік в Standoff</label>
+        <input type="text" id="standoffNick" name="standoffNick" required maxlength="32" autocomplete="off">
+        <label for="standoffId" data-i18n="standoff_id">ID в Standoff</label>
+        <input type="text" id="standoffId" name="standoffId" required maxlength="32" autocomplete="off">
+        <label for="tgUser" data-i18n="tg_user">Telegram</label>
+        <input type="text" id="tgUser" name="tgUser" readonly>
+        <button type="submit" class="done-btn" id="doneBtn" data-i18n="done">Готово</button>
+      </form>
+      <div class="player-profile" id="playerProfile">
+        <div class="player-profile-title" data-i18n="profile">Профіль гравця</div>
+        <div class="player-profile-row"><span data-i18n="standoff_nick">Нік в Standoff</span>: <span id="profileNick"></span></div>
+        <div class="player-profile-row"><span data-i18n="standoff_id">ID в Standoff</span>: <span id="profileId"></span></div>
+        <div class="player-profile-row"><span data-i18n="tg_user">Telegram</span>: <span id="profileTg"></span></div>
       </div>
-      <div class="form-group">
-        <label for="teamTag" data-key="team_tag_label">Тег команди</label>
-        <input type="text" id="teamTag" placeholder="Введіть тег команди (напр. [TAG])" required data-key="team_tag_placeholder">
-      </div>
-      <div class="form-group">
-        <label for="captainUsername" data-key="captain_username_label">Ваш Telegram юзернейм</label>
-        <input type="text" id="captainUsername" placeholder="@ваш_юзернейм" required data-key="captain_username_placeholder">
-      </div>
-      <div class="form-group">
-        <label data-key="team_avatar_label">Аватар команди</label>
-        <img id="teamAvatarPreview" class="team-avatar-preview" src="#" alt="Аватар команди" data-key="team_avatar_alt">
+      <button class="create-team-btn" id="createTeamBtn" style="display:none;" data-i18n="create_team">Створити команду</button>
+      <div class="success-message" id="successMsg" style="display:none;" data-i18n="profile_saved">Профіль збережено!</div>
+      <form class="team-form" id="teamForm" style="display:none;">
+        <label for="teamAvatar" data-i18n="team_avatar">Аватарка команди</label>
         <input type="file" id="teamAvatar" accept="image/*">
-      </div>
-
-      <h2 data-key="main_players_heading">Основний склад (5 гравців)</h2>
-      <div id="mainPlayers">
-        <div class="team-member-field">
-          <input type="text" id="main1Id" placeholder="ID гравця 1" required data-key="player_id_placeholder">
-          <input type="text" id="main1Nick" placeholder="Нік гравця 1" required data-key="player_nick_placeholder">
-          <input type="text" id="main1Tg" placeholder="Telegram юзернейм (опціонально)" data-key="player_tg_placeholder_optional">
+        <img id="teamAvatarPreview" class="team-avatar-preview" src="#" alt="Team Avatar">
+        <label for="teamTag" data-i18n="team_tag">Тег команди</label>
+        <input type="text" id="teamTag" maxlength="12" required data-i18n-placeholder="team_tag_ph">
+        <label for="teamName" data-i18n="team_name">Назва команди</label>
+        <input type="text" id="teamName" maxlength="32" required data-i18n-placeholder="team_name_ph">
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="main_player1">Гравець 1 (основний)</div>
+          <input type="text" placeholder="ID в Standoff 2" id="main1Id" required data-i18n-placeholder="player_id_ph">
+          <input type="text" placeholder="Нікнейм" id="main1Nick" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" placeholder="Telegram" id="main1Tg" required data-i18n-placeholder="player_tg_ph">
         </div>
-        <div class="team-member-field">
-          <input type="text" id="main2Id" placeholder="ID гравця 2" required data-key="player_id_placeholder">
-          <input type="text" id="main2Nick" placeholder="Нік гравця 2" required data-key="player_nick_placeholder">
-          <input type="text" id="main2Tg" placeholder="Telegram юзернейм (опціонально)" data-key="player_tg_placeholder_optional">
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="main_player2">Гравець 2 (основний)</div>
+          <input type="text" placeholder="ID в Standoff 2" id="main2Id" required data-i18n-placeholder="player_id_ph">
+          <input type="text" placeholder="Нікнейм" id="main2Nick" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" placeholder="Telegram" id="main2Tg" required data-i18n-placeholder="player_tg_ph">
         </div>
-        <div class="team-member-field">
-          <input type="text" id="main3Id" placeholder="ID гравця 3" required data-key="player_id_placeholder">
-          <input type="text" id="main3Nick" placeholder="Нік гравця 3" required data-key="player_nick_placeholder">
-          <input type="text" id="main3Tg" placeholder="Telegram юзернейм (опціонально)" data-key="player_tg_placeholder_optional">
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="main_player3">Гравець 3 (основний)</div>
+          <input type="text" placeholder="ID в Standoff 2" id="main3Id" required data-i18n-placeholder="player_id_ph">
+          <input type="text" placeholder="Нікнейм" id="main3Nick" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" placeholder="Telegram" id="main3Tg" required data-i18n-placeholder="player_tg_ph">
         </div>
-        <div class="team-member-field">
-          <input type="text" id="main4Id" placeholder="ID гравця 4" required data-key="player_id_placeholder">
-          <input type="text" id="main4Nick" placeholder="Нік гравця 4" required data-key="player_nick_placeholder">
-          <input type="text" id="main4Tg" placeholder="Telegram юзернейм (опціонально)" data-key="player_tg_placeholder_optional">
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="main_player4">Гравець 4 (основний)</div>
+          <input type="text" placeholder="ID в Standoff 2" id="main4Id" required data-i18n-placeholder="player_id_ph">
+          <input type="text" placeholder="Нікнейм" id="main4Nick" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" placeholder="Telegram" id="main4Tg" required data-i18n-placeholder="player_tg_ph">
         </div>
-        <div class="team-member-field">
-          <input type="text" id="main5Id" placeholder="ID гравця 5" required data-key="player_id_placeholder">
-          <input type="text" id="main5Nick" placeholder="Нік гравця 5" required data-key="player_nick_placeholder">
-          <input type="text" id="main5Tg" placeholder="Telegram юзернейм (опціонально)" data-key="player_tg_placeholder_optional">
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="main_player5">Гравець 5 (основний)</div>
+          <input type="text" placeholder="ID в Standoff 2" id="main5Id" required data-i18n-placeholder="player_id_ph">
+          <input type="text" placeholder="Нікнейм" id="main5Nick" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" placeholder="Telegram" id="main5Tg" required data-i18n-placeholder="player_tg_ph">
         </div>
-      </div>
-
-      <h2 data-key="sub_players_heading">Запасні гравці (2 гравці, опціонально)</h2>
-      <div id="subPlayers">
-        <div class="team-member-field">
-          <input type="text" id="sub1Id" placeholder="ID запасного 1" data-key="sub_player_id_placeholder">
-          <input type="text" id="sub1Nick" placeholder="Нік запасного 1" data-key="sub_player_nick_placeholder">
-          <input type="text" id="sub1Tg" placeholder="Telegram юзернейм (опціонально)" data-key="player_tg_placeholder_optional">
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="sub_player1">Гравець 6 (запасний)</div>
+          <input type="text" placeholder="ID в Standoff 2" id="sub1Id" data-i18n-placeholder="player_id_ph">
+          <input type="text" placeholder="Нікнейм" id="sub1Nick" data-i18n-placeholder="player_nick_ph">
+          <input type="text" placeholder="Telegram" id="sub1Tg" data-i18n-placeholder="player_tg_ph">
         </div>
-        <div class="team-member-field">
-          <input type="text" id="sub2Id" placeholder="ID запасного 2" data-key="sub_player_id_placeholder">
-          <input type="text" id="sub2Nick" placeholder="Нік запасного 2" data-key="sub_player_nick_placeholder">
-          <input type="text" id="sub2Tg" placeholder="Telegram юзернейм (опціонально)" data-key="player_tg_placeholder_optional">
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="sub_player2">Гравець 7 (запасний)</div>
+          <input type="text" placeholder="ID в Standoff 2" id="sub2Id" data-i18n-placeholder="player_id_ph">
+          <input type="text" placeholder="Нікнейм" id="sub2Nick" data-i18n-placeholder="player_nick_ph">
+          <input type="text" placeholder="Telegram" id="sub2Tg" data-i18n-placeholder="player_tg_ph">
         </div>
-      </div>
-
-      <button type="submit" class="btn" id="createTeamBtn" data-key="create_team_button">Створити команду</button>
-    </form>
-    <div id="teamSuccessMsg" class="success-msg" data-key="team_success_msg">Команда успішно створена!</div>
-    <button class="btn" id="createTeamBtn2" style="display: none;" data-key="create_another_team_button">Створити ще команду</button>
+        <button type="submit" class="done-btn" id="teamDoneBtn" data-i18n="team_done">Готово</button>
+      </form>
+      <div class="team-success-message" id="teamSuccessMsg" style="display:none;" data-i18n="team_created">Команду створено!</div>
+    </div>
+    <div id="langPopup" class="popup">
+      <button class="lang-option" data-lang="uk">Українська</button>
+      <button class="lang-option" data-lang="en">English</button>
+      <button class="lang-option" data-lang="ru">Русский</button>
+      <button class="lang-option" data-lang="pl">Polski</button>
+    </div>
+    <div id="notificationPopup" class="popup" style="right:60px; min-width:280px;">
+      <div style="font-weight:bold; color:#00bfae; margin-bottom:8px;" id="notificationTitle">Сповіщення</div>
+      <div id="notificationList" style="width:100%;"></div>
+      <button id="clearNotificationsBtn" class="done-btn" style="margin-top:10px;">Очистити</button>
+    </div>
   </div>
-
-  <div class="notification-container" id="notificationContainer"></div>
-
+  <div id="adminModal">
+    <div id="adminModalContent">
+      <button id="closeAdminModal">✖️</button>
+      <h2 id="adminMenuTitle" style="color:#00bfae; margin-top:0;">Адмін-меню</h2>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <button id="banUserBtn" data-i18n="ban_user">🚫 Заблокувати користувача</button>
+        <button id="unbanUserBtn" data-i18n="unban_user">✅ Розблокувати користувача</button>
+        <button id="givePrizeBtn" data-i18n="give_prize">🏆 Видати приз</button>
+        <button id="disqualifyTeamBtn" data-i18n="disqualify_team">❌ Дискваліфікувати команду</button>
+        <button id="editBracketBtn" data-i18n="edit_bracket">🗂️ Модерувати сітку</button>
+      </div>
+      <div id="adminResult"></div>
+    </div>
+  </div>
+  <div class="main-section active" id="mainSection">
+    <div class="news-section">
+      <div class="news-title" data-i18n="news">Новини</div>
+      <div class="news-list" id="newsList">
+        <div class="news-card">
+          <h4 data-i18n="news4title">Підтримка польської!</h4>
+          <p data-i18n="news4desc">Тепер в нашому додатку з'явилася підтримка польської мови.</p>
+        </div>
+        <div class="news-card">
+          <h4 data-i18n="news5title">Оновлення турнірів!</h4>
+          <p data-i18n="news5desc">Розділ "Турніри" оновлено!</p>
+        </div>
+      </div>
+    </div>
+    <div class="disciplines-section">
+      <div class="disciplines-title" data-i18n="disciplines">Дисципліни</div>
+      <div class="disciplines-list">
+        <div class="discipline-card">
+          <img src="Standoff2.jpg" alt="Standoff 2" class="discipline-img">
+          <div class="discipline-name">Standoff 2</div>
+        </div>
+      </div>
+    </div>
+    <div class="tournaments-section">
+      <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
+      <div class="tournament-list" id="tournamentList">
+        <div class="tournament-card">
+          <h4>RFORZ Grad Prix Season 1</h4>
+          <p data-i18n="tournament1desc">Початок: 1 липня. Призовий фонд: 5000₴</p>
+        </div>
+        <div class="tournament-card">
+          <h4>Quiz Battle</h4>
+          <p data-i18n="tournament2desc">Початок: 10 липня. Призовий фонд: 2000₴</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="rules-section" id="rulesSection">
+    <details class="dropdown">
+      <summary id="rule1x1Title"></summary>
+      <div class="dropdown-content" id="rule1x1Content"></div>
+    </details>
+    <details class="dropdown">
+      <summary id="rule2x2Title"></summary>
+      <div class="dropdown-content" id="rule2x2Content"></div>
+    </details>
+    <details class="dropdown">
+      <summary id="rule5x5Title"></summary>
+      <div class="dropdown-content" id="rule5x5Content"></div>
+    </details>
+  </div>
+  <div class="awards-section" id="awardsSection"></div>
+  <div class="support-section" id="supportSection"></div>
   <div class="bottom-nav">
-    <a href="#" class="nav-item" id="homeNavItem">
-      <i>🏠</i>
-      <span data-key="nav_home">Головна</span>
-    </a>
-    <a href="#" class="nav-item" id="rulesNavItem">
-      <i>📜</i>
-      <span data-key="nav_rules">Правила</span>
-    </a>
-    <a href="#" class="nav-item" id="rewardsNavItem">
-      <i>🏆</i>
-      <span data-key="nav_rewards">Нагороди</span>
-    </a>
-    <a href="#" class="nav-item" id="supportNavItem">
-      <i>💬</i>
-      <span data-key="nav_support">Підтримка</span>
-    </a>
+    <div class="nav-item active" id="navHome"><span>🏠</span><p data-i18n="home">Головна</p></div>
+    <div class="nav-item" id="navRules"><span>📄</span><p data-i18n="rules">Правила</p></div>
+    <div class="nav-item" id="navAwards"><span>🏆</span><p data-i18n="awards">Нагороди</p></div>
+    <div class="nav-item" id="navSupport"><span>🤖</span><p data-i18n="support">Підтримка</p></div>
   </div>
-
-  <div id="homeModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" data-modal="homeModal">&times;</span>
-      <h2 data-key="home_modal_title">Головна Сторінка</h2>
-      <p data-key="home_modal_content">Тут буде основний вміст вашої головної сторінки.</p>
-      <button class="btn" id="showCreateTeamFormBtn" data-key="show_create_team_form_button">Створити команду</button>
-    </div>
-  </div>
-
-  <div id="rulesModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" data-modal="rulesModal">&times;</span>
-      <h2 data-key="rules_modal_title">Правила Турнірів</h2>
-
-      <details>
-        <summary data-key="tournament_1v1_summary">Турніри 1 на 1</summary>
-        <p data-key="tournament_1v1_content">Детальні правила для турнірів 1 на 1...</p>
-      </details>
-      <details>
-        <summary data-key="tournament_2v2_summary">Турніри 2 на 2</summary>
-        <p data-key="tournament_2v2_content">Детальні правила для турнірів 2 на 2...</p>
-      </details>
-      <details>
-        <summary data-key="tournament_5v5_summary">Турніри 5 на 5</summary>
-        <h3 data-key="rules_5v5_title">Правила Турніру по Standoff 2 (5 на 5)</h3>
-        <p data-key="rules_5v5_general_heading">1. Загальні положення:</p>
-        <ul>
-            <li data-key="rules_5v5_general_li1">Турнір проводиться по дисципліні Standoff 2.</li>
-            <li data-key="rules_5v5_general_li2">Формат матчів: 5 на 5.</li>
-            <li data-key="rules_5v5_general_li3">Всі учасники зобов'язані дотримуватися правил чесної гри та проявляти повагу до інших гравців і суддів турніру.</li>
-        </ul>
-        <p data-key="rules_5v5_participation_heading">2. Участь та реєстрація:</p>
-        <ul>
-            <li data-key="rules_5v5_participation_li1">Команда складається з 5 основних гравців і до 2 запасних.</li>
-            <li data-key="rules_5v5_participation_li2">Регіони: Польща, Нідерланди, Франція.</li>
-            <li data-key="rules_5v5_participation_li3">Максимально допустимий пінг — 100 мс. Гравці з перевищенням цього значення можуть бути відсторонені від участі.</li>
-            <li data-key="rules_5v5_participation_li4">Реєстрація проходить через зазначену організаторами платформу або форму.</li>
-        </ul>
-        <p data-key="rules_5v5_tech_heading">3. Технічні вимоги:</p>
-        <ul>
-            <li data-key="rules_5v5_tech_li1">Гра проводиться тільки на мобільних пристроях. Використання емуляторів заборонено.</li>
-            <li data-key="rules_5v5_tech_li2">Перевірка пінгу проводиться перед кожним матчем.</li>
-            <li data-key="rules_5v5_tech_li3">Використання VPN, проксі та будь-яких засобів для зміни регіону/пінгу суворо заборонено.</li>
-        </ul>
-        <p data-key="rules_5v5_format_heading">4. Формат турніру:</p>
-        <ul>
-            <li data-key="rules_5v5_format_li1">Матчі групового етапу проходять у форматі Best of 2 (BO2). Півфінал — Best of 3 (BO3).</li>
-            <li data-key="rules_5v5_format_li2">Фінал – Best of 5 (BO5).</li>
-            <li data-key="rules_5v5_format_li3">Перемога присуджується команді, яка першою виграла 13 раундів.</li>
-            <li data-key="rules_5v5_format_li4">Карти вибираються методом “ban/pick” (відмова/вибір).</li>
-            <li data-key="rules_5v5_format_li5">Перерви між половинами — 1 хвилина. Переключення сторін відбувається після 12 раундів.</li>
-        </ul>
-        <p data-key="rules_5v5_behavior_heading">5. Поведінка гравців:</p>
-        <ul>
-            <li data-key="rules_5v5_behavior_li1">Заборонено використання стороннього ПО, читів і багів.</li>
-            <li data-key="rules_5v5_behavior_li2">Оскорблення, токсична поведінка і провокації заборонені.</li>
-            <li data-key="rules_5v5_behavior_li3">Всі спірні ситуації вирішуються суддею матча. Рішення адміністрації остаточні.</li>
-        </ul>
-        <p data-key="rules_5v5_interruption_heading">6. Переривання матчу:</p>
-        <ul>
-            <li data-key="rules_5v5_interruption_li1">При вилеті гравця матч продовжується, якщо ситуація не критична.</li>
-            <li data-key="rules_5v5_interruption_li2">В разі технічних проблем команда зобов'язана повідомити адміністратора в протягом 2 хвилин.</li>
-            <li data-key="rules_5v5_interruption_li3">Допускається 1 технічна пауза на матч тривалістю до 5 хвилин (по узгодженню з суддею).</li>
-        </ul>
-        <p data-key="rules_5v5_sanctions_heading">7. Санкції:</p>
-        <ul>
-            <li data-key="rules_5v5_sanctions_li1">1-е порушення правил — попередження.</li>
-            <li data-key="rules_5v5_sanctions_li2">2-е — дискваліфікація гравця або всієї команди в залежності від тяжкості порушення.</li>
-            <li data-key="rules_5v5_sanctions_li3">Повторювані порушення — негайне зняття з турніру.</li>
-        </ul>
-        <p data-key="rules_5v5_prizes_heading">8. Призи та нагороди:</p>
-        <ul>
-            <li data-key="rules_5v5_prizes_li1">Призовий фонд і розподіл місць оголошуються перед початком турніру.</li>
-            <li data-key="rules_5v5_prizes_li2">Призи розподіляються всередині команди самостійно або порівну (за замовчуванням).</li>
-        </ul>
-      </details>
-    </div>
-  </div>
-
-  <div id="rewardsModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" data-modal="rewardsModal">&times;</span>
-      <h2 data-key="rewards_modal_title">Мої Нагороди</h2>
-      <div id="myAwardsContainer">
-        <p data-key="rewards_modal_content">Ваші нагороди з'являться тут.</p>
-      </div>
-    </div>
-  </div>
-
-  <div id="supportModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" data-modal="supportModal">&times;</span>
-      <h2 data-key="support_modal_title">Підтримка</h2>
-      <p data-key="support_modal_content1">Зв'яжіться з нами для підтримки.</p>
-      <p data-key="support_modal_content2">Email: support@example.com</p>
-      <p data-key="support_modal_content3">Telegram: @YourSupportUsername</p>
-    </div>
-  </div>
-
-  <div id="adminModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" data-modal="adminModal">&times;</span>
-      <h2 data-key="admin_modal_title">Admin Panel</h2>
-      <p data-key="admin_modal_content">Тут будуть доступні функції для адміністраторів.</p>
-      <button id="givePrizeBtn" class="btn" data-key="give_prize_button">Видати Приз</button>
-      </div>
-  </div>
-
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
-    const translations = {
-      'uk': {
-        'app_title': 'Telegram WebApp',
-        'app_header_title': 'Telegram WebApp',
-        'create_team_heading': 'Створити Команду',
-        'team_name_label': 'Назва команди',
-        'team_name_placeholder': 'Введіть назву команди',
-        'team_tag_label': 'Тег команди',
-        'team_tag_placeholder': 'Введіть тег команди (напр. [TAG])',
-        'captain_username_label': 'Ваш Telegram юзернейм',
-        'captain_username_placeholder': '@ваш_юзернейм',
-        'team_avatar_label': 'Аватар команди',
-        'team_avatar_alt': 'Аватар команди',
-        'main_players_heading': 'Основний склад (5 гравців)',
-        'player_id_placeholder': 'ID гравця',
-        'player_nick_placeholder': 'Нік гравця',
-        'player_tg_placeholder_optional': 'Telegram юзернейм (опціонально)',
-        'sub_players_heading': 'Запасні гравці (2 гравці, опціонально)',
-        'sub_player_id_placeholder': 'ID запасного',
-        'sub_player_nick_placeholder': 'Нік запасного',
-        'create_team_button': 'Створити команду',
-        'team_success_msg': 'Команда успішно створена!',
-        'create_another_team_button': 'Створити ще команду',
-        'nav_home': 'Головна',
-        'nav_rules': 'Правила',
-        'nav_rewards': 'Нагороди',
-        'nav_support': 'Підтримка',
-        'home_modal_title': 'Головна Сторінка',
-        'home_modal_content': 'Тут буде основний вміст вашої головної сторінки.',
-        'show_create_team_form_button': 'Створити команду', // New translation key
-        'rules_modal_title': 'Правила Турнірів',
-        'tournament_1v1_summary': 'Турніри 1 на 1',
-        'tournament_1v1_content': 'Детальні правила для турнірів 1 на 1...',
-        'tournament_2v2_summary': 'Турніри 2 на 2',
-        'tournament_2v2_content': 'Детальні правила для турнірів 2 на 2...',
-        'tournament_5v5_summary': 'Турніри 5 на 5',
-        'rules_5v5_title': 'Правила Турніру по Standoff 2 (5 на 5)',
-        'rules_5v5_general_heading': '1. Загальні положення:',
-        'rules_5v5_general_li1': 'Турнір проводиться по дисципліні Standoff 2.',
-        'rules_5v5_general_li2': 'Формат матчів: 5 на 5.',
-        'rules_5v5_general_li3': 'Всі учасники зобов\'язані дотримуватися правил чесної гри та проявляти повагу до інших гравців і суддів турніру.',
-        'rules_5v5_participation_heading': '2. Участь та реєстрація:',
-        'rules_5v5_participation_li1': 'Команда складається з 5 основних гравців і до 2 запасних.',
-        'rules_5v5_participation_li2': 'Регіони: Польща, Нідерланди, Франція.',
-        'rules_5v5_participation_li3': 'Максимально допустимий пінг — 100 мс. Гравці з перевищенням цього значення можуть бути відсторонені від участі.',
-        'rules_5v5_participation_li4': 'Реєстрація проходить через зазначену організаторами платформу або форму.',
-        'rules_5v5_tech_heading': '3. Технічні вимоги:',
-        'rules_5v5_tech_li1': 'Гра проводиться тільки на мобільних пристроях. Використання емуляторів заборонено.',
-        'rules_5v5_tech_li2': 'Перевірка пінгу проводиться перед кожним матчем.',
-        'rules_5v5_tech_li3': 'Використання VPN, проксі та будь-яких засобів для зміни регіону/пінгу суворо заборонено.',
-        'rules_5v5_format_heading': '4. Формат турніру:',
-        'rules_5v5_format_li1': 'Матчі групового етапу проходять у форматі Best of 2 (BO2). Півфінал — Best of 3 (BO3).',
-        'rules_5v5_format_li2': 'Фінал – Best of 5 (BO5).',
-        'rules_5v5_format_li3': 'Перемога присуджується команді, яка першою виграла 13 раундів.',
-        'rules_5v5_format_li4': 'Карти вибираються методом “ban/pick” (відмова/вибір).',
-        'rules_5v5_format_li5': 'Перерви між половинами — 1 хвилина. Переключення сторін відбувається після 12 раундів.',
-        'rules_5v5_behavior_heading': '5. Поведінка гравців:',
-        'rules_5v5_behavior_li1': 'Заборонено використання стороннього ПО, читів і багів.',
-        'rules_5v5_behavior_li2': 'Оскорблення, токсична поведінка і провокації заборонені.',
-        'rules_5v5_behavior_li3': 'Всі спірні ситуації вирішуються суддею матча. Рішення адміністрації остаточні.',
-        'rules_5v5_interruption_heading': '6. Переривання матчу:',
-        'rules_5v5_interruption_li1': 'При вилеті гравця матч продовжується, якщо ситуація не критична.',
-        'rules_5v5_interruption_li2': 'В разі технічних проблем команда зобов\'язана повідомити адміністратора в протягом 2 хвилин.',
-        'rules_5v5_interruption_li3': 'Допускається 1 технічна пауза на матч тривалістю до 5 хвилин (по узгодженню з суддею).',
-        'rules_5v5_sanctions_heading': '7. Санкції:',
-        'rules_5v5_sanctions_li1': '1-е порушення правил — попередження.',
-        'rules_5v5_sanctions_li2': '2-е — дискваліфікація гравця або всієї команди в залежності від тяжкості порушення.',
-        'rules_5v5_sanctions_li3': 'Повторювані порушення — негайне зняття з турніру.',
-        'rules_5v5_prizes_heading': '8. Призи та нагороди:',
-        'rules_5v5_prizes_li1': 'Призовий фонд і розподіл місць оголошуються перед початком турніру.',
-        'rules_5v5_prizes_li2': 'Призи розподіляються всередині команди самостійно або порівну (за замовчуванням).',
-        'rewards_modal_title': 'Мої Нагороди',
-        'rewards_modal_content': 'Ваші нагороди з\'являться тут.',
-        'support_modal_title': 'Підтримка',
-        'admin_modal_title': 'Admin Panel',
-        'admin_modal_content': 'Тут будуть доступні функції для адміністраторів.',
-        'give_prize_button': 'Видати Приз',
-        'notification_team_created_captain': 'Вітаємо! Ваша команда "{teamName}" успішно створена. Запрошення надіслано до: {invitedUsers}.',
-        'error_creating_team': 'Помилка при створенні команди. Будь ласка, спробуйте ще раз.',
-        'error_prefix': 'Помилка: '
+    const ADMIN_IDS = [5806282517];
+
+    const notificationTranslations = {
+      uk: {
+        invite: "Вас запросили в команду.",
+        joined: "{user} вступив в команду.",
+        prize: "Ви отримали приз за участь в турнірі.",
+        banned: "Ваш аккаунт було заблоковано за використання стороннього ПЗ.",
+        unbanned: "Ваш аккаунт розблоковано.",
+        disqualified: "Ваша команда дискваліфікована з турніру за порушення правил.",
+        title: "Сповіщення",
+        clear: "Очистити",
+        empty: "Немає сповіщень",
+        team_created_captain: "Ви успішно створили команду {teamName} і запросили до неї гравців: {invitedUsers}.",
+        team_invite_player: "Вас запросили до команди {teamName}. Прийняти/Відхилити."
       },
-      'en': {
-        'app_title': 'Telegram WebApp',
-        'app_header_title': 'Telegram WebApp',
-        'create_team_heading': 'Create Team',
-        'team_name_label': 'Team Name',
-        'team_name_placeholder': 'Enter team name',
-        'team_tag_label': 'Team Tag',
-        'team_tag_placeholder': 'Enter team tag (e.g., [TAG])',
-        'captain_username_label': 'Your Telegram username',
-        'captain_username_placeholder': '@your_username',
-        'team_avatar_label': 'Team Avatar',
-        'team_avatar_alt': 'Team Avatar',
-        'main_players_heading': 'Main Roster (5 players)',
-        'player_id_placeholder': 'Player ID',
-        'player_nick_placeholder': 'Player Nickname',
-        'player_tg_placeholder_optional': 'Telegram username (optional)',
-        'sub_players_heading': 'Substitute Players (2 players, optional)',
-        'sub_player_id_placeholder': 'Substitute ID',
-        'sub_player_nick_placeholder': 'Substitute Nickname',
-        'create_team_button': 'Create Team',
-        'team_success_msg': 'Team created successfully!',
-        'create_another_team_button': 'Create another team',
-        'nav_home': 'Home',
-        'nav_rules': 'Rules',
-        'nav_rewards': 'Rewards',
-        'nav_support': 'Support',
-        'home_modal_title': 'Home Page',
-        'home_modal_content': 'This will be the main content of your home page.',
-        'show_create_team_form_button': 'Create Team', // New translation key
-        'rules_modal_title': 'Tournament Rules',
-        'tournament_1v1_summary': '1 vs 1 Tournaments',
-        'tournament_1v1_content': 'Detailed rules for 1 vs 1 tournaments...',
-        'tournament_2v2_summary': '2 vs 2 Tournaments',
-        'tournament_2v2_content': 'Detailed rules for 2 vs 2 tournaments...',
-        'tournament_5v5_summary': '5 vs 5 Tournaments',
-        'rules_5v5_title': 'Standoff 2 Tournament Rules (5v5)',
-        'rules_5v5_general_heading': '1. General Provisions:',
-        'rules_5v5_general_li1': 'The tournament is held in the Standoff 2 discipline.',
-        'rules_5v5_general_li2': 'Match format: 5 vs 5.',
-        'rules_5v5_general_li3': 'All participants must observe fair play rules and show respect for other players and tournament judges.',
-        'rules_5v5_participation_heading': '2. Participation and Registration:',
-        'rules_5v5_participation_li1': 'A team consists of 5 main players and up to 2 substitutes.',
-        'rules_5v5_participation_li2': 'Regions: Poland, Netherlands, France.',
-        'rules_5v5_participation_li3': 'Maximum allowed ping is 100 ms. Players exceeding this value may be disqualified from participation.',
-        'rules_5v5_participation_li4': 'Registration takes place via the platform or form specified by the organizers.',
-        'rules_5v5_tech_heading': '3. Technical Requirements:',
-        'rules_5v5_tech_li1': 'The game is played only on mobile devices. Emulator use is prohibited.',
-        'rules_5v5_tech_li2': 'Ping check is performed before each match.',
-        'rules_5v5_tech_li3': 'The use of VPN, proxies, and any means to change region/ping is strictly prohibited.',
-        'rules_5v5_format_heading': '4. Tournament Format:',
-        'rules_5v5_format_li1': 'Group stage matches are held in Best of 2 (BO2) format. Semifinals – Best of 3 (BO3).',
-        'rules_5v5_format_li2': 'Finals – Best of 5 (BO5).',
-        'rules_5v5_format_li3': 'Victory is awarded to the team that first wins 13 rounds.',
-        'rules_5v5_format_li4': 'Maps are selected by “ban/pick” method.',
-        'rules_5v5_format_li5': 'Breaks between halves – 1 minute. Sides are switched after 12 rounds.',
-        'rules_5v5_behavior_heading': '5. Player Conduct:',
-        'rules_5v5_behavior_li1': 'The use of third-party software, cheats, and bugs is prohibited.',
-        'rules_5v5_behavior_li2': 'Insults, toxic behavior, and provocations are prohibited.',
-        'rules_5v5_behavior_li3': 'All disputed situations are resolved by the match judge. Administration decisions are final.',
-        'rules_5v5_interruption_heading': '6. Match Interruption:',
-        'rules_5v5_interruption_li1': 'If a player disconnects, the match continues if the situation is not critical.',
-        'rules_5v5_interruption_li2': 'In case of technical problems, the team must notify the administrator within 2 minutes.',
-        'rules_5v5_interruption_li3': '1 technical pause per match is allowed for up to 5 minutes (by agreement with the judge).',
-        'rules_5v5_sanctions_heading': '7. Sanctions:',
-        'rules_5v5_sanctions_li1': '1st violation of rules – warning.',
-        'rules_5v5_sanctions_li2': '2nd violation – disqualification of the player or the entire team depending on the severity of the violation.',
-        'rules_5v5_sanctions_li3': 'Repeated violations – immediate removal from the tournament.',
-        'rules_5v5_prizes_heading': '8. Prizes and Awards:',
-        'rules_5v5_prizes_li1': 'The prize pool and distribution of places are announced before the start of the tournament.',
-        'rules_5v5_prizes_li2': 'Prizes are distributed within the team independently or equally (by default).',
-        'rewards_modal_title': 'My Rewards',
-        'rewards_modal_content': 'Your rewards will appear here.',
-        'support_modal_title': 'Support',
-        'support_modal_content1': 'Contact us for support.',
-        'support_modal_content2': 'Email: support@example.com',
-        'support_modal_content3': 'Telegram: @YourSupportUsername',
-        'admin_modal_title': 'Admin Panel',
-        'admin_modal_content': 'Admin functions will be available here.',
-        'give_prize_button': 'Give Prize',
-        'notification_team_created_captain': 'Congratulations! Your team "{teamName}" has been successfully created. Invitations sent to: {invitedUsers}.',
-        'error_creating_team': 'Error creating team. Please try again.',
-        'error_prefix': 'Error: '
+      en: {
+        invite: "You have been invited to a team.",
+        joined: "{user} joined the team.",
+        prize: "You received a prize for participating in the tournament.",
+        banned: "Your account has been blocked for using third-party software.",
+        unbanned: "Your account has been unblocked.",
+        disqualified: "Your team has been disqualified from the tournament for violating the rules.",
+        title: "Notifications",
+        clear: "Clear",
+        empty: "No notifications",
+        team_created_captain: "You have successfully created team {teamName} and invited players: {invitedUsers}.",
+        team_invite_player: "You have been invited to team {teamName}. Accept/Decline."
       },
-      'ru': {
-        'app_title': 'Telegram WebApp',
-        'app_header_title': 'Telegram WebApp',
-        'create_team_heading': 'Создать Команду',
-        'team_name_label': 'Название команды',
-        'team_name_placeholder': 'Введите название команды',
-        'team_tag_label': 'Тег команды',
-        'team_tag_placeholder': 'Введите тег команды (напр. [TAG])',
-        'captain_username_label': 'Ваш Telegram юзернейм',
-        'captain_username_placeholder': '@ваш_юзернейм',
-        'team_avatar_label': 'Аватар команды',
-        'team_avatar_alt': 'Аватар команды',
-        'main_players_heading': 'Основной состав (5 игроков)',
-        'player_id_placeholder': 'ID игрока',
-        'player_nick_placeholder': 'Ник игрока',
-        'player_tg_placeholder_optional': 'Telegram юзернейм (опционально)',
-        'sub_players_heading': 'Запасные игроки (2 игрока, опционально)',
-        'sub_player_id_placeholder': 'ID запасного',
-        'sub_player_nick_placeholder': 'Ник запасного',
-        'create_team_button': 'Создать команду',
-        'team_success_msg': 'Команда успешно создана!',
-        'create_another_team_button': 'Создать еще команду',
-        'nav_home': 'Главная',
-        'nav_rules': 'Правила',
-        'nav_rewards': 'Награды',
-        'nav_support': 'Поддержка',
-        'home_modal_title': 'Главная Страница',
-        'home_modal_content': 'Здесь будет основное содержимое вашей главной страницы.',
-        'show_create_team_form_button': 'Создать команду', // New translation key
-        'rules_modal_title': 'Правила Турниров',
-        'tournament_1v1_summary': 'Турниры 1 на 1',
-        'tournament_1v1_content': 'Подробные правила для турниров 1 на 1...',
-        'tournament_2v2_summary': 'Турниры 2 на 2',
-        'tournament_2v2_content': 'Подробные правила для турниров 2 на 2...',
-        'tournament_5v5_summary': 'Турниры 5 на 5',
-        'rules_5v5_title': 'Правила Турнира по Standoff 2 (5 на 5)',
-        'rules_5v5_general_heading': '1. Общие положения:',
-        'rules_5v5_general_li1': 'Турнир проводится по дисциплине Standoff 2.',
-        'rules_5v5_general_li2': 'Формат матчей: 5 на 5.',
-        'rules_5v5_general_li3': 'Все участники обязаны соблюдать правила честной игры и проявлять уважение к другим игрокам и судьям турнира.',
-        'rules_5v5_participation_heading': '2. Участие и регистрация:',
-        'rules_5v5_participation_li1': 'Команда состоит из 5 основных игроков и до 2 запасных.',
-        'rules_5v5_participation_li2': 'Регионы: Польша, Нидерланды, Франция.',
-        'rules_5v5_participation_li3': 'Максимально допустимый пинг — 100 мс. Игроки с превышением этого значения могут быть отстранены от участия.',
-        'rules_5v5_participation_li4': 'Регистрация проходит через указанную организаторами платформу или форму.',
-        'rules_5v5_tech_heading': '3. Технические требования:',
-        'rules_5v5_tech_li1': 'Игра проводится только на мобильных устройствах. Использование эмуляторов запрещено.',
-        'rules_5v5_tech_li2': 'Проверка пинга производится перед каждым матчем.',
-        'rules_5v5_tech_li3': 'Использование VPN, прокси и любых средств для изменения региона/пинга строго запрещено.',
-        'rules_5v5_format_heading': '4. Формат турнира:',
-        'rules_5v5_format_li1': 'Матчи группового этапа проходят в формате Best of 2 (BO2). Полуфинал — Best of 3 (BO3).',
-        'rules_5v5_format_li2': 'Финал – Best of 5 (BO5).',
-        'rules_5v5_format_li3': 'Победа присуждается команде, первой выигравшей 13 раундов.',
-        'rules_5v5_format_li4': 'Карты выбираются методом “ban/pick” (отказ/выбор).',
-        'rules_5v5_format_li5': 'Перерывы между половинами — 1 минута. Переключение сторон происходит после 12 раундов.',
-        'rules_5v5_behavior_heading': '5. Поведение игроков:',
-        'rules_5v5_behavior_li1': 'Запрещено использование стороннего ПО, читов и багов.',
-        'rules_5v5_behavior_li2': 'Оскорбления, токсичное поведение и провокации запрещены.',
-        'rules_5v5_behavior_li3': 'Все спорные ситуации решаются судьёй матча. Решения администрации окончательны.',
-        'rules_5v5_interruption_heading': '6. Прерывание матча:',
-        'rules_5v5_interruption_li1': 'При вылете игрока матч продолжается, если ситуация не критична.',
-        'rules_5v5_interruption_li2': 'В случае технических проблем команда обязана уведомить администратора в течение 2 минут.',
-        'rules_5v5_interruption_li3': 'Допускается 1 техническая пауза на матч продолжительностью до 5 минут (по согласованию с судьёй).',
-        'rules_5v5_sanctions_heading': '7. Санкции:',
-        'rules_5v5_sanctions_li1': '1-е нарушение правил — предупреждение.',
-        'rules_5v5_sanctions_li2': '2-е — дисквалификация игрока или всей команды в зависимости от тяжести нарушения.',
-        'rules_5v5_sanctions_li3': 'Повторяющиеся нарушения — немедленное снятие с турнира.',
-        'rules_5v5_prizes_heading': '8. Призы и награды:',
-        'rules_5v5_prizes_li1': 'Призовой фонд и распределение мест объявляются перед началом турнира.',
-        'rules_5v5_prizes_li2': 'Призы распределяются внутри команды самостоятельно или поровну (по умолчанию).',
-        'rewards_modal_title': 'Мои Награды',
-        'rewards_modal_content': 'Ваши награды появятся здесь.',
-        'support_modal_title': 'Поддержка',
-        'support_modal_content1': 'Свяжитесь с нами для поддержки.',
-        'support_modal_content2': 'Email: support@example.com',
-        'support_modal_content3': 'Telegram: @YourSupportUsername',
-        'admin_modal_title': 'Панель администратора',
-        'admin_modal_content': 'Здесь будут доступны функции для администраторов.',
-        'give_prize_button': 'Выдать Приз',
-        'notification_team_created_captain': 'Поздравляем! Ваша команда "{teamName}" успешно создана. Приглашения отправлены: {invitedUsers}.',
-        'error_creating_team': 'Ошибка при создании команды. Пожалуйста, попробуйте еще раз.',
-        'error_prefix': 'Ошибка: '
+      ru: {
+        invite: "Вас пригласили в команду.",
+        joined: "{user} вступил в команду.",
+        prize: "Вы получили приз за участие в турнире.",
+        banned: "Ваш аккаунт был заблокирован за использование стороннего ПО.",
+        unbanned: "Ваш аккаунт разблокирован.",
+        disqualified: "Ваша команда дисквалифицирована из турнира за нарушение правил.",
+        title: "Уведомления",
+        clear: "Очистить",
+        empty: "Нет уведомлений",
+        team_created_captain: "Вы успешно создали команду {teamName} и пригласили в нее игроков: {invitedUsers}.",
+        team_invite_player: "Вас пригласили в команду {teamName}. Принять/Отклонить."
       },
-      'pl': {
-        'app_title': 'Telegram WebApp',
-        'app_header_title': 'Telegram WebApp',
-        'create_team_heading': 'Stwórz Drużynę',
-        'team_name_label': 'Nazwa drużyny',
-        'team_name_placeholder': 'Wpisz nazwę drużyny',
-        'team_tag_label': 'Tag drużyny',
-        'team_tag_placeholder': 'Wpisz tag drużyny (np. [TAG])',
-        'captain_username_label': 'Twoja nazwa użytkownika Telegram',
-        'captain_username_placeholder': '@twoja_nazwa_uzytkownika',
-        'team_avatar_label': 'Awatar drużyny',
-        'team_avatar_alt': 'Awatar drużyny',
-        'main_players_heading': 'Główny skład (5 graczy)',
-        'player_id_placeholder': 'ID gracza',
-        'player_nick_placeholder': 'Pseudonim gracza',
-        'player_tg_placeholder_optional': 'Nazwa użytkownika Telegram (opcjonalnie)',
-        'sub_players_heading': 'Gracze rezerwowi (2 graczy, opcjonalnie)',
-        'sub_player_id_placeholder': 'ID rezerwowego',
-        'sub_player_nick_placeholder': 'Pseudonim rezerwowego',
-        'create_team_button': 'Stwórz drużynę',
-        'team_success_msg': 'Drużyna została pomyślnie stworzona!',
-        'create_another_team_button': 'Stwórz kolejną drużynę',
-        'nav_home': 'Strona główna',
-        'nav_rules': 'Zasady',
-        'nav_rewards': 'Nagrody',
-        'nav_support': 'Wsparcie',
-        'home_modal_title': 'Strona Główna',
-        'home_modal_content': 'Tutaj znajdzie się główna zawartość Twojej strony głównej.',
-        'show_create_team_form_button': 'Stwórz drużynę', // New translation key
-        'rules_modal_title': 'Zasady Turniejów',
-        'tournament_1v1_summary': 'Turnieje 1 na 1',
-        'tournament_1v1_content': 'Szczegółowe zasady turniejów 1 na 1...',
-        'tournament_2v2_summary': 'Turnieje 2 na 2',
-        'tournament_2v2_content': 'Szczegółowe zasady turniejów 2 na 2...',
-        'tournament_5v5_summary': 'Turnieje 5 na 5',
-        'rules_5v5_title': 'Zasady Turnieju Standoff 2 (5 na 5)',
-        'rules_5v5_general_heading': '1. Postanowienia ogólne:',
-        'rules_5v5_general_li1': 'Turniej rozgrywany jest w dyscyplinie Standoff 2.',
-        'rules_5v5_general_li2': 'Format meczów: 5 na 5.',
-        'rules_5v5_general_li3': 'Wszyscy uczestnicy zobowiązani są do przestrzegania zasad fair play oraz okazywania szacunku innym graczom i sędziom turnieju.',
-        'rules_5v5_participation_heading': '2. Uczestnictwo i rejestracja:',
-        'rules_5v5_participation_li1': 'Drużyna składa się z 5 graczy podstawowych i do 2 rezerwowych.',
-        'rules_5v5_participation_li2': 'Regiony: Polska, Holandia, Francja.',
-        'rules_5v5_participation_li3': 'Maksymalny dozwolony ping wynosi 100 ms. Gracze przekraczający tę wartość mogą zostać wykluczeni z udziału.',
-        'rules_5v5_participation_li4': 'Rejestracja odbywa się poprzez platformę lub formularz wskazany przez organizatorów.',
-        'rules_5v5_tech_heading': '3. Wymagania techniczne:',
-        'rules_5v5_tech_li1': 'Gra odbywa się wyłącznie na urządzeniach mobilnych. Użycie emulatorów jest zabronione.',
-        'rules_5v5_tech_li2': 'Sprawdzenie pingu odbywa się przed każdym meczem.',
-        'rules_5v5_tech_li3': 'Używanie VPN, proxy i wszelkich środków do zmiany regionu/pingu jest surowo zabronione.',
-        'rules_5v5_format_heading': '4. Format turnieju:',
-        'rules_5v5_format_li1': 'Mecze fazy grupowej odbywają się w formacie Best of 2 (BO2). Półfinały – Best of 3 (BO3).',
-        'rules_5v5_format_li2': 'Finał – Best of 5 (BO5).',
-        'rules_5v5_format_li3': 'Zwycięstwo przyznawane jest drużynie, która jako pierwsza wygra 13 rund.',
-        'rules_5v5_format_li4': 'Mapy wybierane są metodą „ban/pick”.',
-        'rules_5v5_format_li5': 'Przerwy między połowami – 1 minuta. Zmiana stron następuje po 12 rundach.',
-        'rules_5v5_behavior_heading': '5. Zachowanie graczy:',
-        'rules_5v5_behavior_li1': 'Zabronione jest używanie oprogramowania firm trzecich, cheatów i bugów.',
-        'rules_5v5_behavior_li2': 'Obrażanie, toksyczne zachowanie i prowokacje są zabronione.',
-        'rules_5v5_behavior_li3': 'Wszystkie sporne sytuacje rozstrzyga sędzia meczu. Decyzje administracji są ostateczne.',
-        'rules_5v5_interruption_heading': '6. Przerwanie meczu:',
-        'rules_5v5_interruption_li1': 'W przypadku wylogowania gracza, mecz jest kontynuowany, jeśli sytuacja nie jest krytyczna.',
-        'rules_5v5_interruption_li2': 'W przypadku problemów technicznych drużyna jest zobowiązana powiadomić administratora w ciągu 2 minut.',
-        'rules_5v5_interruption_li3': 'Dozwolona jest 1 pauza techniczna na mecz trwająca do 5 minut (za zgodą sędziego).',
-        'rules_5v5_sanctions_heading': '7. Sankcje:',
-        'rules_5v5_sanctions_li1': '1. naruszenie zasad – ostrzeżenie.',
-        'rules_5v5_sanctions_li2': '2. naruszenie – dyskwalifikacja gracza lub całej drużyny w zależności od wagi naruszenia.',
-        'rules_5v5_sanctions_li3': 'Powtarzające się naruszenia – natychmiastowe usunięcie z turnieju.',
-        'rules_5v5_prizes_heading': '8. Nagrody i wyróżnienia:',
-        'rules_5v5_prizes_li1': 'Pula nagród i rozmieszczenie miejsc są ogłaszane przed rozpoczęciem turnieju.',
-        'rules_5v5_prizes_li2': 'Nagrody są rozdzielane wewnątrz zespołu samodzielnie lub po równo (domyślnie).',
-        'rewards_modal_title': 'Moje Nagrody',
-        'rewards_modal_content': 'Twoje nagrody pojawią się tutaj.',
-        'support_modal_title': 'Wsparcie',
-        'support_modal_content1': 'Skontaktuj się z nami w celu uzyskania wsparcia.',
-        'support_modal_content2': 'Email: support@example.com',
-        'support_modal_content3': 'Telegram: @YourSupportUsername',
-        'admin_modal_title': 'Panel Administracyjny',
-        'admin_modal_content': 'Funkcje administracyjne będą dostępne tutaj.',
-        'give_prize_button': 'Przyznaj Nagrodę',
-        'notification_team_created_captain': 'Gratulacje! Twoja drużyna „{teamName}” została pomyślnie utworzona. Zaproszenia wysłano do: {invitedUsers}.',
-        'error_creating_team': 'Błąd podczas tworzenia drużyny. Proszę spróbować ponownie.',
-        'error_prefix': 'Błąd: '
+      pl: {
+        invite: "Zostałeś zaproszony do drużyny.",
+        joined: "{user} dołączył do drużyny.",
+        prize: "Otrzymałeś nagrodę za udział w turnieju.",
+        banned: "Twoje konto zostało zablokowane za używanie nieautoryzowanego oprogramowania.",
+        unbanned: "Twoje konto zostało odblokowane.",
+        disqualified: "Twoja drużyna została zdyskwalifikowana z turnieju za naruszenie zasad.",
+        title: "Powiadomienia",
+        clear: "Wyczyść",
+        empty: "Brak powiadomień",
+        team_created_captain: "Pomyślnie utworzyłeś drużynę {teamName} i zaprosiłeś graczy: {invitedUsers}.",
+        team_invite_player: "Zostałeś zaproszony do drużyny {teamName}. Akceptuj/Odrzuć."
       }
     };
 
-    let currentLang = 'uk'; // Default language
-
-    function setLanguage(lang) {
-      currentLang = lang;
-      document.documentElement.lang = lang; // Set HTML lang attribute
-      document.getElementById('langBtn').dataset.langFlag = getFlagForLang(lang); // Update flag on button
-      document.getElementById('langBtn').textContent = getFlagForLang(lang);
-
-      document.querySelectorAll('[data-key]').forEach(element => {
-        const key = element.dataset.key;
-        let text = translations[lang][key] || translations['uk'][key] || ''; // Fallback to Ukrainian
-
-        // Handle placeholders in notification messages
-        if (key === 'notification_team_created_captain') {
-            // This key is handled by addNotification function, so we don't directly set it here.
-            // But we ensure the lookup for values is available.
-            return;
+    const rulesTranslations = {
+      uk: {
+        "1x1": {
+          title: "Правила 1x1",
+          content: `
+            <h3>Загальні правила</h3>
+            <ul>
+              <li>Матчі проходять у форматі 1х1.</li>
+              <li>Дозволено використовувати будь-яку зброю та спорядження.</li>
+              <li>Заборонено використовувати стороннє програмне забезпечення.</li>
+              <li>Заборонено використовувати баги гри.</li>
+            </ul>
+            <h3>Формат матчу</h3>
+            <ul>
+              <li>Мапа: Sandstone</li>
+              <li>Режим: Закладка бомби</li>
+              <li>Кількість раундів: 16 (до 8 перемог)</li>
+              <li>Час раунду: 2:00 хв</li>
+            </ul>
+            <h3>Дії гравців</h3>
+            <ul>
+              <li>Перед початком матчу гравці повинні перевірити з'єднання та пінг.</li>
+              <li>У разі роз'єднання гравця або технічних проблем матч призупиняється та відновлюється з того ж раунду.</li>
+            </ul>
+            <h3>Штрафи</h3>
+            <ul>
+              <li>Використання читів – бан назавжди.</li>
+              <li>Використання багів – технічна поразка.</li>
+              <li>Образи – попередження, при повторі – технічна поразка.</li>
+            </ul>
+          `
+        },
+        "2x2": {
+          title: "Правила 2x2",
+          content: `
+            <h3>Загальні правила</h3>
+            <ul>
+              <li>Матчі проходять у форматі 2х2.</li>
+              <li>Дозволено використовувати будь-яку зброю та спорядження.</li>
+              <li>Заборонено використовувати стороннє програмне забезпечення.</li>
+              <li>Заборонено використовувати баги гри.</li>
+            </ul>
+            <h3>Формат матчу</h3>
+            <ul>
+              <li>Мапа: Province</li>
+              <li>Режим: Закладка бомби</li>
+              <li>Кількість раундів: 20 (до 10 перемог)</li>
+              <li>Час раунду: 2:15 хв</li>
+            </ul>
+            <h3>Дії гравців</h3>
+            <ul>
+              <li>Перед початком матчу гравці повинні перевірити з'єднання та пінг.</li>
+              <li>У разі роз'єднання гравця або технічних проблем матч призупиняється та відновлюється з того ж раунду.</li>
+            </ul>
+            <h3>Штрафи</h3>
+            <ul>
+              <li>Використання читів – бан назавжди.</li>
+              <li>Використання багів – технічна поразка.</li>
+              <li>Образи – попередження, при повторі – технічна поразка.</li>
+            </ul>
+          `
+        },
+        "5x5": {
+          title: "Правила 5x5",
+          content: `
+            <h3>Загальні правила</h3>
+            <ul>
+              <li>Матчі проходять у форматі 5х5.</li>
+              <li>Дозволено використовувати будь-яку зброю та спорядження.</li>
+              <li>Заборонено використовувати стороннє програмне забезпечення.</li>
+              <li>Заборонено використовувати баги гри.</li>
+            </ul>
+            <h3>Формат матчу</h3>
+            <ul>
+              <li>Мапа: Training Outside</li>
+              <li>Режим: Закладка бомби</li>
+              <li>Кількість раундів: 24 (до 13 перемог)</li>
+              <li>Час раунду: 2:30 хв</li>
+            </ul>
+            <h3>Дії гравців</h3>
+            <ul>
+              <li>Перед початком матчу гравці повинні перевірити з'єднання та пінг.</li>
+              <li>У разі роз'єднання гравця або технічних проблем матч призупиняється та відновлюється з того ж раунду.</li>
+            </ul>
+            <h3>Штрафи</h3>
+            <ul>
+              <li>Використання читів – бан назавжди.</li>
+              <li>Використання багів – технічна поразка.</li>
+              <li>Образи – попередження, при повторі – технічна поразка.</li>
+            </ul>
+          `
         }
-
-        // For input placeholders
-        if (element.placeholder) {
-            element.placeholder = text;
-        } else {
-            element.textContent = text;
+      },
+      en: {
+        "1x1": {
+          title: "1x1 Rules",
+          content: `
+            <h3>General Rules</h3>
+            <ul>
+              <li>Matches are played in 1x1 format.</li>
+              <li>Any weapon and equipment are allowed.</li>
+              <li>Use of third-party software is prohibited.</li>
+              <li>Exploiting game bugs is prohibited.</li>
+            </ul>
+            <h3>Match Format</h3>
+            <ul>
+              <li>Map: Sandstone</li>
+              <li>Mode: Bomb Defuse</li>
+              <li>Number of rounds: 16 (up to 8 wins)</li>
+              <li>Round time: 2:00 min</li>
+            </ul>
+            <h3>Player Actions</h3>
+            <ul>
+              <li>Before the match, players must check their connection and ping.</li>
+              <li>In case of player disconnection or technical problems, the match is paused and resumed from the same round.</li>
+            </ul>
+            <h3>Penalties</h3>
+            <ul>
+              <li>Using cheats - permanent ban.</li>
+              <li>Exploiting bugs - technical defeat.</li>
+              <li>Insults - warning, repeated - technical defeat.</li>
+            </ul>
+          `
+        },
+        "2x2": {
+          title: "2x2 Rules",
+          content: `
+            <h3>General Rules</h3>
+            <ul>
+              <li>Matches are played in 2x2 format.</li>
+              <li>Any weapon and equipment are allowed.</li>
+              <li>Use of third-party software is prohibited.</li>
+              <li>Exploiting game bugs is prohibited.</li>
+            </ul>
+            <h3>Match Format</h3>
+            <ul>
+              <li>Map: Province</li>
+              <li>Mode: Bomb Defuse</li>
+              <li>Number of rounds: 20 (up to 10 wins)</li>
+              <li>Round time: 2:15 min</li>
+            </ul>
+            <h3>Player Actions</h3>
+            <ul>
+              <li>Before the match, players must check their connection and ping.</li>
+              <li>In case of player disconnection or technical problems, the match is paused and resumed from the same round.</li>
+            </ul>
+            <h3>Penalties</h3>
+            <ul>
+              <li>Using cheats - permanent ban.</li>
+              <li>Exploiting bugs - technical defeat.</li>
+              <li>Insults - warning, repeated - technical defeat.</li>
+            </ul>
+          `
+        },
+        "5x5": {
+          title: "5x5 Rules",
+          content: `
+            <h3>General Rules</h3>
+            <ul>
+              <li>Matches are played in 5x5 format.</li>
+              <li>Any weapon and equipment are allowed.</li>
+              <li>Use of third-party software is prohibited.</li>
+              <li>Exploiting game bugs is prohibited.</li>
+            </ul>
+            <h3>Match Format</h3>
+            <ul>
+              <li>Map: Training Outside</li>
+              <li>Mode: Bomb Defuse</li>
+              <li>Number of rounds: 24 (up to 13 wins)</li>
+              <li>Round time: 2:30 min</li>
+            </ul>
+            <h3>Player Actions</h3>
+            <ul>
+              <li>Before the match, players must check their connection and ping.</li>
+              <li>In case of player disconnection or technical problems, the match is paused and resumed from the same round.</li>
+            </ul>
+            <h3>Penalties</h3>
+            <ul>
+              <li>Using cheats - permanent ban.</li>
+              <li>Exploiting bugs - technical defeat.</li>
+              <li>Insults - warning, repeated - technical defeat.</li>
+            </ul>
+          `
         }
-      });
-    }
-
-    function getFlagForLang(lang) {
-        switch (lang) {
-            case 'uk': return '🇺🇦';
-            case 'en': return '🇬🇧'; // Or 🇺🇸, depending on preference
-            case 'ru': return '🇷🇺';
-            case 'pl': return '🇵🇱';
-            default: return '🌐'; // Default globe icon
+      },
+      ru: {
+        "1x1": {
+          title: "Правила 1x1",
+          content: `
+            <h3>Общие правила</h3>
+            <ul>
+              <li>Матчи проходят в формате 1х1.</li>
+              <li>Разрешено использовать любое оружие и снаряжение.</li>
+              <li>Запрещено использовать стороннее программное обеспечение.</li>
+              <li>Запрещено использовать баги игры.</li>
+            </ul>
+            <h3>Формат матча</h3>
+            <ul>
+              <li>Карта: Sandstone</li>
+              <li>Режим: Закладка бомбы</li>
+              <li>Количество раундов: 16 (до 8 побед)</li>
+              <li>Время раунда: 2:00 мин</li>
+            </ul>
+            <h3>Действия игроков</h3>
+            <ul>
+              <li>Перед началом матча игроки должны проверить соединение и пинг.</li>
+              <li>В случае разъединения игрока или технических проблем матч приостанавливается и возобновляется с того же раунда.</li>
+            </ul>
+            <h3>Штрафы</h3>
+            <ul>
+              <li>Использование читов – бан навсегда.</li>
+              <li>Использование багов – техническое поражение.</li>
+              <li>Оскорбления – предупреждение, при повторе – техническое поражение.</li>
+            </ul>
+          `
+        },
+        "2x2": {
+          title: "Правила 2x2",
+          content: `
+            <h3>Общие правила</h3>
+            <ul>
+              <li>Матчи проходят в формате 2х2.</li>
+              <li>Разрешено использовать любое оружие и снаряжение.</li>
+              <li>Запрещено использовать стороннее программное обеспечение.</li>
+              <li>Запрещено использовать баги игры.</li>
+            </ul>
+            <h3>Формат матча</h3>
+            <ul>
+              <li>Карта: Province</li>
+              <li>Режим: Закладка бомбы</li>
+              <li>Количество раундов: 20 (до 10 побег)</li>
+              <li>Время раунда: 2:15 мин</li>
+            </ul>
+            <h3>Действия игроков</h3>
+            <ul>
+              <li>Перед началом матча игроки должны проверить соединение и пинг.</li>
+              <li>В случае разъединения игрока или технических проблем матч приостанавливается и возобновляется с того же раунда.</li>
+            </ul>
+            <h3>Штрафы</h3>
+            <ul>
+              <li>Использование читов – бан навсегда.</li>
+              <li>Использование багов – техническое поражение.</li>
+              <li>Оскорбления – предупреждение, при повторе – техническое поражение.</li>
+            </ul>
+          `
+        },
+        "5x5": {
+          title: "Правила 5x5",
+          content: `
+            <h3>Общие правила</h3>
+            <ul>
+              <li>Матчи проходят в формате 5х5.</li>
+              <li>Разрешено использовать любое оружие и снаряжение.</li>
+              <li>Запрещено использовать стороннее программное обеспечение.</li>
+              <li>Запрещено использовать баги игры.</li>
+            </ul>
+            <h3>Формат матча</h3>
+            <ul>
+              <li>Карта: Training Outside</li>
+              <li>Режим: Закладка бомбы</li>
+              <li>Количество раундов: 24 (до 13 побед)</li>
+              <li>Время раунда: 2:30 мин</li>
+            </ul>
+            <h3>Действия игроков</h3>
+            <ul>
+              <li>Перед началом матча игроки должны проверить соединение и пинг.</li>
+              <li>В случае разъединения игрока или технических проблем матч приостанавливается и возобновляется с того же раунда.</li>
+            </ul>
+            <h3>Штрафы</h3>
+            <ul>
+              <li>Использование читов – бан навсегда.</li>
+              <li>Использование багов – техническое поражение.</li>
+              <li>Оскорбления – предупреждение, при повторе – техническое поражение.</li>
+            </ul>
+          `
         }
-    }
+      },
+      pl: {
+        "1x1": {
+          title: "Zasady 1x1",
+          content: `
+            <h3>Zasady ogólne</h3>
+            <ul>
+              <li>Mecze rozgrywane są w formacie 1x1.</li>
+              <li>Dozwolone jest używanie dowolnej broni i sprzętu.</li>
+              <li>Zabrania się używania oprogramowania osób trzecich.</li>
+              <li>Zabrania się wykorzystywania błędów w grze.</li>
+            </ul>
+            <h3>Format meczu</h3>
+            <ul>
+              <li>Mapa: Sandstone</li>
+              <li>Tryb: Podkładanie bomby</li>
+              <li>Liczba rund: 16 (do 8 zwycięstw)</li>
+              <li>Czas rundy: 2:00 min</li>
+            </ul>
+            <h3>Działania graczy</h3>
+            <ul>
+              <li>Przed meczem gracze muszą sprawdzić swoje połączenie i ping.</li>
+              <li>W przypadku rozłączenia gracza lub problemów technicznych mecz zostaje wstrzymany i wznowiony od tej samej rundy.</li>
+            </ul>
+            <h3>Kary</h3>
+            <ul>
+              <li>Używanie cheatów - ban na zawsze.</li>
+              <li>Wykorzystywanie błędów - porażka techniczna.</li>
+              <li>Obraźliwe zachowanie - ostrzeżenie, powtórne - porażka techniczna.</li>
+            </ul>
+          `
+        },
+        "2x2": {
+          title: "Zasady 2x2",
+          content: `
+            <h3>Zasady ogólne</h3>
+            <ul>
+              <li>Mecze rozgrywane są w formacie 2x2.</li>
+              <li>Dozwolone jest używanie dowolnej broni i sprzętu.</li>
+              <li>Zabrania się używania oprogramowania osób trzecich.</li>
+              <li>Zabrania się wykorzystywania błędów w grze.</li>
+            </ul>
+            <h3>Format meczu</h3>
+            <ul>
+              <li>Mapa: Province</li>
+              <li>Tryb: Podkładanie bomby</li>
+              <li>Liczba rund: 20 (do 10 zwycięstw)</li>
+              <li>Czas rundy: 2:15 min</li>
+            </ul>
+            <h3>Działania graczy</h3>
+            <ul>
+              <li>Przed meczem gracze muszą sprawdzić swoje połączenie i ping.</li>
+              <li>W przypadku rozłączenia gracza lub problemów technicznych mecz zostaje wstrzymany i wznowiony od tej samej rundy.</li>
+            </ul>
+            <h3>Kary</h3>
+            <ul>
+              <li>Używanie cheatów - ban na zawsze.</li>
+              <li>Wykorzystywanie błędów - porażka techniczna.</li>
+              <li>Obraźliwe zachowanie - ostrzeżenie, powtórne - porażka techniczna.</li>
+            </ul>
+          `
+        },
+        "5x5": {
+          title: "Zasady 5x5",
+          content: `
+            <h3>Zasady ogólne</h3>
+            <ul>
+              <li>Mecze rozgrywane są w formacie 5x5.</li>
+              <li>Dozwolone jest używanie dowolnej broni i sprzętu.</li>
+              <li>Zabrania się używania oprogramowania osób trzecich.</li>
+              <li>Zabrania się wykorzystywania błędów w grze.</li>
+            </ul>
+            <h3>Format meczu</h3>
+            <ul>
+              <li>Mapa: Training Outside</li>
+              <li>Tryb: Podkładanie bomby</li>
+              <li>Liczba rund: 24 (do 13 zwycięstw)</li>
+              <li>Czas rundy: 2:30 min</li>
+            </ul>
+            <h3>Działania graczy</h3>
+            <ul>
+              <li>Przed meczem gracze muszą sprawdzić swoje połączenie i ping.</li>
+              <li>W przypadku rozłączenia gracza lub problemów technicznych mecz zostaje wstrzymany i wznowiony od tej samej rundy.</li>
+            </ul>
+            <h3>Kary</h3>
+            <ul>
+              <li>Używanie cheatów - ban na zawsze.</li>
+              <li>Wykorzystywanie błędów - porażka techniczna.</li>
+              <li>Obraźliwe zachowanie - ostrzeżenie, powtórne - porażka techniczna.</li>
+            </ul>
+          `
+        }
+      }
+    };
 
+    let currentLang = localStorage.getItem('lang') || 'uk';
+    const webApp = window.Telegram.WebApp;
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Set initial language
-      setLanguage(currentLang);
+      webApp.ready();
+      webApp.expand();
+      updateContent();
+      loadProfile();
+      loadNotifications();
 
-      const teamForm = document.getElementById('teamForm');
-      const createTeamBtn = document.getElementById('createTeamBtn');
-      const createTeamBtn2 = document.getElementById('createTeamBtn2');
-      const teamSuccessMsg = document.getElementById('teamSuccessMsg');
-      const teamAvatarInput = document.getElementById('teamAvatar');
-      const teamAvatarPreview = document.getElementById('teamAvatarPreview');
-      const notificationContainer = document.getElementById('notificationContainer');
-      const langBtn = document.getElementById('langBtn');
-      const mainContent = document.getElementById('mainContent'); // The team registration form container
-      const showCreateTeamFormBtn = document.getElementById('showCreateTeamFormBtn'); // The new button in home modal
-
-
-      // Modals
-      const modals = document.querySelectorAll('.modal');
-      const closeButtons = document.querySelectorAll('.close-btn');
-
-      // Navigation Items
-      const homeNavItem = document.getElementById('homeNavItem');
-      const rulesNavItem = document.getElementById('rulesNavItem');
-      const rewardsNavItem = document.getElementById('rewardsNavItem');
-      const supportNavItem = document.getElementById('supportNavItem');
-      const adminShieldBtn = document.getElementById('adminShieldBtn');
-
-      function openModal(modalId) {
-        document.getElementById(modalId).style.display = 'block';
+      // Telegram User Data
+      const tgUser = webApp.initDataUnsafe.user;
+      if (tgUser) {
+        document.getElementById('tgUser').value = `@${tgUser.username}`;
+        document.getElementById('profileTg').textContent = `@${tgUser.username}`;
+        checkAdminStatus(tgUser.id);
       }
 
-      function closeAllModals() {
-        modals.forEach(modal => {
-          modal.style.display = 'none';
-        });
-      }
+      // Event Listeners
+      document.getElementById('avatar').addEventListener('click', toggleProfilePopup);
+      document.getElementById('langBtn').addEventListener('click', toggleLangPopup);
+      document.getElementById('registerBtn').addEventListener('click', showProfileForm);
+      document.getElementById('profileForm').addEventListener('submit', saveProfile);
+      document.getElementById('createTeamBtn').addEventListener('click', showTeamForm);
+      document.getElementById('teamForm').addEventListener('submit', createTeam);
+      document.getElementById('teamAvatar').addEventListener('change', previewTeamAvatar);
 
-      // Language switcher logic (cycles through languages)
-      const availableLangs = ['uk', 'en', 'ru', 'pl'];
-      let currentLangIndex = availableLangs.indexOf(currentLang);
-
-      langBtn.addEventListener('click', () => {
-        currentLangIndex = (currentLangIndex + 1) % availableLangs.length;
-        setLanguage(availableLangs[currentLangIndex]);
+      // Admin menu
+      document.getElementById('adminMenuBtn').addEventListener('click', toggleAdminModal);
+      document.getElementById('closeAdminModal').addEventListener('click', () => {
+        document.getElementById('adminModal').classList.remove('active');
+        document.getElementById('adminResult').textContent = '';
       });
+      document.getElementById('banUserBtn').addEventListener('click', banUser);
+      document.getElementById('unbanUserBtn').addEventListener('click', unbanUser);
+      document.getElementById('givePrizeBtn').addEventListener('click', givePrize);
 
-      // Initially open the home modal when the page loads
-      openModal('homeModal');
+      // Notification button
+      document.getElementById('notificationBtn').addEventListener('click', toggleNotificationPopup);
+      document.getElementById('clearNotificationsBtn').addEventListener('click', clearAllNotifications);
 
-      // Event Listener for the new "Create Team" button in Home Modal
-      if (showCreateTeamFormBtn) {
-        showCreateTeamFormBtn.addEventListener('click', () => {
-          closeAllModals(); // Close the home modal
-          mainContent.style.display = 'block'; // Show the team registration form
-        });
-      }
-
-
-      // Event Listeners for Nav Items
-      homeNavItem.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeAllModals();
-        mainContent.style.display = 'none'; // Hide main content when nav to home modal
-        openModal('homeModal');
-      });
-
-      rulesNavItem.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeAllModals();
-        mainContent.style.display = 'none'; // Hide main content
-        openModal('rulesModal');
-      });
-
-      rewardsNavItem.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeAllModals();
-        mainContent.style.display = 'none'; // Hide main content
-        openModal('rewardsModal');
-      });
-
-      supportNavItem.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeAllModals();
-        mainContent.style.display = 'none'; // Hide main content
-        openModal('supportModal');
-      });
-
-      adminShieldBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeAllModals();
-        mainContent.style.display = 'none'; // Hide main content
-        openModal('adminModal');
-      });
-
-      // Event Listeners for Close Buttons
-      closeButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-          const modalId = e.target.dataset.modal;
-          document.getElementById(modalId).style.display = 'none';
+      // Language options
+      document.querySelectorAll('.lang-option').forEach(button => {
+        button.addEventListener('click', (event) => {
+          currentLang = event.target.dataset.lang;
+          localStorage.setItem('lang', currentLang);
+          updateContent();
+          toggleLangPopup();
         });
       });
 
-      // Close modal when clicking outside
-      window.addEventListener('click', (event) => {
-        modals.forEach(modal => {
-          if (event.target == modal) {
-            modal.style.display = "none";
-          }
-        });
-      });
+      // Navigation
+      document.getElementById('navHome').addEventListener('click', () => showSection('mainSection', 'navHome'));
+      document.getElementById('navRules').addEventListener('click', () => showSection('rulesSection', 'navRules'));
+      document.getElementById('navAwards').addEventListener('click', () => showSection('awardsSection', 'navAwards'));
+      document.getElementById('navSupport').addEventListener('click', () => showSection('supportSection', 'navSupport'));
+    });
 
-      teamAvatarInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            teamAvatarPreview.src = e.target.result;
-          };
-          reader.readAsDataURL(file);
+    function updateContent() {
+      // Update elements with data-i18n attribute
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.dataset.i18n;
+        if (i18n[currentLang] && i18n[currentLang][key]) {
+          element.textContent = i18n[currentLang][key];
         }
       });
 
-      teamForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const teamName = document.getElementById('teamName').value;
-        const teamTag = document.getElementById('teamTag').value;
-        const captainUsername = document.getElementById('captainUsername').value;
-
-        const players = [];
-        for (let i = 1; i <= 5; i++) {
-          const id = document.getElementById(`main${i}Id`).value;
-          const nick = document.getElementById(`main${i}Nick`).value;
-          const tg = document.getElementById(`main${i}Tg`).value;
-          if (id && nick) {
-            players.push({ id, nick, tg });
-          }
+      // Update input placeholders with data-i18n-placeholder attribute
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+        const key = element.dataset.i18nPlaceholder; // Corrected to match HTML
+        if (i18n[currentLang] && i18n[currentLang][key]) {
+          element.placeholder = i18n[currentLang][key];
         }
-        for (let i = 1; i <= 2; i++) {
-          const id = document.getElementById(`sub${i}Id`).value;
-          const nick = document.getElementById(`sub${i}Nick`).value;
-          const tg = document.getElementById(`sub${i}Tg`).value;
-          if (id && nick) {
-            players.push({ id, nick, tg });
-          }
-        }
+      });
 
-        const teamData = {
-          team_name: teamName,
-          team_tag: teamTag,
-          captain_username: captainUsername,
-          players: players.filter(p => p.tg).map(p => p.tg)
-        };
+      // Update rules section
+      for (const ruleType in rulesTranslations[currentLang]) {
+        const rule = rulesTranslations[currentLang][ruleType];
+        const titleElement = document.getElementById(`rule${ruleType}Title`);
+        const contentElement = document.getElementById(`rule${ruleType}Content`);
+        if (titleElement) titleElement.textContent = rule.title;
+        if (contentElement) contentElement.innerHTML = rule.content;
+      }
 
+      // Update notification title
+      const notificationTitle = document.getElementById('notificationTitle');
+      if (notificationTitle) {
+        notificationTitle.textContent = notificationTranslations[currentLang].title;
+      }
+      const clearNotificationsBtn = document.getElementById('clearNotificationsBtn');
+      if (clearNotificationsBtn) {
+        clearNotificationsBtn.textContent = notificationTranslations[currentLang].clear;
+      }
+
+      renderNotifications();
+    }
+
+    function showSection(sectionId, navItemId) {
+      document.querySelectorAll('.main-section, .rules-section, .awards-section, .support-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(sectionId).classList.add('active');
+
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      document.getElementById(navItemId).classList.add('active');
+
+      webApp.scrollTo(0, 0); // Scroll to top when changing sections
+    }
+
+    function toggleProfilePopup() {
+      document.getElementById('profilePopup').classList.toggle('active');
+      document.getElementById('langPopup').classList.remove('active');
+      document.getElementById('notificationPopup').classList.remove('active');
+    }
+
+    function toggleLangPopup() {
+      document.getElementById('langPopup').classList.toggle('active');
+      document.getElementById('profilePopup').classList.remove('active');
+      document.getElementById('notificationPopup').classList.remove('active');
+    }
+
+    function toggleNotificationPopup() {
+      document.getElementById('notificationPopup').classList.toggle('active');
+      document.getElementById('profilePopup').classList.remove('active');
+      document.getElementById('langPopup').classList.remove('active');
+      updateNotificationBadge();
+    }
+
+    function showProfileForm() {
+      document.getElementById('registerBtn').style.display = 'none';
+      document.getElementById('profileForm').style.display = 'flex';
+      document.getElementById('playerProfile').style.display = 'none';
+      document.getElementById('createTeamBtn').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'none';
+      document.getElementById('teamForm').style.display = 'none';
+      document.getElementById('teamSuccessMsg').style.display = 'none';
+    }
+
+    function saveProfile(event) {
+      event.preventDefault();
+      const standoffNick = document.getElementById('standoffNick').value;
+      const standoffId = document.getElementById('standoffId').value;
+      const tgUser = document.getElementById('tgUser').value;
+
+      const profileData = { standoffNick, standoffId, tgUser };
+      localStorage.setItem('userProfile', JSON.stringify(profileData));
+
+      document.getElementById('profileNick').textContent = standoffNick;
+      document.getElementById('profileId').textContent = standoffId;
+      document.getElementById('profileTg').textContent = tgUser;
+
+      document.getElementById('profileForm').style.display = 'none';
+      document.getElementById('playerProfile').style.display = 'block';
+      document.getElementById('successMsg').style.display = 'block';
+      document.getElementById('createTeamBtn').style.display = 'block';
+    }
+
+    function loadProfile() {
+      const profileData = JSON.parse(localStorage.getItem('userProfile'));
+      if (profileData) {
+        document.getElementById('standoffNick').value = profileData.standoffNick;
+        document.getElementById('standoffId').value = profileData.standoffId;
+        document.getElementById('profileNick').textContent = profileData.standoffNick;
+        document.getElementById('profileId').textContent = profileData.standoffId;
+
+        document.getElementById('registerBtn').style.display = 'none';
+        document.getElementById('profileForm').style.display = 'none';
+        document.getElementById('playerProfile').style.display = 'block';
+        document.getElementById('createTeamBtn').style.display = 'block';
+      } else {
+        document.getElementById('registerBtn').style.display = 'block';
+        document.getElementById('profileForm').style.display = 'none';
+        document.getElementById('playerProfile').style.display = 'none';
+        document.getElementById('createTeamBtn').style.display = 'none';
+      }
+    }
+
+    function checkAdminStatus(userId) {
+      const adminMenuBtn = document.getElementById('adminMenuBtn');
+      if (ADMIN_IDS.includes(userId)) {
+        adminMenuBtn.style.display = 'block';
+      } else {
+        adminMenuBtn.style.display = 'none';
+      }
+    }
+
+    function toggleAdminModal() {
+      document.getElementById('adminModal').classList.toggle('active');
+      document.getElementById('profilePopup').classList.remove('active');
+      document.getElementById('langPopup').classList.remove('active');
+      document.getElementById('notificationPopup').classList.remove('active');
+      document.getElementById('adminResult').textContent = '';
+    }
+
+    async function getUserStatus(username) {
+      try {
+        const response = await fetch(`/api/user_status/${username}`);
+        const data = await response.json();
+        return data.is_banned;
+      } catch (error) {
+        console.error('Error fetching user status:', error);
+        return false;
+      }
+    }
+
+    async function banUser() {
+      const username = prompt("Введіть Telegram юзернейм користувача для блокування (без @):");
+      if (username) {
         try {
-          const response = await fetch('/api/create_team', {
+          const response = await fetch('/api/ban_user', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(teamData),
+            body: JSON.stringify({ username: username }),
           });
-
           const result = await response.json();
-
+          document.getElementById('adminResult').textContent = result.message;
           if (result.success) {
-            const invitedPlayers = teamData.players.length > 0
-              ? teamData.players.map(username => `@${username}`).join(', ')
-              : translations[currentLang]['not_applicable'] || 'немає'; // Use translated 'none'
-
-            addNotification('team_created_captain', {
-              teamName: teamName,
-              invitedUsers: invitedPlayers
-            });
-
-            document.getElementById('teamForm').style.display = "none";
-            document.getElementById('teamSuccessMsg').style.display = "block";
-            document.getElementById('createTeamBtn').style.display = "block"; // Changed from createTeamBtn2
-          } else {
-            alert(`${translations[currentLang]['error_prefix']}${result.message}`);
+            addNotification('banned', { user: username }, result.user_id);
           }
         } catch (error) {
-          console.error('Error creating team:', error);
-          alert(translations[currentLang]['error_creating_team']);
+          console.error('Error banning user:', error);
+          document.getElementById('adminResult').textContent = 'Помилка блокування користувача.';
         }
+      }
+    }
+
+    async function unbanUser() {
+      const username = prompt("Введіть Telegram юзернейм користувача для розблокування (без @):");
+      if (username) {
+        try {
+          const response = await fetch('/api/unban_user', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username }),
+          });
+          const result = await response.json();
+          document.getElementById('adminResult').textContent = result.message;
+          if (result.success) {
+            addNotification('unbanned', { user: username }, result.user_id);
+          }
+        } catch (error) {
+          console.error('Error unbanning user:', error);
+          document.getElementById('adminResult').textContent = 'Помилка розблокування користувача.';
+        }
+      }
+    }
+
+    async function givePrize() {
+      const username = prompt("Введіть Telegram юзернейм користувача для видачі призу (без @):");
+      if (username) {
+        try {
+          const response = await fetch('/api/give_prize', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username }),
+          });
+          const result = await response.json();
+          document.getElementById('adminResult').textContent = result.message;
+          if (result.success) {
+            addNotification('prize', { user: username }, result.user_id);
+          }
+        } catch (error) {
+          console.error('Error giving prize:', error);
+          document.getElementById('adminResult').textContent = 'Помилка видачі призу.';
+        }
+      }
+    }
+
+    function addNotification(type, data = {}, userId = null) {
+      let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+      const timestamp = new Date().toISOString();
+      notifications.unshift({ type, data, timestamp, userId });
+      localStorage.setItem('notifications', JSON.stringify(notifications));
+      renderNotifications();
+      updateNotificationBadge();
+    }
+
+    function renderNotifications() {
+      const notificationList = document.getElementById('notificationList');
+      notificationList.innerHTML = '';
+      let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+
+      const tgUser = webApp.initDataUnsafe.user;
+      const currentUserId = tgUser ? tgUser.id : null;
+
+      const relevantNotifications = notifications.filter(notification => {
+        if (notification.userId === null || notification.userId === undefined) {
+          return true;
+        }
+        return notification.userId === currentUserId;
       });
 
-      createTeamBtn2.addEventListener('click', () => {
-        teamForm.reset();
-        teamAvatarPreview.src = "#";
-        teamSuccessMsg.style.display = "none";
-        teamForm.style.display = "block";
-        createTeamBtn2.style.display = "none";
-      });
+      if (relevantNotifications.length === 0) {
+        notificationList.innerHTML = `<div class="notification-item">${notificationTranslations[currentLang].empty}</div>`;
+        return;
+      }
 
-      function addNotification(type, data) {
-        const notification = document.createElement('div');
-        notification.classList.add('notification');
+      relevantNotifications.forEach(notification => {
+        const notificationItem = document.createElement('div');
+        notificationItem.classList.add('notification-item');
+        let message = notificationTranslations[currentLang][notification.type] || "Нове сповіщення";
 
-        let message = '';
-        if (type === 'team_created_captain') {
-            message = translations[currentLang]['notification_team_created_captain']
-                .replace('{teamName}', data.teamName)
-                .replace('{invitedUsers}', data.invitedUsers);
+        for (const key in notification.data) {
+          message = message.replace(`{${key}}`, notification.data[key]);
         }
 
-        notification.innerHTML = `
-          <span>${message}</span>
-          <span class="notification-close">&times;</span>
+        const date = new Date(notification.timestamp);
+        const timeString = date.toLocaleTimeString(currentLang, { hour: '2-digit', minute: '2-digit' });
+        const dateString = date.toLocaleDateString(currentLang);
+
+        notificationItem.innerHTML = `
+          <div>${message}</div>
+          <div style="font-size:0.8em; color:#aaa; margin-top:5px;">${dateString} ${timeString}</div>
         `;
+        notificationList.appendChild(notificationItem);
+      });
+    }
 
-        notificationContainer.appendChild(notification);
+    function loadNotifications() {
+      renderNotifications();
+      updateNotificationBadge();
+    }
 
-        notification.querySelector('.notification-close').addEventListener('click', () => {
-          notification.remove();
-        });
+    function clearAllNotifications() {
+      localStorage.removeItem('notifications');
+      renderNotifications();
+      updateNotificationBadge();
+    }
 
-        setTimeout(() => {
-          notification.remove();
-        }, 8000); // Remove after 8 seconds
-      }
+    function updateNotificationBadge() {
+      const notificationBadge = document.getElementById('notificationBadge');
+      const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
 
-      // Initial load for team data from localStorage if exists
-      const savedTeamData = localStorage.getItem("teamData");
-      if (savedTeamData) {
-        const teamData = JSON.parse(savedTeamData);
-        document.getElementById('teamName').value = teamData.name || '';
-        document.getElementById('teamTag').value = teamData.tag || '';
-        document.getElementById('captainUsername').value = teamData.captainUsername || '';
-        if (teamData.avatar) {
-          teamAvatarPreview.src = teamData.avatar;
+      const tgUser = webApp.initDataUnsafe.user;
+      const currentUserId = tgUser ? tgUser.id : null;
+
+      const unreadNotificationsCount = notifications.filter(notification => {
+        if (notification.userId === null || notification.userId === undefined) {
+          return true;
         }
+        return notification.userId === currentUserId;
+      }).length;
 
-        teamData.main.forEach((player, index) => {
-          if (index < 5) {
-            document.getElementById(`main${index + 1}Id`).value = player.id || '';
-            document.getElementById(`main${index + 1}Nick`).value = player.nick || '';
-            document.getElementById(`main${index + 1}Tg`).value = player.tg || '';
-          }
-        });
-        teamData.subs.forEach((player, index) => {
-          if (index < 2) {
-            document.getElementById(`sub${index + 1}Id`).value = player.id || '';
-            document.getElementById(`sub${index + 1}Nick`).value = player.nick || '';
-            document.getElementById(`sub${index + 1}Tg`).value = player.tg || '';
-          }
-        });
+      if (unreadNotificationsCount > 0) {
+        notificationBadge.textContent = unreadNotificationsCount;
+        notificationBadge.style.display = 'flex';
+      } else {
+        notificationBadge.style.display = 'none';
       }
-    });
+    }
+
+    function showTeamForm() {
+      document.getElementById('createTeamBtn').style.display = 'none';
+      document.getElementById('teamForm').style.display = 'flex';
+      document.getElementById('teamSuccessMsg').style.display = 'none';
+    }
+
+    function previewTeamAvatar(event) {
+      const preview = document.getElementById('teamAvatarPreview');
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = function () {
+        preview.src = reader.result;
+        preview.style.display = 'block';
+      }
+
+      if (file) {
+        reader.readAsDataURL(file);
+      } else {
+        preview.src = "";
+        preview.style.display = 'none';
+      }
+    }
+
+    async function createTeam(event) {
+      event.preventDefault();
+
+      const teamName = document.getElementById('teamName').value;
+      const teamTag = document.getElementById('teamTag').value;
+      const captainUsername = webApp.initDataUnsafe.user.username;
+
+      const players = [];
+      for (let i = 1; i <= 5; i++) {
+        const id = document.getElementById(`main${i}Id`).value;
+        const nick = document.getElementById(`main${i}Nick`).value;
+        const tg = document.getElementById(`main${i}Tg`).value;
+        if (id && nick) {
+          players.push({ id, nick, tg });
+        }
+      }
+      for (let i = 1; i <= 2; i++) {
+        const id = document.getElementById(`sub${i}Id`).value;
+        const nick = document.getElementById(`sub${i}Nick`).value;
+        const tg = document.getElementById(`sub${i}Tg`).value;
+        if (id && nick) {
+          players.push({ id, nick, tg });
+        }
+      }
+
+      const teamData = {
+        team_name: teamName,
+        team_tag: teamTag,
+        captain_username: captainUsername,
+        players: players.filter(p => p.tg).map(p => p.tg)
+      };
+
+      try {
+        const response = await fetch('/api/create_team', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(teamData),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          const invitedPlayers = teamData.players.length > 0
+            ? teamData.players.map(username => `@${username}`).join(', ')
+            : 'немає';
+
+          addNotification('team_created_captain', {
+            teamName: teamName,
+            invitedUsers: invitedPlayers
+          });
+
+          document.getElementById('teamForm').style.display = "none";
+          document.getElementById('teamSuccessMsg').style.display = "block";
+          document.getElementById('createTeamBtn').style.display = "block";
+        } else {
+          alert(`Помилка: ${result.message}`);
+        }
+      } catch (error) {
+        console.error('Error creating team:', error);
+        alert('Помилка при створенні команди. Спробуйте ще раз.');
+      }
+    }
   </script>
 </body>
 </html>
