@@ -583,175 +583,271 @@
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
-    // Ініціалізація Telegram WebApp
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
+    const telegram = window.Telegram.WebApp;
 
-    // Отримання елементів DOM
+    telegram.ready();
+    telegram.expand();
+
+    const avatarElement = document.getElementById('avatar');
     const profilePopup = document.getElementById('profilePopup');
-    const avatar = document.getElementById('avatar');
     const registerBtn = document.getElementById('registerBtn');
     const profileForm = document.getElementById('profileForm');
     const doneBtn = document.getElementById('doneBtn');
-    const standoffNickInput = document.getElementById('standoffNick');
-    const standoffIdInput = document.getElementById('standoffId');
-    const tgUserInput = document.getElementById('tgUser');
+    const profileSuccessMsg = document.getElementById('profileSuccessMsg');
     const playerProfile = document.getElementById('playerProfile');
-    const profileNick = document.getElementById('profileNick');
-    const profileId = document.getElementById('profileId');
-    const profileTg = document.getElementById('profileTg');
-    const successMsg = document.getElementById('successMsg');
+    const editProfileBtn = document.getElementById('editProfileBtn');
+    const standoffNickInput = document.getElementById('standoffNick');
+    const telegramUsernameInput = document.getElementById('telegramUsername');
+    const displayNick = document.getElementById('displayNick');
+    const displayTg = document.getElementById('displayTg');
+
     const langBtn = document.getElementById('langBtn');
     const langPopup = document.getElementById('langPopup');
+    const langOptions = document.querySelectorAll('.lang-option');
+
     const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('.main-section, .rules-section, .awards-section, .support-section, .team-section');
+
+    const teamForm = document.getElementById('teamForm');
+    const teamAvatarInput = document.getElementById('teamAvatar');
+    const teamAvatarPreview = document.getElementById('teamAvatarPreview');
+    const teamSuccessMsg = document.getElementById('teamSuccessMsg');
+    const createTeamBtn2 = document.getElementById('createTeamBtn2');
+
+    const notificationBtn = document.getElementById('notificationBtn');
+    const notificationPopup = document.getElementById('notificationPopup');
+    const notificationBadge = document.getElementById('notificationBadge');
+    const notificationList = document.getElementById('notificationList');
+
     const adminMenuBtn = document.getElementById('adminMenuBtn');
     const adminModal = document.getElementById('adminModal');
     const closeAdminModal = document.getElementById('closeAdminModal');
-    const notificationBtn = document.getElementById('notificationBtn');
-    const notificationPopup = document.getElementById('notificationPopup');
-    const notificationList = document.getElementById('notificationList');
-    const notificationBadge = document.getElementById('notificationBadge');
-    const createTeamBtn = document.getElementById('createTeamBtn');
-    const teamForm = document.getElementById('teamForm');
-    const teamSuccessMsg = document.getElementById('teamSuccessMsg');
-    const teamAvatarInput = document.getElementById('teamAvatar');
-    const teamAvatarPreview = document.getElementById('teamAvatarPreview');
-    const createTeamBtn2 = document.getElementById('createTeamBtn2'); // The submit button inside team form
+    const adminResult = document.getElementById('adminResult');
 
-    let currentLanguage = localStorage.getItem('language') || 'uk';
     const translations = {
       uk: {
-        register: "Зареєструватись",
-        standoff_nick: "Нік в Standoff",
-        standoff_id: "ID в Standoff",
-        tg_user: "Telegram",
-        done: "Готово",
-        profile: "Профіль гравця",
-        profile_saved: "Профіль збережено!",
-        latest_news: "Останні новини",
-        disciplines: "Дисципліни",
-        upcoming_tournaments: "Найближчі турніри",
-        home: "Головна",
-        rules: "Правила",
-        awards: "Нагороди",
-        support: "Підтримка",
-        general_rules: "Загальні правила",
-        general_rules_text: "", // Left empty as per instruction
-        discipline_specific_rules: "Правила по дисциплінах",
-        discipline_specific_rules_text: "", // Left empty as per instruction
-        conduct_rules: "Правила поведінки",
-        conduct_rules_text: "", // Left empty as per instruction
-        prizes_info: "Інформація про призи",
-        prizes_info_text: "", // Left empty as per instruction
-        how_to_get_prizes: "Як отримати призи",
-        how_to_get_prizes_text: "", // Left empty as per instruction
-        faq: "Часті запитання",
-        faq_text: "", // Left empty as per instruction
-        contact_us: "Зв'язатися з нами",
-        contact_us_text: "", // Left empty as per instruction
-        team_created: "Команда успішно створена!",
-        team_created_captain: "Ви успішно створили команду \"{teamName}\". Запрошення надіслано гравцям: {invitedUsers}.",
-        create_team: "Створити команду",
-        team_avatar: "Аватарка команди",
-        team_tag: "Тег команди",
-        team_tag_ph: "Наприклад, 'XYZ'",
-        team_name: "Назва команди",
-        team_name_ph: "Наприклад, 'Елітні Воїни'",
-        main_player1: "Гравець 1 (основний)",
-        main_player2: "Гравець 2 (основний)",
-        main_player3: "Гравець 3 (основний)",
-        main_player4: "Гравець 4 (основний)",
-        main_player5: "Гравець 5 (основний)",
-        sub_player1: "Гравець 1 (запасний)",
-        sub_player2: "Гравець 2 (запасний)",
-        player_id_ph: "ID в Standoff 2",
-        player_nick_ph: "Нікнейм",
-        player_tg_ph: "Telegram юзернейм (без @)",
-
+        "register": "Зареєструватись",
+        "nick": "Нік у Standoff 2:",
+        "placeholder-nick": "Ваш нік",
+        "telegram-username": "Telegram Юзернейм:",
+        "done": "Готово",
+        "profile-saved": "Профіль збережено!",
+        "your-profile": "Ваш Профіль:",
+        "profile-nick": "Нік:",
+        "profile-telegram": "Telegram:",
+        "edit-profile": "Редагувати профіль",
+        "main-page": "Головна Сторінка",
+        "rules": "Правила",
+        "awards": "Нагороди",
+        "support": "Підтримка",
+        "nav-main": "Головна",
+        "nav-rules": "Правила",
+        "nav-awards": "Нагороди",
+        "nav-support": "Підтримка",
+        "nav-team": "Команда",
+        "news": "Новини",
+        "disciplines": "Дисципліни",
+        "tournaments": "Турніри",
+        "rule-1-title": "Загальні положення",
+        "rule-1-content": "<p>1.1. Цей документ є офіційним зведенням правил для всіх учасників турнірів та користувачів платформи.</p><p>1.2. Реєструючись на платформі та беручи участь у турнірах, ви погоджуєтеся з цими правилами.</p>",
+        "rule-2-title": "Поведінка гравців",
+        "rule-2-content": "<p>2.1. Учасники повинні дотримуватися спортивної поведінки та взаємоповаги.</p><p>2.2. Заборонено використання нецензурної лексики, образ та дискримінації.</p>",
+        "rule-3-title": "Чесна гра",
+        "rule-3-content": "<p>3.1. Категорично заборонено використання будь-якого стороннього програмного забезпечення (читів).</p><p>3.2. За порушення цього правила команда буде негайно дискваліфікована та заблокована.</p>",
+        "awards-content": "Інформація про нагороди та досягнення учасників буде доступна тут.",
+        "support-content": "Якщо у вас виникли питання, зверніться до нашої служби підтримки через Telegram: @YourSupportUsername",
+        "team-creation": "Створити Команду",
+        "team-name": "Назва Команди:",
+        "placeholder-team-name": "Введіть назву команди",
+        "team-tag": "Тег Команди:",
+        "placeholder-team-tag": "Введіть тег (напр. [TAG])",
+        "team-avatar": "Аватар Команди:",
+        "main-squad": "Основний склад (5 гравців)",
+        "subs-squad": "Запасні гравці (2 гравці, опціонально)",
+        "create-team": "Створити Команду",
+        "team-created-success": "Команда успішно створена!",
+        "create-new-team": "Створити нову команду",
+        "admin-menu": "Адмін-меню",
+        "ban-user": "Забанити гравця",
+        "unban-user": "Розбанити гравця",
+        "give-prize": "Видати приз команді",
+        "disqualify-team": "Дискваліфікувати команду",
+        "edit-bracket": "Редагувати сітку",
+        "notification-team-created-captain": "Ваша команда '{teamName}' успішно створена! Запрошення надіслано гравцям: {invitedUsers}.",
+        "notification-invite-player": "Вас запросили в команду '{teamName}' від @{captainUsername}. Прийняти запрошення?",
+        "notification-invite-accepted": "@{playerUsername} прийняв ваше запрошення до команди '{teamName}'.",
+        "notification-invite-declined": "@{playerUsername} відхилив ваше запрошення до команди '{teamName}'.",
+        "notification-team-full": "Ви досягли максимальної кількості команд.",
+        "notification-player-already-in-team": "Гравець вже є учасником іншої команди.",
+        "notification-invite-sent": "Запрошення надіслано!",
+        "notification-invite-already-pending": "Ви вже маєте незавершене запрошення до цієї команди.",
+        "notification-self-invite": "Ви не можете запросити себе до команди.",
+        "notification-player-not-found": "Гравець з таким Telegram юзернеймом не знайдений.",
+        "notification-invalid-telegram-username": "Будь ласка, введіть дійсний Telegram юзернейм (починається з @, мінімум 5 символів)."
       },
       en: {
-        register: "Register",
-        standoff_nick: "Standoff Nick",
-        standoff_id: "Standoff ID",
-        tg_user: "Telegram",
-        done: "Done",
-        profile: "Player Profile",
-        profile_saved: "Profile saved!",
-        latest_news: "News",
-        disciplines: "Disciplines",
-        upcoming_tournaments: "Upcoming Tournaments",
-        home: "Home",
-        rules: "Rules",
-        awards: "Awards",
-        support: "Support",
-        general_rules: "General Rules",
-        general_rules_text: "", // Left empty as per instruction
-        discipline_specific_rules: "Discipline-Specific Rules",
-        discipline_specific_rules_text: "", // Left empty as per instruction
-        conduct_rules: "Conduct Rules",
-        conduct_rules_text: "", // Left empty as per instruction
-        prizes_info: "Prize Information",
-        prizes_info_text: "", // Left empty as per instruction
-        how_to_get_prizes: "How to Get Prizes",
-        how_to_get_prizes_text: "", // Left empty as per instruction
-        faq: "FAQ",
-        faq_text: "", // Left empty as per instruction
-        contact_us: "Contact Us",
-        contact_us_text: "", // Left empty as per instruction
-        team_created: "Team successfully created!",
-        team_created_captain: "You have successfully created the team \"{teamName}\". Invitations sent to players: {invitedUsers}.",
-        create_team: "Create Team",
-        team_avatar: "Team Avatar",
-        team_tag: "Team Tag",
-        team_tag_ph: "e.g., 'XYZ'",
-        team_name: "Team Name",
-        team_name_ph: "e.g., 'Elite Warriors'",
-        main_player1: "Player 1 (Main)",
-        main_player2: "Player 2 (Main)",
-        main_player3: "Player 3 (Main)",
-        main_player4: "Player 4 (Main)",
-        main_player5: "Player 5 (Main)",
-        sub_player1: "Player 1 (Substitute)",
-        sub_player2: "Player 2 (Substitute)",
-        player_id_ph: "Standoff 2 ID",
-        player_nick_ph: "Nickname",
-        player_tg_ph: "Telegram username (without @)",
+        "register": "Register",
+        "nick": "Standoff 2 Nick:",
+        "placeholder-nick": "Your Nickname",
+        "telegram-username": "Telegram Username:",
+        "done": "Done",
+        "profile-saved": "Profile saved!",
+        "your-profile": "Your Profile:",
+        "profile-nick": "Nick:",
+        "profile-telegram": "Telegram:",
+        "edit-profile": "Edit profile",
+        "main-page": "Main Page",
+        "rules": "Rules",
+        "awards": "Awards",
+        "support": "Support",
+        "nav-main": "Main",
+        "nav-rules": "Rules",
+        "nav-awards": "Awards",
+        "nav-support": "Support",
+        "nav-team": "Team",
+        "news": "News",
+        "disciplines": "Disciplines",
+        "tournaments": "Tournaments",
+        "rule-1-title": "General Provisions",
+        "rule-1-content": "<p>1.1. This document is the official set of rules for all tournament participants and platform users.</p><p>1.2. By registering on the platform and participating in tournaments, you agree to these rules.</p>",
+        "rule-2-title": "Player Conduct",
+        "rule-2-content": "<p>2.1. Participants must adhere to sportsmanship and mutual respect.</p><p>2.2. Use of offensive language, insults, and discrimination is prohibited.</p>",
+        "rule-3-title": "Fair Play",
+        "rule-3-content": "<p>3.1. The use of any third-party software (cheats) is strictly prohibited.</p><p>3.2. Violation of this rule will result in immediate disqualification and banning of the team.</p>",
+        "awards-content": "Information about awards and participant achievements will be available here.",
+        "support-content": "If you have any questions, please contact our support team via Telegram: @YourSupportUsername",
+        "team-creation": "Create Team",
+        "team-name": "Team Name:",
+        "placeholder-team-name": "Enter team name",
+        "team-tag": "Team Tag:",
+        "placeholder-team-tag": "Enter tag (e.g., [TAG])",
+        "team-avatar": "Team Avatar:",
+        "main-squad": "Main Squad (5 players)",
+        "subs-squad": "Substitute Players (2 players, optional)",
+        "create-team": "Create Team",
+        "team-created-success": "Team successfully created!",
+        "create-new-team": "Create New Team",
+        "admin-menu": "Admin Menu",
+        "ban-user": "Ban Player",
+        "unban-user": "Unban Player",
+        "give-prize": "Give Prize to Team",
+        "disqualify-team": "Disqualify Team",
+        "edit-bracket": "Edit Bracket",
+        "notification-team-created-captain": "Your team '{teamName}' has been successfully created! Invitations sent to players: {invitedUsers}.",
+        "notification-invite-player": "You have been invited to join team '{teamName}' by @{captainUsername}. Accept invitation?",
+        "notification-invite-accepted": "@{playerUsername} accepted your invitation to team '{teamName}'.",
+        "notification-invite-declined": "@{playerUsername} declined your invitation to team '{teamName}'.",
+        "notification-team-full": "You have reached the maximum number of teams.",
+        "notification-player-already-in-team": "Player is already a member of another team.",
+        "notification-invite-sent": "Invitation sent!",
+        "notification-invite-already-pending": "You already have a pending invitation for this team.",
+        "notification-self-invite": "You cannot invite yourself to the team.",
+        "notification-player-not-found": "Player with this Telegram username not found.",
+        "notification-invalid-telegram-username": "Please enter a valid Telegram username (starts with @, min 5 characters)."
       }
     };
 
+    let currentLang = localStorage.getItem('lang') || 'uk';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+      translatePage();
+    }
+
     function translatePage() {
       document.querySelectorAll('[data-i18n]').forEach(element => {
-        const key = element.dataset.i18n;
-        if (translations[currentLanguage][key]) {
-          element.textContent = translations[currentLanguage][key];
-        }
-      });
-      document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-        const key = element.dataset.i18nPlaceholder;
-        if (translations[currentLanguage][key]) {
-          element.placeholder = translations[currentLanguage][key];
+        const key = element.getAttribute('data-i18n');
+        if (translations[currentLang] && translations[currentLang][key]) {
+          element.innerHTML = translations[currentLang][key];
         }
       });
     }
 
-    // Admin validation logic (kept as previously discussed)
-    document.addEventListener('DOMContentLoaded', () => {
-      // ЗАМІНІТЬ ЦІ ID НА СПРАВЖНІ ID АДМІНІВ!
-      const ADMIN_IDS = new Set([5806282517]);
+    // Function to add notification
+    function addNotification(type, data) {
+      const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+      const timestamp = new Date().toLocaleString();
+      let message = '';
 
-      if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        const telegramUserId = tg.initDataUnsafe.user.id;
-        console.log("Telegram User ID:", telegramUserId); // Для дебагу
-        if (ADMIN_IDS.has(telegramUserId)) {
-          adminMenuBtn.style.display = 'block'; // Показуємо кнопку адмін-меню
-          console.log("User is an admin!");
-        } else {
-          console.log("User is NOT an admin.");
-        }
-      } else {
-        console.log("Telegram WebApp initDataUnsafe.user not available. Cannot determine admin status.");
+      switch (type) {
+        case 'team_created_captain':
+          message = translations[currentLang]['notification-team-created-captain']
+            .replace('{teamName}', data.teamName)
+            .replace('{invitedUsers}', data.invitedUsers);
+          break;
+        // Add other notification types if needed for local display
+        default:
+          message = `Unknown notification type: ${type}`;
       }
+
+      notifications.unshift({ message, timestamp }); // Add to the beginning
+      localStorage.setItem('notifications', JSON.stringify(notifications));
+      renderNotifications();
+      updateNotificationBadge();
+    }
+
+    // Function to render notifications
+    function renderNotifications() {
+      notificationList.innerHTML = '';
+      const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+      if (notifications.length === 0) {
+        notificationList.innerHTML = `<div class="notification-item" data-i18n="no-notifications">Немає сповіщень.</div>`;
+      } else {
+        notifications.forEach(notification => {
+          const notificationItem = document.createElement('div');
+          notificationItem.classList.add('notification-item');
+          notificationItem.innerHTML = `${notification.message}<br><small style="color:#aaa;">${notification.timestamp}</small>`;
+          notificationList.appendChild(notificationItem);
+        });
+      }
+      translatePage(); // Translate newly added notification text
+    }
+
+    // Update notification badge count
+    function updateNotificationBadge() {
+      const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+      if (notifications.length > 0) {
+        notificationBadge.textContent = notifications.length;
+        notificationBadge.style.display = 'flex';
+      } else {
+        notificationBadge.style.display = 'none';
+      }
+    }
+
+
+    telegram.onEvent('main_button_pressed', function() {
+      Telegram.WebApp.close();
+    });
+
+    telegram.MainButton.setText('Закрити');
+    telegram.MainButton.show();
+
+    avatarElement.addEventListener('click', () => {
+      profilePopup.classList.toggle('active');
+      langPopup.classList.remove('active'); // Close lang popup if open
+      notificationPopup.classList.remove('active'); // Close notification popup if open
+      loadProfile();
+    });
+
+    langBtn.addEventListener('click', () => {
+      langPopup.classList.toggle('active');
+      profilePopup.classList.remove('active'); // Close profile popup if open
+      notificationPopup.classList.remove('active'); // Close notification popup if open
+    });
+
+    langOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        setLanguage(option.dataset.lang);
+        langPopup.classList.remove('active');
+      });
+    });
+
+    notificationBtn.addEventListener('click', () => {
+      notificationPopup.classList.toggle('active');
+      profilePopup.classList.remove('active'); // Close profile popup if open
+      langPopup.classList.remove('active'); // Close lang popup if open
+      renderNotifications(); // Render notifications when popup is opened
     });
 
     adminMenuBtn.addEventListener('click', () => {
@@ -762,211 +858,132 @@
       adminModal.classList.remove('active');
     });
 
-    adminModal.addEventListener('click', (e) => {
-      if (e.target === adminModal) {
-        adminModal.classList.remove('active');
-      }
-    });
-
-    // Dummy admin functions (replace with actual backend calls)
+    // Admin action buttons (for demonstration)
     document.getElementById('banUserBtn').addEventListener('click', () => {
-      document.getElementById('adminResult').textContent = 'Користувач заблокований (симуляція)';
+      adminResult.textContent = 'User banned (simulated).';
     });
     document.getElementById('unbanUserBtn').addEventListener('click', () => {
-      document.getElementById('adminResult').textContent = 'Користувач розблокований (симуляція)';
+      adminResult.textContent = 'User unbanned (simulated).';
     });
     document.getElementById('givePrizeBtn').addEventListener('click', () => {
-      document.getElementById('adminResult').textContent = 'Приз нараховано (симуляція)';
+      adminResult.textContent = 'Prize given (simulated).';
     });
     document.getElementById('disqualifyTeamBtn').addEventListener('click', () => {
-      document.getElementById('adminResult').textContent = 'Команда дискваліфікована (симуляція)';
+      adminResult.textContent = 'Team disqualified (simulated).';
     });
     document.getElementById('editBracketBtn').addEventListener('click', () => {
-      document.getElementById('adminResult').textContent = 'Сітка турніру відредагована (симуляція)';
+      adminResult.textContent = 'Bracket edited (simulated).';
     });
 
-    // Populate Telegram user in profile form
-    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-      tgUserInput.value = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name || 'N/A';
-    } else {
-      tgUserInput.value = 'Недоступно';
-    }
 
-    // Profile Popup Logic
-    avatar.addEventListener('click', () => {
-      profilePopup.classList.toggle('active');
-      // Hide other popups
-      langPopup.classList.remove('active');
-      notificationPopup.classList.remove('active');
-    });
+    function loadProfile() {
+      const userId = telegram.initDataUnsafe.user?.id;
+      const userNick = telegram.initDataUnsafe.user?.username;
 
-    // Close popups when clicking outside
-    document.addEventListener('click', (event) => {
-      if (!profilePopup.contains(event.target) && event.target !== avatar) {
-        profilePopup.classList.remove('active');
-      }
-      if (!langPopup.contains(event.target) && event.target !== langBtn) {
-        langPopup.classList.remove('active');
-      }
-      if (!notificationPopup.contains(event.target) && event.target !== notificationBtn && !notificationBadge.contains(event.target)) {
-        notificationPopup.classList.remove('active');
-      }
-    });
+      if (userId) {
+        telegramUsernameInput.value = `@${userNick || 'N/A'}`; // Set Telegram username
 
-    // Registration and Profile Display
-    const savedProfile = localStorage.getItem('userProfile');
-    if (savedProfile) {
-      const profileData = JSON.parse(savedProfile);
-      displayProfile(profileData);
-      registerBtn.style.display = 'none';
-      createTeamBtn.style.display = 'block'; // Show create team button if profile exists
-    } else {
-      registerBtn.style.display = 'block';
-      profileForm.style.display = 'none';
-      playerProfile.style.display = 'none';
-      createTeamBtn.style.display = 'none'; // Hide create team button if no profile
+        const savedNick = localStorage.getItem(`nick_${userId}`);
+        const savedAvatar = localStorage.getItem(`avatar_${userId}`);
+
+        if (savedNick) {
+          standoffNickInput.value = savedNick;
+          displayNick.textContent = savedNick;
+          displayTg.textContent = `@${userNick || 'N/A'}`;
+          registerBtn.style.display = 'none';
+          profileForm.style.display = 'none';
+          playerProfile.style.display = 'block';
+        } else {
+          registerBtn.style.display = 'block';
+          profileForm.style.display = 'none';
+          playerProfile.style.display = 'none';
+        }
+
+        if (savedAvatar) {
+          avatarElement.src = savedAvatar;
+        } else if (telegram.initDataUnsafe.user?.photo_url) {
+          avatarElement.src = telegram.initDataUnsafe.user.photo_url;
+        } else {
+          avatarElement.src = 'avatar.jpg'; // Default avatar
+        }
+      } else {
+        // Handle cases where user ID is not available (e.g., debugging outside Telegram WebApp)
+        registerBtn.style.display = 'block';
+        profileForm.style.display = 'none';
+        playerProfile.style.display = 'none';
+        telegramUsernameInput.value = '@debuguser';
+        avatarElement.src = 'avatar.jpg';
+      }
     }
 
     registerBtn.addEventListener('click', () => {
       registerBtn.style.display = 'none';
       profileForm.style.display = 'flex';
+      profileSuccessMsg.style.display = 'none';
       playerProfile.style.display = 'none';
-      successMsg.style.display = 'none';
-      createTeamBtn.style.display = 'none'; // Hide create team button during registration
     });
 
-    profileForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const standoffNick = standoffNickInput.value;
-      const standoffId = standoffIdInput.value;
-      const tgUser = tgUserInput.value;
-
-      const userProfile = { standoffNick, standoffId, tgUser };
-      localStorage.setItem('userProfile', JSON.stringify(userProfile));
-      displayProfile(userProfile);
-
-      profileForm.style.display = 'none';
-      successMsg.style.display = 'block';
-      createTeamBtn.style.display = 'block'; // Show create team button after profile saved
+    doneBtn.addEventListener('click', () => {
+      const userId = telegram.initDataUnsafe.user?.id;
+      if (userId) {
+        const nick = standoffNickInput.value;
+        localStorage.setItem(`nick_${userId}`, nick);
+        displayNick.textContent = nick;
+        displayTg.textContent = telegramUsernameInput.value;
+        profileForm.style.display = 'none';
+        profileSuccessMsg.style.display = 'block';
+        playerProfile.style.display = 'block';
+      }
     });
 
-    function displayProfile(profileData) {
-      profileNick.textContent = profileData.standoffNick;
-      profileId.textContent = profileData.standoffId;
-      profileTg.textContent = profileData.tgUser;
-      playerProfile.style.display = 'block';
-    }
-
-    // Language switcher
-    langBtn.addEventListener('click', () => {
-      langPopup.classList.toggle('active');
-      // Hide other popups
-      profilePopup.classList.remove('active');
-      notificationPopup.classList.remove('active');
+    editProfileBtn.addEventListener('click', () => {
+      registerBtn.style.display = 'none';
+      profileForm.style.display = 'flex';
+      profileSuccessMsg.style.display = 'none';
+      playerProfile.style.display = 'none';
     });
 
-    document.querySelectorAll('.lang-option').forEach(button => {
-      button.addEventListener('click', (event) => {
-        currentLanguage = event.target.dataset.lang;
-        localStorage.setItem('language', currentLanguage);
-        translatePage(); // Use this function to re-render content
-        langPopup.classList.remove('active');
-      });
-    });
-
-    // Navigation logic
     navItems.forEach(item => {
       item.addEventListener('click', () => {
+        const targetSectionId = item.dataset.section + 'Section';
+
         navItems.forEach(nav => nav.classList.remove('active'));
         item.classList.add('active');
 
-        document.querySelectorAll('.main-section, .rules-section, .awards-section, .support-section').forEach(section => {
-          section.classList.remove('active');
+        sections.forEach(section => {
+          if (section.id === targetSectionId) {
+            section.classList.add('active');
+          } else {
+            section.classList.remove('active');
+          }
         });
-        document.getElementById(item.dataset.target).classList.add('active');
+        profilePopup.classList.remove('active'); // Close popups when navigating
+        langPopup.classList.remove('active');
+        notificationPopup.classList.remove('active');
       });
     });
 
-    // Initial translation on load
-    translatePage();
-
-    // Notification Logic (kept as previously discussed)
-    let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-
-    function renderNotifications() {
-      notificationList.innerHTML = '';
-      if (notifications.length === 0) {
-        notificationList.innerHTML = '<div class="notification-item" data-i18n="no_new_notifications">Немає нових сповіщень.</div>'; // Added data-i18n
-        notificationBadge.style.display = 'none';
-      } else {
-        // Sort notifications by timestamp in descending order (latest first)
-        const sortedNotifications = [...notifications].sort((a, b) => b.timestamp - a.timestamp);
-
-        sortedNotifications.forEach((notification, index) => {
-          const item = document.createElement('div');
-          item.className = 'notification-item';
-
-          let message = translations[currentLanguage][notification.type] || notification.type;
-          for (const key in notification.data) {
-            message = message.replace(`{${key}}`, notification.data[key]);
-          }
-          item.textContent = message;
-          notificationList.appendChild(item);
-        });
-        notificationBadge.textContent = notifications.length;
-        notificationBadge.style.display = 'flex';
-      }
-    }
-
-    function addNotification(type, data = {}) {
-      const newNotification = { type, data, timestamp: Date.now() };
-      notifications.push(newNotification);
-      localStorage.setItem('notifications', JSON.stringify(notifications));
-      renderNotifications();
-    }
-
-    notificationBtn.addEventListener('click', () => {
-      notificationPopup.classList.toggle('active');
-      // Hide other popups
-      profilePopup.classList.remove('active');
-      langPopup.classList.remove('active');
-    });
-
-    // Initial render of notifications
-    renderNotifications();
-
-    // Team Creation Logic (kept as previously discussed due to backend files)
-    createTeamBtn.addEventListener('click', () => {
-      teamForm.style.display = 'flex';
-      createTeamBtn.style.display = 'none';
-      teamSuccessMsg.style.display = 'none';
-      profilePopup.classList.remove('active'); // Close profile popup
-    });
-
-    teamAvatarInput.addEventListener('change', function(event) {
+    // Team creation form
+    teamAvatarInput.addEventListener('change', (event) => {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = (e) => {
           teamAvatarPreview.src = e.target.result;
           teamAvatarPreview.style.display = 'block';
         };
         reader.readAsDataURL(file);
-      } else {
-        teamAvatarPreview.src = '#';
-        teamAvatarPreview.style.display = 'none';
       }
     });
 
-    teamForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    teamForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
 
       const teamName = document.getElementById('teamName').value;
       const teamTag = document.getElementById('teamTag').value;
-      const captainUsername = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'unknown'; // Get captain's Telegram username
+      const captainUsername = telegram.initDataUnsafe.user?.username || 'unknown';
 
       const players = [];
-      // Main players
       for (let i = 1; i <= 5; i++) {
         const id = document.getElementById(`main${i}Id`).value;
         const nick = document.getElementById(`main${i}Nick`).value;
@@ -975,7 +992,6 @@
           players.push({ id, nick, tg });
         }
       }
-      // Substitute players
       for (let i = 1; i <= 2; i++) {
         const id = document.getElementById(`sub${i}Id`).value;
         const nick = document.getElementById(`sub${i}Nick`).value;
@@ -989,7 +1005,7 @@
         team_name: teamName,
         team_tag: teamTag,
         captain_username: captainUsername,
-        players: players.filter(p => p.tg).map(p => p.tg) // Only send Telegram usernames for invitations
+        players: players.filter(p => p.tg).map(p => p.tg)
       };
 
       try {
@@ -1015,51 +1031,30 @@
 
           document.getElementById('teamForm').style.display = "none";
           document.getElementById('teamSuccessMsg').style.display = "block";
-          document.getElementById('createTeamBtn').style.display = "block"; // Show create team button again
+          document.getElementById('createTeamBtn2').style.display = "block";
         } else {
           alert(`Помилка: ${result.message}`);
         }
       } catch (error) {
-        console.error('Помилка при створенні команди:', error);
+        console.error('Error creating team:', error);
         alert('Помилка при створенні команди. Спробуйте ще раз.');
       }
     });
 
-    // Placeholder functions for content population (removed dummy data)
-    function populateNews() {
-      const newsList = document.querySelector('.news-list');
-      newsList.innerHTML = ''; // Clear existing content
-      // Populate with actual news data from your backend
-      newsList.innerHTML = `<h4>${data.title}</h4><p>${data.content}</p>`;
-    }
+    createTeamBtn2.addEventListener('click', () => {
+      teamForm.reset();
+      teamAvatarPreview.style.display = 'none';
+      teamForm.style.display = 'flex';
+      teamSuccessMsg.style.display = 'none';
+      createTeamBtn2.style.display = 'none';
+    });
 
-    function populateDisciplines() {
-      const disciplinesList = document.querySelector('.disciplines-list');
-      disciplinesList.innerHTML = ''; // Clear existing content
-      // Populate with actual discipline data from your backend
-      disciplinesList.innerHTML = `<img src="${data.img}" alt="${data.name}" class="discipline-img"><div class="discipline-name">${data.name}</div>`;
-    }
-
-    function populateTournaments() {
-      const tournamentList = document.querySelector('.tournament-list');
-      tournamentList.innerHTML = ''; // Clear existing content
-      // Populate with actual tournament data from your backend
-      tournamentList.innerHTML = `<h4>${data.title}</h4><p>${data.description}</p>`;
-    }
-
-    // Call populate functions after initial load and translation
-    function updateContentBasedOnLanguage() {
-      populateNews();
-      populateDisciplines();
-      populateTournaments();
-      translatePage();
-      renderNotifications(); // Ensure notifications are re-rendered with current language
-    }
-
-    // Initial content population and translation
-    updateContentBasedOnLanguage();
-    
-
+    // Initial calls
+    setLanguage(currentLang);
+    loadProfile();
+    updateNotificationBadge(); // Initial badge update
   </script>
+  
+
 </body>
 </html>
