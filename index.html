@@ -248,6 +248,61 @@
   font-weight: bold;
   color: #00bfae;
 }
+.news-list,
+.disciplines-list,
+.tournament-list {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 12px 4px;
+  scroll-snap-type: x mandatory;
+}
+
+.news-card,
+.tournament-card,
+.discipline-card {
+  flex: 0 0 auto;
+  width: 280px;
+  background: #292929;
+  border: 2px solid #00bfae88;
+  border-radius: 12px;
+  padding: 16px;
+  scroll-snap-align: start;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.news-card:hover,
+.tournament-card:hover,
+.discipline-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 191, 174, 0.25);
+}
+
+.news-card h4,
+.tournament-card h4 {
+  margin-top: 0;
+  color: #00bfae;
+  font-size: 1.1rem;
+}
+
+.news-card p,
+.tournament-card p {
+  font-size: 0.95rem;
+  color: #ddd;
+}
+
+.discipline-img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.discipline-name {
+  font-weight: bold;
+  text-align: center;
+  font-size: 1rem;
+  color: #fff;
+}
 </style>
 </head>
 <body>
