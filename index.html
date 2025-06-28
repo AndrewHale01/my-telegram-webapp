@@ -434,39 +434,36 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
   const tg = window.Telegram.WebApp;
-  tg.ready();
-  tg.expand();
+tg.ready();
+tg.expand();
 
-  const profilePopup = document.getElementById('profilePopup');
-  const avatar = document.getElementById('avatar');
-  const registerBtn = document.getElementById('registerBtn');
-  const profileForm = document.getElementById('profileForm');
-  const doneBtn = document.getElementById('doneBtn');
-  const standoffNickInput = document.getElementById('standoffNick');
-  const standoffIdInput = document.getElementById('standoffId');
-  const tgUserInput = document.getElementById('tgUser');
-  const playerProfile = document.getElementById('playerProfile');
-  const profileNick = document.getElementById('profileNick');
-  const profileId = document.getElementById('profileId');
-  const profileTg = document.getElementById('profileTg');
-  const successMsg = document.getElementById('successMsg');
-  const createTeamBtn = document.getElementById('createTeamBtn');
-  const teamForm = document.getElementById('teamForm');
-  const teamSuccessMsg = document.getElementById('teamSuccessMsg');
-  const teamAvatarInput = document.getElementById('teamAvatar');
-  const teamAvatarPreview = document.getElementById('teamAvatarPreview');
-  const langBtn = document.getElementById('langBtn');
-  const langPopup = document.getElementById('langPopup');
-  const notificationBtn = document.getElementById('notificationBtn');
-  const notificationPopup = document.getElementById('notificationPopup');
-  const notificationList = document.getElementById('notificationList');
-  const notificationBadge = document.getElementById('notificationBadge');
-  const navItems = document.querySelectorAll('.nav-item');
-  const adminMenuBtn = document.getElementById('adminMenuBtn');
+const avatar = document.getElementById('avatar');
+const profilePopup = document.getElementById('profilePopup');
+const registerBtn = document.getElementById('registerBtn');
+const profileForm = document.getElementById('profileForm');
+const standoffNickInput = document.getElementById('standoffNick');
+const standoffIdInput = document.getElementById('standoffId');
+const tgUserInput = document.getElementById('tgUser');
+const playerProfile = document.getElementById('playerProfile');
+const profileNick = document.getElementById('profileNick');
+const profileId = document.getElementById('profileId');
+const profileTg = document.getElementById('profileTg');
+const successMsg = document.getElementById('successMsg');
+const createTeamBtn = document.getElementById('createTeamBtn');
+const teamForm = document.getElementById('teamForm');
+const teamSuccessMsg = document.getElementById('teamSuccessMsg');
+const teamAvatarInput = document.getElementById('teamAvatar');
+const teamAvatarPreview = document.getElementById('teamAvatarPreview');
+const langBtn = document.getElementById('langBtn');
+const langPopup = document.getElementById('langPopup');
+const notificationBtn = document.getElementById('notificationBtn');
+const notificationPopup = document.getElementById('notificationPopup');
+const notificationList = document.getElementById('notificationList');
+const notificationBadge = document.getElementById('notificationBadge');
+const adminMenuBtn = document.getElementById('adminMenuBtn');
+const navItems = document.querySelectorAll('.nav-item');
 
-  let currentLanguage = localStorage.getItem('language') || 'uk';
-  const translations = {
-  uk: {
+const translations = {uk: {
     register: "Зареєструватись",
     standoff_nick: "Нік в Standoff",
     standoff_id: "ID в Standoff",
@@ -607,244 +604,193 @@
     awards_text: "Wszyscy finaliści otrzymają bonusy. Zwycięzcy otrzymają nagrody i certyfikaty."
   }
 };
-  navItems.forEach(item => {
-  item.addEventListener('click', () => {
-    navItems.forEach(nav => nav.classList.remove('active'));
-    item.classList.add('active');
+let currentLanguage = localStorage.getItem('language') || 'uk';
 
-    const targetId = item.dataset.target;
-    document.querySelectorAll('.main-section, .rules-section, .awards-section, .support-section')
-      .forEach(section => section.classList.remove('active'));
-
-    document.getElementById(targetId)?.classList.add('active');
+function translatePage() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (translations[currentLanguage]?.[key]) {
+      el.textContent = translations[currentLanguage][key];
+    }
   });
-  navItems.forEach(item => {
-  item.addEventListener('click', () => {
-    // Активний стан у навігації
-    navItems.forEach(nav => nav.classList.remove('active'));
-    item.classList.add('active');
-
-    // Секції
-    const allSections = ['mainSection', 'rulesSection', 'awardsSection', 'supportSection'];
-    allSections.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('active');
-    });
-
-    const targetId = item.dataset.target;
-    const targetSection = document.getElementById(targetId);
-    if (targetSection) targetSection.classList.add('active');
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    if (translations[currentLanguage]?.[key]) {
+      el.placeholder = translations[currentLanguage][key];
+    }
+  });
+}
+function setLanguage(lang) {
+  currentLanguage = lang;
+  localStorage.setItem('language', lang);
+  translatePage();
+}
+document.querySelectorAll('.lang-option').forEach(btn => {
+  btn.addEventListener('click', () => {
+    setLanguage(btn.dataset.lang);
+    langPopup.classList.remove('active');
   });
 });
 
+avatar.addEventListener('click', () => {
+  profilePopup.classList.toggle('active');
+  langPopup.classList.remove('active');
+  notificationPopup.classList.remove('active');
+});
+langBtn.addEventListener('click', () => {
+  langPopup.classList.toggle('active');
+  profilePopup.classList.remove('active');
+  notificationPopup.classList.remove('active');
+});
+notificationBtn.addEventListener('click', () => {
+  notificationPopup.classList.toggle('active');
+  profilePopup.classList.remove('active');
+  langPopup.classList.remove('active');
+});
+document.addEventListener('click', e => {
+  if (!profilePopup.contains(e.target) && e.target !== avatar) profilePopup.classList.remove('active');
+  if (!langPopup.contains(e.target) && e.target !== langBtn) langPopup.classList.remove('active');
+  if (!notificationPopup.contains(e.target) && e.target !== notificationBtn && !notificationBadge.contains(e.target)) {
+    notificationPopup.classList.remove('active');
+  }
 });
 
-  function translatePage() {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.dataset.i18n;
-      if (translations[currentLanguage]?.[key]) {
-        el.textContent = translations[currentLanguage][key];
-      }
-    });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-      const key = el.dataset.i18nPlaceholder;
-      if (translations[currentLanguage]?.[key]) {
-        el.placeholder = translations[currentLanguage][key];
-      }
-    });
-  }
-
-  function setLanguage(lang) {
-    currentLanguage = lang;
-    localStorage.setItem('language', lang);
-    translatePage();
-  }
-
-  document.querySelectorAll('.lang-option').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setLanguage(btn.dataset.lang);
-      langPopup.classList.remove('active');
-    });
-  });
-
-  avatar.addEventListener('click', () => {
-    profilePopup.classList.toggle('active');
-    langPopup.classList.remove('active');
-    notificationPopup.classList.remove('active');
-  });
-
-  langBtn.addEventListener('click', () => {
-    langPopup.classList.toggle('active');
-    profilePopup.classList.remove('active');
-    notificationPopup.classList.remove('active');
-  });
-
-  notificationBtn.addEventListener('click', () => {
-    notificationPopup.classList.toggle('active');
-    profilePopup.classList.remove('active');
-    langPopup.classList.remove('active');
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!profilePopup.contains(e.target) && e.target !== avatar) profilePopup.classList.remove('active');
-    if (!langPopup.contains(e.target) && e.target !== langBtn) langPopup.classList.remove('active');
-    if (!notificationPopup.contains(e.target) && e.target !== notificationBtn && !notificationBadge.contains(e.target)) notificationPopup.classList.remove('active');
-  });
-  // Завантажити Telegram юзера (якщо є)
-  if (tg.initDataUnsafe?.user) {
-    tgUserInput.value = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name || 'N/A';
-  }
-
-  // Профіль збережено?
-  const savedProfile = localStorage.getItem('userProfile');
-  if (savedProfile) {
-    const profile = JSON.parse(savedProfile);
-    displayProfile(profile);
-    registerBtn.style.display = 'none';
-    createTeamBtn.style.display = 'block';
-  }
-
-  registerBtn.addEventListener('click', () => {
-    registerBtn.style.display = 'none';
-    profileForm.style.display = 'flex';
-    playerProfile.style.display = 'none';
-    successMsg.style.display = 'none';
-    createTeamBtn.style.display = 'none';
-  });
-
-  profileForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const profile = {
-      standoffNick: standoffNickInput.value,
-      standoffId: standoffIdInput.value,
-      tgUser: tgUserInput.value
+if (tg.initDataUnsafe?.user) {
+  tgUserInput.value = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name || 'N/A';
+}
+const savedProfile = localStorage.getItem('userProfile');
+if (savedProfile) {
+  const profile = JSON.parse(savedProfile);
+  displayProfile(profile);
+  registerBtn.style.display = 'none';
+  createTeamBtn.style.display = 'block';
+}
+registerBtn.addEventListener('click', () => {
+  registerBtn.style.display = 'none';
+  profileForm.style.display = 'flex';
+  playerProfile.style.display = 'none';
+  successMsg.style.display = 'none';
+  createTeamBtn.style.display = 'none';
+});
+profileForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const profile = {
+    standoffNick: standoffNickInput.value,
+    standoffId: standoffIdInput.value,
+    tgUser: tgUserInput.value
+  };
+  localStorage.setItem('userProfile', JSON.stringify(profile));
+  displayProfile(profile);
+  profileForm.style.display = 'none';
+  successMsg.style.display = 'block';
+  createTeamBtn.style.display = 'block';
+});
+function displayProfile(profile) {
+  profileNick.textContent = profile.standoffNick;
+  profileId.textContent = profile.standoffId;
+  profileTg.textContent = profile.tgUser;
+  playerProfile.style.display = 'block';
+}
+createTeamBtn.addEventListener('click', () => {
+  teamForm.style.display = 'flex';
+  createTeamBtn.style.display = 'none';
+  teamSuccessMsg.style.display = 'none';
+  profilePopup.classList.remove('active');
+});
+teamAvatarInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      teamAvatarPreview.src = e.target.result;
+      teamAvatarPreview.style.display = 'block';
     };
-    localStorage.setItem('userProfile', JSON.stringify(profile));
-    displayProfile(profile);
-    profileForm.style.display = 'none';
-    successMsg.style.display = 'block';
-    createTeamBtn.style.display = 'block';
-  });
-
-  function displayProfile(profile) {
-    profileNick.textContent = profile.standoffNick;
-    profileId.textContent = profile.standoffId;
-    profileTg.textContent = profile.tgUser;
-    playerProfile.style.display = 'block';
+    reader.readAsDataURL(file);
+  } else {
+    teamAvatarPreview.src = '#';
+    teamAvatarPreview.style.display = 'none';
   }
+});
+teamForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const teamName = document.getElementById('teamName').value;
+  const teamTag = document.getElementById('teamTag').value;
+  const captainUsername = tg.initDataUnsafe?.user?.username || 'unknown';
+  const players = []; // реалізуй формування гравців вручну або циклом
 
-  createTeamBtn.addEventListener('click', () => {
-    teamForm.style.display = 'flex';
-    createTeamBtn.style.display = 'none';
-    teamSuccessMsg.style.display = 'none';
-    profilePopup.classList.remove('active');
-  });
+  const teamData = {
+    team_name: teamName,
+    team_tag: teamTag,
+    captain_username: captainUsername,
+    players
+  };
 
-  teamAvatarInput.addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        teamAvatarPreview.src = e.target.result;
-        teamAvatarPreview.style.display = 'block';
-      };
-      reader.readAsDataURL(file);
+  try {
+    const res = await fetch('/api/create_team', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(teamData),
+    });
+    const result = await res.json();
+    if (result.success) {
+      const invited = players.length ? players.map(u => `@${u}`).join(', ') : 'немає';
+      addNotification('team_created_captain', { teamName, invitedUsers: invited });
+      teamForm.style.display = 'none';
+      teamSuccessMsg.style.display = 'block';
+      createTeamBtn.style.display = 'block';
     } else {
-      teamAvatarPreview.src = '#';
-      teamAvatarPreview.style.display = 'none';
+      alert(`Помилка: ${result.message}`);
     }
-  });
-
-  teamForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const teamName = document.getElementById('teamName').value;
-    const teamTag = document.getElementById('teamTag').value;
-    const captainUsername = tg.initDataUnsafe?.user?.username || 'unknown';
-
-    const players = [];
-    const ids = ['main1']; // Додай інші ID для додаткових гравців тут
-    ids.forEach(id => {
-      const tg = document.getElementById(`${id}Tg`)?.value || '';
-      if (tg) players.push(tg);
-    });
-
-    const teamData = {
-      team_name: teamName,
-      team_tag: teamTag,
-      captain_username: captainUsername,
-      players
-    };
-
-    try {
-      const res = await fetch('/api/create_team', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(teamData),
-      });
-      const result = await res.json();
-      if (result.success) {
-        const invited = players.length > 0 ? players.map(u => `@${u}`).join(', ') : 'немає';
-        addNotification('team_created_captain', { teamName, invitedUsers: invited });
-        teamForm.style.display = 'none';
-        teamSuccessMsg.style.display = 'block';
-        createTeamBtn.style.display = 'block';
-      } else {
-        alert(`Помилка: ${result.message}`);
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Помилка при створенні команди.');
-    }
-  });
-
-  const ADMIN_IDS = new Set([5806282517]); // Заміни ID на свій Telegram
-  if (tg.initDataUnsafe?.user?.id && ADMIN_IDS.has(tg.initDataUnsafe.user.id)) {
-    adminMenuBtn.style.display = 'block';
-    adminMenuBtn.addEventListener('click', () => {
-      alert('Ласкаво просимо до адмін-панелі 👑');
-    });
+  } catch (err) {
+    console.error(err);
+    alert('Помилка при створенні команди.');
   }
+});
 
-  // Сповіщення
-  const notifications = [
-    { type: 'team_created_captain', text: 'Команду {{teamName}} створено. Запрошені: {{invitedUsers}}' },
-  ];
+// Сповіщення
+const notifications = [
+  { type: 'team_created_captain', text: 'Команду {{teamName}} створено. Запрошені: {{invitedUsers}}' },
+];
+function addNotification(type, data = {}) {
+  const template = notifications.find(n => n.type === type)?.text;
+  if (!template) return;
+  const msg = template.replace(/\{\{(\w+)\}\}/g, (_, key) => data[key] || '');
+  const item = document.createElement('div');
+  item.classList.add('notification-item');
+  item.textContent = msg;
+  notificationList.prepend(item);
+  notificationBadge.textContent = notificationList.children.length;
+  notificationBadge.style.display = 'flex';
+}
+document.getElementById('clearNotificationsBtn').addEventListener('click', () => {
+  notificationList.innerHTML = '';
+  notificationBadge.textContent = '0';
+  notificationBadge.style.display = 'none';
+});
 
-  function addNotification(type, data = {}) {
-    const template = notifications.find(n => n.type === type)?.text;
-    if (!template) return;
-    const msg = template.replace(/\{\{(\w+)\}\}/g, (_, key) => data[key] || '');
-    const item = document.createElement('div');
-    item.classList.add('notification-item');
-    item.textContent = msg;
-    notificationList.prepend(item);
-    notificationBadge.textContent = notificationList.children.length;
-    notificationBadge.style.display = 'flex';
-  }
-
-  document.getElementById('clearNotificationsBtn').addEventListener('click', () => {
-    notificationList.innerHTML = '';
-    notificationBadge.textContent = '0';
-    notificationBadge.style.display = 'none';
+// Адмінка
+const ADMIN_IDS = new Set([5806282517]);
+if (tg.initDataUnsafe?.user?.id && ADMIN_IDS.has(tg.initDataUnsafe.user.id)) {
+  adminMenuBtn.style.display = 'block';
+  adminMenuBtn.addEventListener('click', () => {
+    alert('Ласкаво просимо до адмін-панелі 👑');
   });
-  // Перемикання секцій
-  document.addEventListener('DOMContentLoaded', () => {
-    navItems.forEach(item => {
-      item.addEventListener('click', () => {
-        navItems.forEach(nav => nav.classList.remove('active'));
-        item.classList.add('active');
+}
 
-        const sections = ['mainSection', 'rulesSection', 'awardsSection', 'supportSection'];
-        sections.forEach(id => document.getElementById(id)?.classList.remove('active'));
-
-        const targetId = item.dataset.target;
-        document.getElementById(targetId)?.classList.add('active');
-      });
+// Навігація між сторінками
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    item.classList.add('active');
+    ['mainSection','rulesSection','awardsSection','supportSection'].forEach(id => {
+      document.getElementById(id)?.classList.remove('active');
     });
-
-    // Переклад при завантаженні
-    setLanguage(currentLanguage);
+    document.getElementById(item.dataset.target)?.classList.add('active');
   });
+});
+
+setLanguage(currentLanguage); // переклад одразу при запуску
+
 </script>
 </body>
 </html>
