@@ -314,6 +314,23 @@
   font-size: 1rem;
   color: #fff;
 }
+.news-section,
+.disciplines-section,
+.tournaments-section {
+  margin-top: 24px;
+  padding: 0 12px;
+}
+
+.news-title,
+.disciplines-title,
+.tournaments-title {
+  margin-bottom: 8px;
+  margin-left: 4px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #00bfae;
+}
+
   </style>
 </head>
 <body>
@@ -336,13 +353,6 @@
         <input type="text" id="tgUser" name="tgUser" readonly>
         <button type="submit" class="done-btn" id="doneBtn" data-i18n="done">Готово</button>
       </form>
-      <div class="news-section">
-  <div class="news-title" data-i18n="news">Новини</div>
-  <div class="news-list" id="newsList">
-    <div class="news-card">
-      <h4>🔔 Оновлення</h4>
-      <p>Ми додали підтримку англійської, а також оновили адмін-панель.</p>
-    </div>
     <!-- Додаткові .news-card -->
   </div>
 </div>
@@ -432,21 +442,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="rules-section" id="rulesSection">
-    <details class="dropdown">
-      <summary id="rule1x1Title">1x1</summary>
-      <div class="dropdown-content" id="rule1x1Content"></div>
-    </details>
-    <details class="dropdown">
-      <summary id="rule2x2Title">2x2</summary>
-      <div class="dropdown-content" id="rule2x2Content"></div>
-    </details>
-    <details class="dropdown">
-      <summary id="rule5x5Title">5x5</summary>
-      <div class="dropdown-content" id="rule5x5Content"></div>
-    </details>
   </div>
 
   <div class="awards-section" id="awardsSection"></div>
