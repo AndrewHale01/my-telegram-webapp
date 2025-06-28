@@ -1029,21 +1029,21 @@
       const newsList = document.querySelector('.news-list');
       newsList.innerHTML = ''; // Clear existing content
       // Populate with actual news data from your backend
-      // Example: newsList.innerHTML = `<h4>${data.title}</h4><p>${data.content}</p>`;
+      newsList.innerHTML = `<h4>${data.title}</h4><p>${data.content}</p>`;
     }
 
     function populateDisciplines() {
       const disciplinesList = document.querySelector('.disciplines-list');
       disciplinesList.innerHTML = ''; // Clear existing content
       // Populate with actual discipline data from your backend
-      // Example: disciplinesList.innerHTML = `<img src="${data.img}" alt="${data.name}" class="discipline-img"><div class="discipline-name">${data.name}</div>`;
+      disciplinesList.innerHTML = `<img src="${data.img}" alt="${data.name}" class="discipline-img"><div class="discipline-name">${data.name}</div>`;
     }
 
     function populateTournaments() {
       const tournamentList = document.querySelector('.tournament-list');
       tournamentList.innerHTML = ''; // Clear existing content
       // Populate with actual tournament data from your backend
-      // Example: tournamentList.innerHTML = `<h4>${data.title}</h4><p>${data.description}</p>`;
+      tournamentList.innerHTML = `<h4>${data.title}</h4><p>${data.description}</p>`;
     }
 
     // Call populate functions after initial load and translation
