@@ -549,48 +549,7 @@
 tg.ready();
 tg.expand();
 
-function showPopupBelowElement(popup, triggerElement) {
-  const rect = triggerElement.getBoundingClientRect();
-  const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
-  popup.style.position = "absolute";
-  popup.style.top = `${rect.bottom + scrollTop + 6}px`;
-  popup.style.left = `${rect.left}px`;
-  popup.classList.add("active");
-}
-
-avatar.addEventListener('click', () => {
-  if (profilePopup.classList.contains('active')) {
-    profilePopup.classList.remove('active');
-  } else {
-    showPopupBelowElement(profilePopup, avatar);
-  }
-  langPopup.classList.remove('active');
-  if (typeof notificationPopup !== "undefined") notificationPopup.classList.remove('active');
-});
-
-langBtn.addEventListener('click', () => {
-  if (langPopup.classList.contains('active')) {
-    langPopup.classList.remove('active');
-  } else {
-    showPopupBelowElement(langPopup, langBtn);
-  }
-  profilePopup.classList.remove('active');
-  if (typeof notificationPopup !== "undefined") notificationPopup.classList.remove('active');
-});
-
-// Якщо маєш кнопку сповіщень, то:
-if (typeof notificationBtn !== "undefined" && typeof notificationPopup !== "undefined") {
-  notificationBtn.addEventListener('click', () => {
-    if (notificationPopup.classList.contains('active')) {
-      notificationPopup.classList.remove('active');
-    } else {
-      showPopupBelowElement(notificationPopup, notificationBtn);
-    }
-    profilePopup.classList.remove('active');
-    langPopup.classList.remove('active');
-  });
-}
 
 
 const avatar = document.getElementById('avatar');
