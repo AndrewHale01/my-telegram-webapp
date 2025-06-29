@@ -214,14 +214,14 @@
     .notification-badge {
       position: absolute;
       top: 2px;
-      right: 2px;
+      right: 10px;
       background: #e53935;
       color: #fff;
       border-radius: 50%;
       font-size: 0.85rem;
       min-width: 20px;
       min-height: 20px;
-      padding: 20 6px;
+      padding: 0 6px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -530,8 +530,6 @@
     <div class="nav-item" data-target="supportSection"><span>🤖</span><p data-i18n="support">Підтримка</p></div>
   </div>
 
-
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
   const tg = window.Telegram.WebApp;
@@ -635,7 +633,12 @@ const translations = {uk: {
     tournament1desc: "Starts July 1. Prize pool: 5000₴",
     tournament2desc: "Starts July 10. Prize pool: 2000₴",
     awards_title: "Awards",
-    awards_text: "All finalists receive bonus perks. Winners get prizes and certificates."
+    awards_text: "All finalists receive bonus perks. Winners get prizes and certificates.",
+    notificationTitle: "Notifications",
+    notificationList: "No new notifications yet.",
+    clearNotifications: "Clear Notifications",
+    adminMenu: "Admin Menu",
+    adminMenuDesc: "Manage tournaments, teams, and players.",
   },
   ru: {
     register: "Зарегистрироваться",
@@ -670,7 +673,10 @@ const translations = {uk: {
     tournament1desc: "Старт: 1 июля. Призовой фонд: 5000₴",
     tournament2desc: "Старт: 10 июля. Призовой фонд: 2000₴",
     awards_title: "Награды",
-    awards_text: "Финалисты получают бонусы, победители — призы и дипломы."
+    awards_text: "Финалисты получают бонусы, победители — призы и дипломы.",
+    notificationTitle: "Уведомления",
+    notificationList: "Пока нет новых уведомлений.",
+    clearNotifications: "Очистить уведомления",
   },
   pl: {
     register: "Zarejestruj się",
@@ -705,7 +711,10 @@ const translations = {uk: {
     tournament1desc: "Start: 1 lipca. Pula nagród: 5000₴",
     tournament2desc: "Start: 10 lipca. Pula nagród: 2000₴",
     awards_title: "Nagrody",
-    awards_text: "Wszyscy finaliści otrzymają bonusy. Zwycięzcy otrzymają nagrody i certyfikaty."
+    awards_text: "Wszyscy finaliści otrzymają bonusy. Zwycięzcy otrzymają nagrody i certyfikaty.",
+    notificationTitle: "Powiadomienia",
+    notificationList: "Brak nowych powiadomień.",
+    clearNotifications: "Wyczyść powiadomienia",
   }
 };
 let currentLanguage = localStorage.getItem('language') || 'uk';
