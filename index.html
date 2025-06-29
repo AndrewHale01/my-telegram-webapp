@@ -26,9 +26,38 @@
       padding: 16px;
       position: relative;
     }
-    .lang-btn, .adminMenuBtn {
+    .lang-btn {
       font-size: 1.5rem;
       cursor: pointer;
+    }
+    .lang-popup {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 16px;
+      background: #333;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      flex-direction: column;
+      z-index: 10;
+    }
+    .lang-popup.active {
+      display: flex;
+    }
+    .lang-option {
+      background: none;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lang-option:hover {
+      background: #444;
     }
     .avatar-small {
       width: 40px;
@@ -43,7 +72,10 @@
     .avatar-small:hover {
       box-shadow: 0 0 0 4px #00bfae55;
     }
-
+    #profilePopup {
+    top: 60px;
+    left: 0px;
+    }
     .popup {
       display: none;
       position: absolute;
@@ -55,7 +87,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       z-index: 10;
       flex-direction: column;
-      min-width: 260px;
+      min-width: 0px;
       align-items: center;
       animation: fadeIn 0.2s;
     }
@@ -342,6 +374,12 @@
 <body>
   <div class="topbar">
     <div class="lang-btn" id="langBtn">🌐</div>
+    <div id="langPopup" class="lang-popup">
+      <button class="lang-option" data-lang="uk">🇺🇦 Українська</button>
+      <button class="lang-option" data-lang="en">🇬🇧 English</button>
+      <button class="lang-option" data-lang="ru">🇷🇺 Русский</button>
+      <button class="lang-option" data-lang="pl">🇵🇱 Polski</button>
+    </div>
     <img id="avatar" class="avatar-small" src="avatar.jpg" alt="Avatar">
     <button id="notificationBtn" class="notification-btn" title="Сповіщення">
       🔔
@@ -349,6 +387,7 @@
     </button>
     <button id="adminMenuBtn" title="Адмін-меню">🛡️</button>
   </div>
+
   <div id="profilePopup" class="popup">
     <button class="register-btn" id="registerBtn" data-i18n="register">Зареєструватись</button>
 </div>
@@ -397,6 +436,8 @@
         <input type="text" id="main1Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
       </div>
 
+
+
       <!-- Можеш додати ще 4 основних і 2 запасних за цим шаблоном -->
 
       <button type="submit" class="done-btn" id="teamDoneBtn" data-i18n="team_done">Готово</button>
@@ -420,6 +461,8 @@
     <div id="notificationList" style="width:100%;"></div>
     <button id="clearNotificationsBtn" class="done-btn" style="margin-top:10px;">Очистити</button>
   </div>
+
+  <div id="homeSection" class="section active"></div>
   <!-- ГОЛОВНА -->
   <div class="main-section active" id="mainSection">
     <div class="news-section">
@@ -434,7 +477,7 @@
           <p data-i18n="news2desc">Тепер усі турніри доступні на окремій сторінці.</p>
         </div>
       </div>
-    </div>
+  </div>
 
     <div class="disciplines-section">
       <div class="disciplines-title" data-i18n="disciplines">Дисципліни</div>
@@ -460,6 +503,32 @@
       </div>
     </div>
   </div>
+</div>
+
+<div id="rulesSection" class="section">
+    <h2>Правила турніру</h2>
+    <details>
+      <summary>Турніри 1х1</summary>
+      <p>• Гравці грають один проти одного.<br>
+         • Раунди проходять до 3 перемог.<br>
+         • Перемагає той, хто перший виграє 3 раунди.
+      </p>
+    </details>
+    <details>
+      <summary>Турніри 2х2</summary>
+      <p>• Команди по 2 гравці.<br>
+         • Успіх залежить від координації та злагодженої гри.<br>
+         • Перші до 5 перемог — проходять далі.
+      </p>
+    </details>
+    <details>
+      <summary>Турніри 5х5</summary>
+      <p>• Класична командна гра.<br>
+         • Потрібна стратегія, підтримка та командний дух.<br>
+         • Гра триває до 10 загальних перемог.
+      </p>
+    </details>
+  </div>
 
   <!-- НАВІГАЦІЯ -->
   <div class="bottom-nav">
@@ -480,6 +549,48 @@
 tg.ready();
 tg.expand();
 
+function showPopupBelowElement(popup, triggerElement) {
+  const rect = triggerElement.getBoundingClientRect();
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+  popup.style.position = "absolute";
+  popup.style.top = `${rect.bottom + scrollTop + 6}px`;
+  popup.style.left = `${rect.left}px`;
+  popup.classList.add("active");
+}
+
+avatar.addEventListener('click', () => {
+  if (profilePopup.classList.contains('active')) {
+    profilePopup.classList.remove('active');
+  } else {
+    showPopupBelowElement(profilePopup, avatar);
+  }
+  langPopup.classList.remove('active');
+  if (typeof notificationPopup !== "undefined") notificationPopup.classList.remove('active');
+});
+
+langBtn.addEventListener('click', () => {
+  if (langPopup.classList.contains('active')) {
+    langPopup.classList.remove('active');
+  } else {
+    showPopupBelowElement(langPopup, langBtn);
+  }
+  profilePopup.classList.remove('active');
+  if (typeof notificationPopup !== "undefined") notificationPopup.classList.remove('active');
+});
+
+// Якщо маєш кнопку сповіщень, то:
+if (typeof notificationBtn !== "undefined" && typeof notificationPopup !== "undefined") {
+  notificationBtn.addEventListener('click', () => {
+    if (notificationPopup.classList.contains('active')) {
+      notificationPopup.classList.remove('active');
+    } else {
+      showPopupBelowElement(notificationPopup, notificationBtn);
+    }
+    profilePopup.classList.remove('active');
+    langPopup.classList.remove('active');
+  });
+}
 
 
 const avatar = document.getElementById('avatar');
