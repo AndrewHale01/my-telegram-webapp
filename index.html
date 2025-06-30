@@ -535,6 +535,21 @@
 </div>
 </div>
 
+<div id="adminModal">
+    <div id="adminModalContent">
+      <button id="closeAdminModal">✖️</button>
+      <h2 id="adminMenuTitle" style="color:#00bfae; margin-top:0;">Адмін-меню</h2>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <button id="banUserBtn" data-i18n="ban_user">🚫 Заблокувати користувача</button>
+        <button id="unbanUserBtn" data-i18n="unban_user">✅ Розблокувати користувача</button>
+        <button id="givePrizeBtn" data-i18n="give_prize">🏆 Видати приз</button>
+        <button id="disqualifyTeamBtn" data-i18n="disqualify_team">❌ Дискваліфікувати команду</button>
+        <button id="editBracketBtn" data-i18n="edit_bracket">🗂️ Модерувати сітку</button>
+      </div>
+      <div id="adminResult"></div>
+    </div>
+  </div>
+
 <div id="rulesSection" class="section">
     <h2>Правила турніру</h2>
     <details>
@@ -574,7 +589,60 @@
 tg.ready();
 tg.expand();
 
-
+const notificationTranslations = {
+      uk: {
+        invite: "Вас запросили в команду.",
+        joined: "{user} вступив в команду.",
+        prize: "Ви отримали приз за участь в турнірі.",
+        banned: "Ваш аккаунт було заблоковано за використання стороннього ПЗ.",
+        unbanned: "Ваш аккаунт розблоковано.",
+        disqualified: "Ваша команда дискваліфікована з турніру за порушення правил.",
+        title: "Сповіщення",
+        clear: "Очистити",
+        empty: "Немає сповіщень",
+        team_created_captain: "Ви успішно створили команду {teamName} і запросили до неї гравців: {invitedUsers}.",
+        team_invite_player: "Вас запросили до команди {teamName}. Прийняти/Відхилити."
+      },
+      en: {
+        invite: "You have been invited to a team.",
+        joined: "{user} joined the team.",
+        prize: "You received a prize for participating in the tournament.",
+        banned: "Your account has been blocked for using third-party software.",
+        unbanned: "Your account has been unblocked.",
+        disqualified: "Your team has been disqualified from the tournament for violating the rules.",
+        title: "Notifications",
+        clear: "Clear",
+        empty: "No notifications",
+        team_created_captain: "You have successfully created team {teamName} and invited players: {invitedUsers}.",
+        team_invite_player: "You have been invited to team {teamName}. Accept/Decline."
+      },
+      ru: {
+        invite: "Вас пригласили в команду.",
+        joined: "{user} вступил в команду.",
+        prize: "Вы получили приз за участие в турнире.",
+        banned: "Ваш аккаунт был заблокирован за использование стороннего ПО.",
+        unbanned: "Ваш аккаунт разблокирован.",
+        disqualified: "Ваша команда дисквалифицирована из турнира за нарушение правил.",
+        title: "Уведомления",
+        clear: "Очистить",
+        empty: "Нет уведомлений",
+        team_created_captain: "Вы успешно создали команду {teamName} и пригласили в нее игроков: {invitedUsers}.",
+        team_invite_player: "Вас пригласили в команду {teamName}. Принять/Отклонить."
+      },
+      pl: {
+        invite: "Zostałeś zaproszony do drużyny.",
+        joined: "{user} dołączył do drużyny.",
+        prize: "Otrzymałeś nagrodę za udział w turnieju.",
+        banned: "Twoje konto zostało zablokowane za używanie nieautoryzowanego oprogramowania.",
+        unbanned: "Twoje konto zostało odblokowane.",
+        disqualified: "Twoja drużyna została zdyskwalifikowana z turnieju za naruszenie zasad.",
+        title: "Powiadomienia",
+        clear: "Wyczyść",
+        empty: "Brak powiadomień",
+        team_created_captain: "Pomyślnie utworzyłeś drużynę {teamName} i zaprosiłeś graczy: {invitedUsers}.",
+        team_invite_player: "Zostałeś zaproszony do drużyny {teamName}. Akceptuj/Odrzuć."
+      }
+    };
 
 
 const avatar = document.getElementById('avatar');
@@ -636,7 +704,9 @@ const translations = {uk: {
     tournament1desc: "Старт: 1 липня. Призовий фонд: 5000₴",
     tournament2desc: "Початок: 10 липня. Призовий фонд: 2000₴",
     awards_title: "Нагороди",
-    awards_text: "Усі учасники фіналу отримують спеціальні бонуси. Переможці — призи та сертифікати."
+    awards_text: "Усі учасники фіналу отримують спеціальні бонуси. Переможці — призи та сертифікати.",
+    notificationBtn: "Сповіщення",
+    clear: "Очистити сповіщення",
   },
   en: {
     register: "Register",
@@ -672,11 +742,8 @@ const translations = {uk: {
     tournament2desc: "Starts July 10. Prize pool: 2000₴",
     awards_title: "Awards",
     awards_text: "All finalists receive bonus perks. Winners get prizes and certificates.",
-    notificationTitle: "Notifications",
-    notificationList: "No new notifications yet.",
-    clearNotifications: "Clear Notifications",
-    adminMenu: "Admin Menu",
-    adminMenuDesc: "Manage tournaments, teams, and players.",
+    notificationBtn: "Notifications",
+    clear: "Clear Notifications",
   },
   ru: {
     register: "Зарегистрироваться",
@@ -712,9 +779,8 @@ const translations = {uk: {
     tournament2desc: "Старт: 10 июля. Призовой фонд: 2000₴",
     awards_title: "Награды",
     awards_text: "Финалисты получают бонусы, победители — призы и дипломы.",
-    notificationTitle: "Уведомления",
-    notificationList: "Пока нет новых уведомлений.",
-    clearNotifications: "Очистить уведомления",
+    notifications: "Уведомления",
+    clear: "Очистить уведомления",
   },
   pl: {
     register: "Zarejestruj się",
@@ -750,9 +816,8 @@ const translations = {uk: {
     tournament2desc: "Start: 10 lipca. Pula nagród: 2000₴",
     awards_title: "Nagrody",
     awards_text: "Wszyscy finaliści otrzymają bonusy. Zwycięzcy otrzymają nagrody i certyfikaty.",
-    notificationTitle: "Powiadomienia",
-    notificationList: "Brak nowych powiadomień.",
-    clearNotifications: "Wyczyść powiadomienia",
+    notifications: "Powiadomienia",
+    clear: "Wyczyść powiadomienia",
   }
 };
 let currentLanguage = localStorage.getItem('language') || 'uk';
@@ -936,6 +1001,111 @@ if (tg.initDataUnsafe?.user?.id && ADMIN_IDS.has(tg.initDataUnsafe.user.id)) {
     alert('Ласкаво просимо до адмін-панелі 👑');
   });
 };
+function checkAdminStatus(userId) {
+      const adminMenuBtn = document.getElementById('adminMenuBtn');
+      if (ADMIN_IDS.includes(userId)) {
+        adminMenuBtn.style.display = 'block';
+      } else {
+        adminMenuBtn.style.display = 'none';
+      }
+    }
+
+    function toggleAdminModal() {
+      document.getElementById('adminModal').classList.toggle('active');
+      document.getElementById('profilePopup').classList.remove('active');
+      document.getElementById('langPopup').classList.remove('active');
+      document.getElementById('notificationPopup').classList.remove('active');
+      document.getElementById('adminResult').textContent = '';
+    }
+
+    async function getUserStatus(username) {
+      try {
+        const response = await fetch(`/api/user_status/${username}`);
+        const data = await response.json();
+        return data.is_banned;
+      } catch (error) {
+        console.error('Error fetching user status:', error);
+        return false;
+      }
+    }
+
+    async function banUser() {
+      const username = prompt("Введіть Telegram юзернейм користувача для блокування (без @):");
+      if (username) {
+        try {
+          const response = await fetch('/api/ban_user', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username }),
+          });
+          const result = await response.json();
+          document.getElementById('adminResult').textContent = result.message;
+          if (result.success) {
+            addNotification('banned', { user: username }, result.user_id);
+          }
+        } catch (error) {
+          console.error('Error banning user:', error);
+          document.getElementById('adminResult').textContent = 'Помилка блокування користувача.';
+        }
+      }
+    }
+
+    async function unbanUser() {
+      const username = prompt("Введіть Telegram юзернейм користувача для розблокування (без @):");
+      if (username) {
+        try {
+          const response = await fetch('/api/unban_user', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username }),
+          });
+          const result = await response.json();
+          document.getElementById('adminResult').textContent = result.message;
+          if (result.success) {
+            addNotification('unbanned', { user: username }, result.user_id);
+          }
+        } catch (error) {
+          console.error('Error unbanning user:', error);
+          document.getElementById('adminResult').textContent = 'Помилка розблокування користувача.';
+        }
+      }
+    }
+
+    async function givePrize() {
+      const username = prompt("Введіть Telegram юзернейм користувача для видачі призу (без @):");
+      if (username) {
+        try {
+          const response = await fetch('/api/give_prize', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username }),
+          });
+          const result = await response.json();
+          document.getElementById('adminResult').textContent = result.message;
+          if (result.success) {
+            addNotification('prize', { user: username }, result.user_id);
+          }
+        } catch (error) {
+          console.error('Error giving prize:', error);
+          document.getElementById('adminResult').textContent = 'Помилка видачі призу.';
+        }
+      }
+    }
+
+    function addNotification(type, data = {}, userId = null) {
+      let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+      const timestamp = new Date().toISOString();
+      notifications.unshift({ type, data, timestamp, userId });
+      localStorage.setItem('notifications', JSON.stringify(notifications));
+      renderNotifications();
+      updateNotificationBadge();
+    }
 
 // Навігація між сторінками
     document.querySelectorAll(".nav-item").forEach(item => {
