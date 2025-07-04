@@ -1097,12 +1097,13 @@ document.getElementById('clearNotificationsBtn').addEventListener('click', () =>
 const ADMIN_IDS = new Set([5806282517]);
 
 function checkAdminStatus(userId) {
-      const adminMenuBtn = document.getElementById('adminMenuBtn');
-      if (ADMIN_IDS.includes(userId)) {
-        adminMenuBtn.style.display = 'block';
-      } else {
-        adminMenuBtn.style.display = 'none';
-      }
+      const closeAdminModal = document.getElementById('closeAdminModal');
+if (closeAdminModal) {
+  closeAdminModal.addEventListener('click', () => {
+    adminPopup.classList.remove('active');
+  });
+}
+
     }
 
     function toggleAdminModal() {
