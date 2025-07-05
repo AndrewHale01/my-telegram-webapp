@@ -41,7 +41,7 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.4);
       flex-direction: column;
       z-index: 10;
-      width: 200px; /* Зменшено ширину */
+      width: 200px;
     }
     .lang-popup.active {
       display: flex;
@@ -73,11 +73,12 @@
     .avatar-small:hover {
       box-shadow: 0 0 0 4px #00bfae55;
     }
+    /* Updated Profile Popup positioning */
     #profilePopup {
       top: 60px;
-      left: 0px; /* Resetting left for proper positioning */
-      right: auto; /* Ensure it's not sticking to right */
-      max-width: 360px; /* Зменшено максимальну ширину */
+      right: 16px; /* Moved to right */
+      left: auto; /* Reset left */
+      max-width: 360px;
     }
     .popup {
       display: none;
@@ -429,11 +430,53 @@
       color: #00bfae;
     }
     .section {
-      padding: 24px 16px; /* Adjusted padding for sections */
+      padding: 24px 16px;
       display: none;
     }
     .section.active {
       display: block;
+    }
+    /* Updated Notification Popup positioning */
+    #notificationPopup {
+      right: 16px; /* Adjusted to align with other right-aligned elements */
+      min-width: 280px;
+    }
+
+    /* New styles for consistent pages */
+    .section h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 1.5rem; /* Larger heading */
+      font-weight: bold;
+      color: #00bfae; /* Consistent highlight color */
+      text-align: center;
+    }
+    .section p {
+      font-size: 1rem;
+      color: #ddd;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .section details {
+      background: #292929;
+      border: 2px solid #00bfae88;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .section summary {
+      font-weight: bold;
+      color: #00bfae;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+    .section details p {
+      padding-top: 10px;
+      margin-bottom: 0;
+      color: #ccc;
+      font-size: 0.95rem;
     }
   </style>
 </head>
@@ -552,7 +595,7 @@
     <div class="team-success-message" id="teamSuccessMsg" style="display:none;" data-i18n="team_created">Команду створено!</div>
   </div>
 
-  <div id="notificationPopup" class="popup" style="right:60px; min-width:280px;">
+  <div id="notificationPopup" class="popup">
     <div style="font-weight:bold; color:#00bfae; margin-bottom:8px;" id="notificationTitle">Сповіщення</div>
     <div id="notificationList" style="width:100%;"></div>
     <button id="clearNotificationsBtn" class="done-btn" style="margin-top:10px;">Очистити</button>
