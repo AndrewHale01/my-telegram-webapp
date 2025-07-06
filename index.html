@@ -829,8 +829,7 @@
         <label for="standoffId" data-i18n="standoff_id">ID в Standoff</label>
         <input type="text" id="standoffId" name="standoffId" required maxlength="32" autocomplete="off">
         <label for="tgUser" data-i18n="tg_user">Telegram</label>
-        <input type="text" id="tgUser" name="tgUser" readonly>
-        <button type="submit" class="done-btn" id="doneBtn" data-i18n="done">Готово</button>
+        <input type="text" id="tgUser" name="tgUser" readonly> <button type="submit" class="done-btn" id="doneBtn" data-i18n="done">Готово</button>
       </form>
 
       <div class="player-profile" id="playerProfile">
@@ -1526,7 +1525,7 @@
         teamSuccessMsg.style.display = 'none'; // Ensure team success msg is hidden
         standoffNickInput.value = userData.standoffNick;
         standoffIdInput.value = userData.standoffId;
-        tgUser.value = userData.tgUser;
+        tgUser.value = userData.tgUser; // Pre-fill Telegram username
     }
 
     function showRegisterButton() {
