@@ -1169,10 +1169,13 @@
       window.Telegram = {
         WebApp: {
           initDataUnsafe: {
+            // !!! ВСТАВТЕ ВАШ СПРАВЖНІЙ TELEGRAM USER ID ТУТ ДЛЯ ТЕСТУВАННЯ АДМІН-ФУНКЦІЙ !!!
+            // Наприклад: id: 123456789,
             user: {
-              id: 123456789, // Example user ID (non-admin)
+              id: 987654321, // Example user ID (SET THIS TO YOUR TELEGRAM ID FOR ADMIN ACCESS)
               first_name: "Test",
-              last_name: "User"
+              last_name: "User",
+              username: "testuser"
             }
           },
           ready: () => console.log("Telegram WebApp is ready (mocked)"),
@@ -1758,16 +1761,23 @@
         rforzGrandPrixTournamentCard.addEventListener('click', () => {
             showSection('tournamentViewSection');
             showTournamentTab('groupStage'); // Default to group stage when tournament view is opened
+
+            // Show admin editing section if user is admin
+            if (isAdmin) {
+                document.getElementById('userTournamentView').style.display = 'none';
+                document.getElementById('adminTournamentEdit').style.display = 'block';
+            } else {
+                document.getElementById('userTournamentView').style.display = 'block';
+                document.getElementById('adminTournamentEdit').style.display = 'none';
+            }
         });
     }
 
     // Event listener for back button in tournamentViewSection
-    const backToHomeFromTournamentViewBtn = document.getElementById('backToHomeFromTournamentView'); // Get the element here
-    if (backToHomeFromTournamentViewBtn) {
-        backToHomeFromTournamentViewBtn.addEventListener('click', () => {
-            showSection('homeSection');
-        });
-    }
+    const backToHomeFromTournamentViewBtn = document.getElementById('backToHomeFromTournamentView');
+    backToHomeFromTournamentViewBtn.addEventListener('click', () => {
+        showSection('homeSection');
+    });
 
     // Tournament View Tabs
     const tournamentTabs = document.querySelectorAll('.tournament-tab');
@@ -1805,14 +1815,18 @@
     const viewPlayoffBracketAdminBtn = document.getElementById('viewPlayoffBracketAdminBtn');
     const groupStageEdit = document.getElementById('groupStageEdit');
     const adminPlayoffBracketView = document.getElementById('adminPlayoffBracketView');
+    const userTournamentView = document.getElementById('userTournamentView');
+
 
     // Admin ID Validation - IMPORTANT: In a real application, this should be handled server-side for security.
-    const adminIds = [5806282517]; // Replace with actual admin Telegram user IDs
+    // !!! ДОДАЙТЕ СВОЇ TELEGRAM USER ID В ЦЕЙ МАСИВ, ЩОБ МАТИ АДМІН-ПРАВА !!!
+    const adminIds = [12345, 987654321]; // Замініть на реальні Telegram user ID адміністраторів
 
     let isAdmin = false;
     if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
         const userId = Telegram.WebApp.initDataUnsafe.user.id;
         isAdmin = adminIds.includes(userId);
+        console.log(`Current User ID: ${userId}, Is Admin: ${isAdmin}`); // Для налагодження
     }
     // End Admin ID Validation
 
@@ -1848,26 +1862,6 @@
         createTournamentModal.style.display = 'none';
         tournamentForm.reset();
     });
-
-    // Tournament editing visibility
-    if (adminTournamentEdit) {
-        if (isAdmin) {
-            // If admin, the adminTournamentEdit div will be shown by default by JS.
-            // If not admin, it remains hidden by CSS.
-            // This button might trigger showing/hiding sections within adminTournamentEdit
-            // This part of the code handles showing/hiding the main admin edit section.
-            // The 'Редагувати Турнір' button or a similar entry point should be visible only for admins.
-            // For now, if isAdmin, we show the adminTournamentEdit section when tournamentViewSection is active.
-            const userTournamentView = document.getElementById('userTournamentView');
-             if (userTournamentView) {
-                // If it's admin, replace user view with admin view
-                userTournamentView.style.display = 'none';
-                adminTournamentEdit.style.display = 'block';
-            }
-        } else {
-            adminTournamentEdit.style.display = 'none'; // Ensure it's hidden for non-admins
-        }
-    }
 
 
     editGroupStageBtn.addEventListener('click', () => {
