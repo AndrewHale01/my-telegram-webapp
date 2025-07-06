@@ -703,7 +703,7 @@
         border: 1px solid #00bfae;
     }
 
-    /* Styles for the Tournament Creation Modal */
+    /* Styles for the new Tournament Creation Modal */
     .modal {
       display: none; /* Hidden by default */
       position: fixed; /* Stay in place */
@@ -1008,6 +1008,7 @@
   </div>
   <div id="tournamentViewSection" class="section">
     <button id="backToHomeFromTournamentView" class="back-btn" data-i18n="back_to_home">← Головна</button>
+    <button id="editTournamentBtn" class="back-btn" style="display:none;">✏️ Редагувати турнір</button>
     <h2 data-i18n="tournament_view_title">Перегляд Турніру</h2>
     <div class="tournament-section-content">
       <div id="userTournamentView">
@@ -1757,27 +1758,74 @@
     const rforzGrandPrixCard = document.querySelector('#tournamentList .tournament-card h4');
     const rforzGrandPrixTournamentCard = rforzGrandPrixCard ? rforzGrandPrixCard.closest('.tournament-card') : null;
 
+    // Admin Modals and Functionality
+    const adminMenuBtn = document.getElementById('adminMenuBtn');
+    const adminPopup = document.getElementById('adminPopup');
+    const createTournamentAdminBtn = document.getElementById('createTournamentAdminBtn');
+    const createTournamentModal = document.getElementById('createTournamentModal');
+    const closeTournamentModalBtn = document.getElementById('closeTournamentModalBtn');
+    const tournamentForm = document.getElementById('tournamentForm');
+    const adminTournamentEdit = document.getElementById('adminTournamentEdit');
+    const editGroupStageBtn = document.getElementById('editGroupStageBtn');
+    const viewPlayoffBracketAdminBtn = document.getElementById('viewPlayoffBracketAdminBtn');
+    const groupStageEdit = document.getElementById('groupStageEdit');
+    const adminPlayoffBracketView = document.getElementById('adminPlayoffBracketView');
+    const userTournamentView = document.getElementById('userTournamentView');
+
+    const editTournamentBtn = document.getElementById('editTournamentBtn'); // New button element
+
+    // Admin ID Validation - IMPORTANT: In a real application, this should be handled server-side for security.
+    // !!! ДОДАЙТЕ СВОЇ TELEGRAM USER ID В ЦЕЙ МАСИВ, ЩОБ МАТИ АДМІН-ПРАВА !!!
+    const adminIds = [5806282517]; // Замініть на реальні Telegram user ID адміністраторів
+
+    let isAdmin = false;
+    if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
+        const userId = Telegram.WebApp.initDataUnsafe.user.id;
+        isAdmin = adminIds.includes(userId);
+        console.log(`Current User ID: ${userId}, Is Admin: ${isAdmin}`); // Для налагодження
+    }
+    // End Admin ID Validation
+
     if (rforzGrandPrixTournamentCard) {
         rforzGrandPrixTournamentCard.addEventListener('click', () => {
             showSection('tournamentViewSection');
             showTournamentTab('groupStage'); // Default to group stage when tournament view is opened
 
-            // Show admin editing section if user is admin
+            // Always show user view first
+            userTournamentView.style.display = 'block';
+            adminTournamentEdit.style.display = 'none';
+
+            // Show 'Edit Tournament' button only if admin
             if (isAdmin) {
-                document.getElementById('userTournamentView').style.display = 'none';
-                document.getElementById('adminTournamentEdit').style.display = 'block';
+                editTournamentBtn.style.display = 'inline-block';
+                editTournamentBtn.textContent = '✏️ Редагувати турнір'; // Ensure initial text is correct
             } else {
-                document.getElementById('userTournamentView').style.display = 'block';
-                document.getElementById('adminTournamentEdit').style.display = 'none';
+                editTournamentBtn.style.display = 'none';
             }
         });
     }
+
+    // New event listener for the 'Edit Tournament' button
+    editTournamentBtn.addEventListener('click', () => {
+        if (userTournamentView.style.display === 'block') { // Currently in user view, switch to admin
+            userTournamentView.style.display = 'none';
+            adminTournamentEdit.style.display = 'block';
+            editTournamentBtn.textContent = '👁️ Переглянути турнір'; // Change text to 'View Tournament'
+        } else { // Currently in admin view, switch to user
+            userTournamentView.style.display = 'block';
+            adminTournamentEdit.style.display = 'none';
+            editTournamentBtn.textContent = '✏️ Редагувати турнір'; // Change text back to 'Edit Tournament'
+        }
+    });
 
     // Event listener for back button in tournamentViewSection
     const backToHomeFromTournamentViewBtn = document.getElementById('backToHomeFromTournamentView');
     backToHomeFromTournamentViewBtn.addEventListener('click', () => {
         showSection('homeSection');
+        // Ensure edit button is hidden when navigating away from tournament view
+        editTournamentBtn.style.display = 'none';
     });
+
 
     // Tournament View Tabs
     const tournamentTabs = document.querySelectorAll('.tournament-tab');
@@ -1802,34 +1850,6 @@
             showTournamentTab(tab.dataset.tab);
         });
     });
-
-    // Admin Modals and Functionality
-    const adminMenuBtn = document.getElementById('adminMenuBtn');
-    const adminPopup = document.getElementById('adminPopup');
-    const createTournamentAdminBtn = document.getElementById('createTournamentAdminBtn');
-    const createTournamentModal = document.getElementById('createTournamentModal');
-    const closeTournamentModalBtn = document.getElementById('closeTournamentModalBtn');
-    const tournamentForm = document.getElementById('tournamentForm');
-    const adminTournamentEdit = document.getElementById('adminTournamentEdit');
-    const editGroupStageBtn = document.getElementById('editGroupStageBtn');
-    const viewPlayoffBracketAdminBtn = document.getElementById('viewPlayoffBracketAdminBtn');
-    const groupStageEdit = document.getElementById('groupStageEdit');
-    const adminPlayoffBracketView = document.getElementById('adminPlayoffBracketView');
-    const userTournamentView = document.getElementById('userTournamentView');
-
-
-    // Admin ID Validation - IMPORTANT: In a real application, this should be handled server-side for security.
-    // !!! ДОДАЙТЕ СВОЇ TELEGRAM USER ID В ЦЕЙ МАСИВ, ЩОБ МАТИ АДМІН-ПРАВА !!!
-    const adminIds = [12345, 987654321]; // Замініть на реальні Telegram user ID адміністраторів
-
-    let isAdmin = false;
-    if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
-        const userId = Telegram.WebApp.initDataUnsafe.user.id;
-        isAdmin = adminIds.includes(userId);
-        console.log(`Current User ID: ${userId}, Is Admin: ${isAdmin}`); // Для налагодження
-    }
-    // End Admin ID Validation
-
 
     adminMenuBtn.addEventListener('click', (event) => {
         if (isAdmin) {
