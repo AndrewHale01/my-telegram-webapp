@@ -46,20 +46,6 @@
     .lang-popup.active {
       display: flex;
     }
-    .lang-option {
-      background: none;
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      text-align: left;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .lang-option:hover {
-      background: #444;
-    }
     .avatar-small {
       width: 40px;
       height: 40px;
@@ -82,9 +68,7 @@
     }
     .popup {
       display: none;
-      position: absolute;
-      top: 60px;
-      right: 0;
+      position: absolute; /* Kept for langPopup and notificationPopup */
       background: #333;
       padding: 24px 20px 20px 20px;
       border-radius: 16px;
@@ -99,7 +83,7 @@
       display: flex;
     }
 
-    .register-btn, .done-btn, .create-team-btn {
+    .register-btn, .done-btn, .create-team-btn, .submit-btn {
       background: #2196f3;
       color: #fff;
       border: none;
@@ -113,7 +97,7 @@
       width: 100%;
       max-width: 220px;
     }
-    .register-btn:hover, .done-btn:hover, .create-team-btn:hover {
+    .register-btn:hover, .done-btn:hover, .create-team-btn:hover, .submit-btn:hover {
       background: #1976d2;
     }
 
@@ -703,7 +687,7 @@
         border: 1px solid #00bfae;
     }
 
-    /* Styles for the new Tournament Creation Modal */
+    /* Styles for Modals (Tournament Creation and now Profile) */
     .modal {
       display: none; /* Hidden by default */
       position: fixed; /* Stay in place */
@@ -832,93 +816,98 @@
         <button id="disqualifyTeamBtn" data-i18n="disqualify_team">❌ Дискваліфікувати команду</button>
       </div>
     </div>
-
-    <div id="profilePopup" class="popup">
-      <button class="register-btn" id="registerBtn" data-i18n="register">Зареєструватись</button>
-    </div>
-    <form class="profile-form" id="profileForm" style="display:none;">
-      <label for="standoffNick" data-i18n="standoff_nick">Нік в Standoff</label>
-      <input type="text" id="standoffNick" name="standoffNick" required maxlength="32" autocomplete="off">
-      <label for="standoffId" data-i18n="standoff_id">ID в Standoff</label>
-      <input type="text" id="standoffId" name="standoffId" required maxlength="32" autocomplete="off">
-      <label for="tgUser" data-i18n="tg_user">Telegram</label>
-      <input type="text" id="tgUser" name="tgUser" readonly>
-      <button type="submit" class="done-btn" id="doneBtn" data-i18n="done">Готово</button>
-    </form>
-
-    <div class="player-profile" id="playerProfile">
-      <div class="player-profile-title" data-i18n="profile">Профіль гравця</div>
-      <div class="player-profile-row">
-        <span data-i18n="standoff_nick">Нік в Standoff</span>: <span id="profileNick"></span>
-      </div>
-      <div class="player-profile-row">
-        <span data-i18n="standoff_id">ID в Standoff</span>: <span id="profileId"></span>
-      </div>
-      <div class="player-profile-row">
-        <span data-i18n="tg_user">Telegram</span>: <span id="profileTg"></span>
-      </div>
-    </div>
-
-    <button class="create-team-btn" id="createTeamBtn" style="display:none;" data-i18n="create_team">Створити команду</button>
-    <div class="success-message" id="successMsg" style="display:none;" data-i18n="profile_saved">Профіль збережено!</div>
-
-    <form class="team-form" id="teamForm" style="display:none;">
-      <label for="teamAvatar" data-i18n="team_avatar">Аватарка команди</label>
-      <input type="file" id="teamAvatar" accept="image/*">
-      <img id="teamAvatarPreview" class="team-avatar-preview" src="#" alt="Team Avatar">
-
-      <label for="teamTag" data-i18n="team_tag">Тег команди</label>
-      <input type="text" id="teamTag" maxlength="12" required data-i18n-placeholder="team_tag_ph">
-
-      <label for="teamName" data-i18n="team_name">Назва команди</label>
-      <input type="text" id="teamName" maxlength="32" required data-i18n-placeholder="team_name_ph">
-
-      <div class="team-player-block">
-        <div class="team-player-title" data-i18n="main_player1">Гравець 1 (капітан)</div>
-        <input type="text" id="main1Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
-        <input type="text" id="main1Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
-        <input type="text" id="main1Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
-      </div>
-      <div class="team-player-block">
-        <div class="team-player-title" data-i18n="main_player2">Гравець 2 (основний)</div>
-        <input type="text" id="main2Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
-        <input type="text" id="main2Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
-        <input type="text" id="main2Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
-      </div>
-      <div class="team-player-block">
-        <div class="team-player-title" data-i18n="main_player3">Гравець 3 (основний)</div>
-        <input type="text" id="main3Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
-        <input type="text" id="main3Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
-        <input type="text" id="main3Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
-      </div>
-      <div class="team-player-block">
-        <div class="team-player-title" data-i18n="main_player4">Гравець 4 (основний)</div>
-        <input type="text" id="main4Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
-        <input type="text" id="main4Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
-        <input type="text" id="main4Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
-      </div>
-      <div class="team-player-block">
-        <div class="team-player-title" data-i18n="main_player5">Гравець 5 (основний)</div>
-        <input type="text" id="main5Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
-        <input type="text" id="main5Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
-        <input type="text" id="main5Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
-      </div>
-      <div class="team-player-block">
-        <div class="team-player-title" data-i18n="spare_player1">Гравець 6 (запасний)</div>
-        <input type="text" id="spare1Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
-        <input type="text" id="spare1Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
-        <input type="text" id="spare1Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
-      </div>
-      <div class="team-player-block">
-        <div class="team-player-title" data-i18n="spare_player2">Гравець 7 (запасний)</div>
-        <input type="text" id="spare2Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
-        <input type="text" id="spare2Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
-        <input type="text" id="spare2Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
-      </div>
-      <button type="submit" class="done-btn" id="teamDoneBtn" data-i18n="team_done">Готово</button>
-    </form>
-    <div class="team-success-message" id="teamSuccessMsg" style="display:none;" data-i18n="team_created">Команду створено!</div>
   </div>
+
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" id="closeProfileModalBtn">&times;</span>
+      <h2 id="profileModalTitle">Профіль гравця</h2> <button class="register-btn" id="registerBtn" data-i18n="register">Зареєструватись</button>
+
+      <form class="profile-form" id="profileForm" style="display:none;">
+        <label for="standoffNick" data-i18n="standoff_nick">Нік в Standoff</label>
+        <input type="text" id="standoffNick" name="standoffNick" required maxlength="32" autocomplete="off">
+        <label for="standoffId" data-i18n="standoff_id">ID в Standoff</label>
+        <input type="text" id="standoffId" name="standoffId" required maxlength="32" autocomplete="off">
+        <label for="tgUser" data-i18n="tg_user">Telegram</label>
+        <input type="text" id="tgUser" name="tgUser" readonly>
+        <button type="submit" class="done-btn" id="doneBtn" data-i18n="done">Готово</button>
+      </form>
+
+      <div class="player-profile" id="playerProfile">
+        <div class="player-profile-title" data-i18n="profile">Профіль гравця</div>
+        <div class="player-profile-row">
+          <span data-i18n="standoff_nick">Нік в Standoff</span>: <span id="profileNick"></span>
+        </div>
+        <div class="player-profile-row">
+          <span data-i18n="standoff_id">ID в Standoff</span>: <span id="profileId"></span>
+        </div>
+        <div class="player-profile-row">
+          <span data-i18n="tg_user">Telegram</span>: <span id="profileTg"></span>
+        </div>
+      </div>
+
+      <button class="create-team-btn" id="createTeamBtn" style="display:none;" data-i18n="create_team">Створити команду</button>
+      <div class="success-message" id="successMsg" style="display:none;" data-i18n="profile_saved">Профіль збережено!</div>
+
+      <form class="team-form" id="teamForm" style="display:none;">
+        <label for="teamAvatar" data-i18n="team_avatar">Аватарка команди</label>
+        <input type="file" id="teamAvatar" accept="image/*">
+        <img id="teamAvatarPreview" class="team-avatar-preview" src="#" alt="Team Avatar">
+
+        <label for="teamTag" data-i18n="team_tag">Тег команди</label>
+        <input type="text" id="teamTag" maxlength="12" required data-i18n-placeholder="team_tag_ph">
+
+        <label for="teamName" data-i18n="team_name">Назва команди</label>
+        <input type="text" id="teamName" maxlength="32" required data-i18n-placeholder="team_name_ph">
+
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="main_player1">Гравець 1 (капітан)</div>
+          <input type="text" id="main1Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
+          <input type="text" id="main1Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" id="main1Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
+        </div>
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="main_player2">Гравець 2 (основний)</div>
+          <input type="text" id="main2Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
+          <input type="text" id="main2Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" id="main2Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
+        </div>
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="main_player3">Гравець 3 (основний)</div>
+          <input type="text" id="main3Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
+          <input type="text" id="main3Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" id="main3Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
+        </div>
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="main_player4">Гравець 4 (основний)</div>
+          <input type="text" id="main4Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
+          <input type="text" id="main4Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" id="main4Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
+        </div>
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="main_player5">Гравець 5 (основний)</div>
+          <input type="text" id="main5Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
+          <input type="text" id="main5Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" id="main5Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
+        </div>
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="spare_player1">Гравець 6 (запасний)</div>
+          <input type="text" id="spare1Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
+          <input type="text" id="spare1Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" id="spare1Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
+        </div>
+        <div class="team-player-block">
+          <div class="team-player-title" data-i18n="spare_player2">Гравець 7 (запасний)</div>
+          <input type="text" id="spare2Id" placeholder="ID в Standoff 2" required data-i18n-placeholder="player_id_ph">
+          <input type="text" id="spare2Nick" placeholder="Нікнейм" required data-i18n-placeholder="player_nick_ph">
+          <input type="text" id="spare2Tg" placeholder="Telegram" required data-i18n-placeholder="player_tg_ph">
+        </div>
+        <button type="submit" class="done-btn" id="teamDoneBtn" data-i18n="team_done">Готово</button>
+      </form>
+      <div class="team-success-message" id="teamSuccessMsg" style="display:none;" data-i18n="team_created">Команду створено!</div>
+    </div>
+  </div>
+
   <div id="notificationPopup" class="popup">
     <div style="font-weight:bold; color:#00bfae; margin-bottom:8px;" id="notificationTitle">Сповіщення</div>
     <div id="notificationList" style="width:100%;"></div>
@@ -1448,10 +1437,12 @@
 
     // Helper function to close all popups
     function closeAllPopups() {
-        const allPopups = document.querySelectorAll('.popup.active');
-        allPopups.forEach(popup => {
-            popup.classList.remove('active');
-        });
+        // Close specific popups using their IDs and popup/modal classes
+        document.getElementById('langPopup').classList.remove('active');
+        document.getElementById('adminPopup').classList.remove('active');
+        document.getElementById('notificationPopup').classList.remove('active');
+        document.getElementById('profileModal').style.display = 'none'; // Close the new profile modal
+        document.getElementById('createTournamentModal').style.display = 'none'; // Close tournament modal
     }
 
 
@@ -1473,20 +1464,26 @@
         if (!langPopup.contains(event.target) && langPopup.classList.contains('active')) {
             langPopup.classList.remove('active');
         }
-        if (!profilePopup.contains(event.target) && profilePopup.classList.contains('active')) {
-            profilePopup.classList.remove('active');
-        }
         if (!adminPopup.contains(event.target) && adminPopup.classList.contains('active') && event.target !== adminMenuBtn) {
             adminPopup.classList.remove('active');
         }
         if (!notificationPopup.contains(event.target) && notificationPopup.classList.contains('active') && event.target !== notificationBtn) {
             notificationPopup.classList.remove('active');
         }
+        // Handle clicks outside the profile modal
+        if (event.target == profileModal) {
+            profileModal.style.display = 'none';
+        }
+        // Handle clicks outside the create tournament modal
+        if (event.target == createTournamentModal) {
+            createTournamentModal.style.display = 'none';
+        }
     });
 
-    // Profile Management
+    // Profile Management (Now using a modal structure)
     const avatar = document.getElementById('avatar');
-    const profilePopup = document.getElementById('profilePopup');
+    const profileModal = document.getElementById('profileModal'); // Changed from profilePopup
+    const closeProfileModalBtn = document.getElementById('closeProfileModalBtn');
     const registerBtn = document.getElementById('registerBtn');
     const profileForm = document.getElementById('profileForm');
     const standoffNickInput = document.getElementById('standoffNick');
@@ -1506,34 +1503,62 @@
         tgUser: Telegram.WebApp.initDataUnsafe.user ? `@${Telegram.WebApp.initDataUnsafe.user.username || Telegram.WebApp.initDataUnsafe.user.first_name}` : ''
     };
 
-    function updateProfileDisplay() {
-        if (userData.standoffNick && userData.standoffId) {
-            registerBtn.style.display = 'none';
-            profileForm.style.display = 'none';
-            playerProfile.style.display = 'block';
-            profileNick.textContent = userData.standoffNick;
-            profileId.textContent = userData.standoffId;
-            profileTg.textContent = userData.tgUser;
-            createTeamBtn.style.display = 'block';
-        } else {
-            registerBtn.style.display = 'block';
-            playerProfile.style.display = 'none';
-            createTeamBtn.style.display = 'none';
-        }
+    function showProfileView() {
+        registerBtn.style.display = 'none';
+        profileForm.style.display = 'none';
+        playerProfile.style.display = 'block';
+        profileNick.textContent = userData.standoffNick;
+        profileId.textContent = userData.standoffId;
+        profileTg.textContent = userData.tgUser;
+        createTeamBtn.style.display = 'block';
+        successMsg.style.display = 'none';
+        teamForm.style.display = 'none'; // Ensure team form is hidden
+        teamSuccessMsg.style.display = 'none'; // Ensure team success msg is hidden
     }
 
-    avatar.addEventListener('click', (event) => {
-        closeAllPopups(); // Close other popups first
-        profilePopup.classList.toggle('active');
-        event.stopPropagation();
-    });
-
-    registerBtn.addEventListener('click', () => {
+    function showRegisterForm() {
         registerBtn.style.display = 'none';
         profileForm.style.display = 'flex';
+        playerProfile.style.display = 'none';
+        createTeamBtn.style.display = 'none';
+        successMsg.style.display = 'none';
+        teamForm.style.display = 'none'; // Ensure team form is hidden
+        teamSuccessMsg.style.display = 'none'; // Ensure team success msg is hidden
         standoffNickInput.value = userData.standoffNick;
         standoffIdInput.value = userData.standoffId;
         tgUser.value = userData.tgUser;
+    }
+
+    function showRegisterButton() {
+        registerBtn.style.display = 'block';
+        profileForm.style.display = 'none';
+        playerProfile.style.display = 'none';
+        createTeamBtn.style.display = 'none';
+        successMsg.style.display = 'none';
+        teamForm.style.display = 'none'; // Ensure team form is hidden
+        teamSuccessMsg.style.display = 'none'; // Ensure team success msg is hidden
+    }
+
+    function updateProfileDisplay() {
+        if (userData.standoffNick && userData.standoffId) {
+            showProfileView();
+        } else {
+            showRegisterButton();
+        }
+    }
+
+    avatar.addEventListener('click', () => {
+        closeAllPopups(); // Close other popups first
+        profileModal.style.display = 'block'; // Show the profile modal
+        updateProfileDisplay(); // Show relevant profile content
+    });
+
+    closeProfileModalBtn.addEventListener('click', () => {
+        profileModal.style.display = 'none';
+    });
+
+    registerBtn.addEventListener('click', () => {
+        showRegisterForm();
     });
 
     profileForm.addEventListener('submit', (e) => {
@@ -1542,10 +1567,9 @@
         userData.standoffId = standoffIdInput.value;
         localStorage.setItem('standoffNick', userData.standoffNick);
         localStorage.setItem('standoffId', userData.standoffId);
-        updateProfileDisplay();
+        showProfileView(); // Display the updated profile
         successMsg.style.display = 'block';
         setTimeout(() => successMsg.style.display = 'none', 3000);
-        profilePopup.classList.remove('active');
     });
 
     // Team Management
@@ -1571,8 +1595,12 @@
     });
 
     createTeamBtnElement.addEventListener('click', () => {
-        teamForm.style.display = 'flex';
+        profileForm.style.display = 'none';
+        playerProfile.style.display = 'none';
+        registerBtn.style.display = 'none';
         createTeamBtnElement.style.display = 'none';
+        teamForm.style.display = 'flex';
+        teamSuccessMsg.style.display = 'none';
     });
 
     teamForm.addEventListener('submit', (e) => {
@@ -1581,7 +1609,7 @@
         teamForm.style.display = 'none';
         teamSuccessMsg.style.display = 'block';
         setTimeout(() => teamSuccessMsg.style.display = 'none', 3000);
-        createTeamBtnElement.style.display = 'block';
+        showProfileView(); // Go back to displaying profile after team creation
     });
 
     // Notification Management
@@ -1868,12 +1896,6 @@
 
     closeTournamentModalBtn.addEventListener('click', () => {
         createTournamentModal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target == createTournamentModal) {
-            createTournamentModal.style.display = 'none';
-        }
     });
 
     tournamentForm.addEventListener('submit', (e) => {
