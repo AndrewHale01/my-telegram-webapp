@@ -829,7 +829,7 @@
         <button id="unbanUserBtn" data-i18n="unban_user">✅ Розблокувати користувача</button>
         <button id="givePrizeBtn" data-i18n="give_prize">🏆 Видати приз</button>
         <button id="disqualifyTeamBtn" data-i18n="disqualify_team">❌ Дискваліфікувати команду</button>
-        </div>
+      </div>
     </div>
 
     <div id="profilePopup" class="popup">
@@ -1103,10 +1103,12 @@
       <span>🏠</span>
       <span data-i18n="home">Головна</span>
     </div>
-    <div class="nav-item" data-section="rulesSection"> <span>📜</span>
+    <div class="nav-item" data-section="rulesSection">
+      <span>📜</span>
       <span data-i18n="rules_footer_menu_item">Правила</span>
     </div>
-    <div class="nav-item" data-section="awardsSection"> <span>🏆</span>
+    <div class="nav-item" data-section="awardsSection">
+      <span>🏆</span>
       <span data-i18n="awards">Нагороди</span>
     </div>
     <div class="nav-item" data-section="supportSection">
@@ -1168,7 +1170,6 @@
         'unban_user': '✅ Розблокувати користувача',
         'give_prize': '🏆 Видати приз',
         'disqualify_team': '❌ Дискваліфікувати команду',
-        // 'tournament_menu_btn': '🏆 Турнір', <-- Removed
         'support_title': 'Підтримка',
         'support_description': 'Якщо у вас виникли питання або проблеми, будь ласка, зв\'яжіться з нами:',
         'support_email': 'Електронна пошта: support@example.com',
@@ -1229,7 +1230,6 @@
         'unban_user': '✅ Unban User',
         'give_prize': '🏆 Give Prize',
         'disqualify_team': '❌ Disqualify Team',
-        // 'tournament_menu_btn': '🏆 Tournament', <-- Removed
         'support_title': 'Support',
         'support_description': 'If you have any questions or problems, please contact us:',
         'support_email': 'Email: support@example.com',
@@ -1290,7 +1290,6 @@
         'unban_user': '✅ Разблочить пользователя',
         'give_prize': '🏆 Выдать приз',
         'disqualify_team': '❌ Дисквалифицировать команду',
-        // 'tournament_menu_btn': '🏆 Турнир', <-- Removed
         'support_title': 'Поддержка',
         'support_description': 'Если у вас возникли вопросы или проблемы, пожалуйста, свяжитесь с нами:',
         'support_email': 'Электронная почта: support@example.com',
@@ -1351,7 +1350,6 @@
         'unban_user': '✅ Odblokuj użytkownika',
         'give_prize': '🏆 Przyznaj nagrodę',
         'disqualify_team': '❌ Zdyskwalifikuj drużynę',
-        // 'tournament_menu_btn': '🏆 Turniej', <-- Removed
         'support_title': 'Wsparcie',
         'support_description': 'Jeśli masz pytania lub problemy, skontaktuj się z nami:',
         'support_email': 'Email: support@example.com',
@@ -1367,6 +1365,93 @@
     const langBtn = document.getElementById('langBtn');
     const langPopup = document.getElementById('langPopup');
     const langOptions = document.querySelectorAll('.lang-option');
+
+    // Tournament creation modal (from previous interactions)
+    const createTournamentModal = document.createElement('div');
+    createTournamentModal.className = 'modal';
+    createTournamentModal.innerHTML = `
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Створити Турнір</h2>
+        <form id="tournamentForm">
+          <div class="form-group">
+            <label for="tournamentName">Назва Турніру</label>
+            <input type="text" id="tournamentName" required>
+          </div>
+          <div class="form-group">
+            <label for="tournamentDiscipline">Дисципліна</label>
+            <select id="tournamentDiscipline" required>
+              <option value="standoff2">Standoff 2</option>
+              </select>
+          </div>
+          <div class="form-group">
+            <label for="tournamentFormat">Формат</label>
+            <select id="tournamentFormat" required>
+              <option value="1v1">1v1</option>
+              <option value="2v2">2v2</option>
+              <option value="5v5">5v5</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="startDate">Дата початку</label>
+            <input type="date" id="startDate" required>
+          </div>
+          <div class="form-group">
+            <label for="endDate">Дата закінчення</label>
+            <input type="date" id="endDate" required>
+          </div>
+          <div class="form-group">
+            <label for="prizePool">Призовий Фонд</label>
+            <input type="number" id="prizePool" min="0" value="0" required>
+          </div>
+          <div class="form-group">
+            <label for="description">Опис</label>
+            <textarea id="description" rows="4"></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Створити</button>
+        </form>
+      </div>
+    `;
+    document.body.appendChild(createTournamentModal);
+
+    // Tournament details section (moved to ensure it's in `sections` NodeList)
+    const tournamentDetailsSection = document.createElement('div');
+    tournamentDetailsSection.id = 'tournamentDetailsSection';
+    tournamentDetailsSection.className = 'section';
+    tournamentDetailsSection.innerHTML = `
+      <button id="backToAwardsBtn" class="back-btn" data-i18n="back_to_awards">← Нагороди</button>
+      <h2 id="tournamentDetailsTitle"></h2>
+      <p id="tournamentDetailsDescription"></p>
+      <h3 data-i18n="ranking">Рейтинг</h3>
+      <table class="ranking-table">
+        <thead>
+          <tr>
+            <th>Місце</th>
+            <th>Команда/Гравець</th>
+            <th>Нагорода</th>
+          </tr>
+        </thead>
+        <tbody id="tournamentRankingBody">
+          </tbody>
+      </table>
+    `;
+    document.body.appendChild(tournamentDetailsSection);
+
+
+    // All popups and their trigger buttons
+    const avatar = document.getElementById('avatar');
+    const profilePopup = document.getElementById('profilePopup');
+    const notificationBtn = document.getElementById('notificationBtn');
+    const notificationPopup = document.getElementById('notificationPopup');
+    const adminMenuBtn = document.getElementById('adminMenuBtn');
+    const adminPopup = document.getElementById('adminPopup');
+
+    const allPopups = [langPopup, profilePopup, notificationPopup, adminPopup];
+    const allButtons = [langBtn, avatar, notificationBtn, adminMenuBtn];
+
+    // Select sections and nav items AFTER dynamic elements are added
+    const sections = document.querySelectorAll('.section');
+    const navItems = document.querySelectorAll('.nav-item');
 
     function applyLanguage(lang) {
       document.querySelectorAll('[data-i18n]').forEach(element => {
@@ -1394,7 +1479,15 @@
       localStorage.setItem('language', lang);
     }
 
+    // Function to close all active popups
+    function closeAllPopups() {
+      allPopups.forEach(popup => {
+        popup.classList.remove('active');
+      });
+    }
+
     langBtn.addEventListener('click', (event) => {
+      closeAllPopups(); // Close other popups
       langPopup.classList.toggle('active');
       event.stopPropagation();
     });
@@ -1406,14 +1499,7 @@
       });
     });
 
-    document.addEventListener('click', (event) => {
-      if (!langPopup.contains(event.target) && event.target !== langBtn) {
-        langPopup.classList.remove('active');
-      }
-    });
 
-    const avatar = document.getElementById('avatar');
-    const profilePopup = document.getElementById('profilePopup');
     const registerBtn = document.getElementById('registerBtn');
     const profileForm = document.getElementById('profileForm');
     const doneBtn = document.getElementById('doneBtn');
@@ -1433,7 +1519,7 @@
     // Simulate Telegram WebApp user data
     // In a real Telegram WebApp, this data would come from window.Telegram.WebApp.initDataUnsafe.user
     const tgWebAppUser = {
-      id: '123456789',
+      id: '123456789', // Example ID for admin access testing
       first_name: 'John',
       last_name: 'Doe',
       username: 'johndoe',
@@ -1467,13 +1553,18 @@
     }
 
     avatar.addEventListener('click', (event) => {
+      closeAllPopups(); // Close other popups
       profilePopup.classList.toggle('active');
       event.stopPropagation();
     });
 
     document.addEventListener('click', (event) => {
-      if (!profilePopup.contains(event.target) && event.target !== avatar && event.target !== registerBtn && event.target !== doneBtn && event.target !== createTeamBtn && event.target !== teamDoneBtn) {
-        profilePopup.classList.remove('active');
+      // Check if the click is outside any of the popups or their trigger buttons
+      const isClickOutsidePopups = !allPopups.some(popup => popup.contains(event.target));
+      const isClickOutsideButtons = !allButtons.some(button => button.contains(event.target));
+
+      if (isClickOutsidePopups && isClickOutsideButtons) {
+        closeAllPopups();
         profileForm.style.display = 'none';
         teamForm.style.display = 'none';
         updateProfileDisplay();
@@ -1542,8 +1633,6 @@
     });
 
     // Notification functionality
-    const notificationBtn = document.getElementById('notificationBtn');
-    const notificationPopup = document.getElementById('notificationPopup');
     const notificationBadge = document.getElementById('notificationBadge');
     const notificationList = document.getElementById('notificationList');
     const clearNotificationsBtn = document.getElementById('clearNotificationsBtn');
@@ -1601,15 +1690,10 @@
     }
 
     notificationBtn.addEventListener('click', (event) => {
+      closeAllPopups(); // Close other popups
       notificationPopup.classList.toggle('active');
       renderNotifications();
       event.stopPropagation();
-    });
-
-    document.addEventListener('click', (event) => {
-      if (!notificationPopup.contains(event.target) && event.target !== notificationBtn) {
-        notificationPopup.classList.remove('active');
-      }
     });
 
     clearNotificationsBtn.addEventListener('click', () => {
@@ -1619,99 +1703,32 @@
       showNotificationBadge();
     });
 
-    // Simulate adding a new notification
-    // setInterval(() => {
-    //   const newNotif = {
-    //     title: 'Нове сповіщення!',
-    //     message: 'Це тестове сповіщення.',
-    //     time: new Date().toLocaleTimeString(),
-    //     read: false
-    //   };
-    //   notifications.push(newNotif);
-    //   saveNotifications();
-    //   showNotificationBadge();
-    //   if (notificationPopup.classList.contains('active')) {
-    //     renderNotifications();
-    //   }
-    // }, 30000); // Add a new notification every 30 seconds for testing
-
     // Admin menu functionality
-    const adminMenuBtn = document.getElementById('adminMenuBtn');
-    const adminPopup = document.getElementById('adminPopup');
     const createTournamentAdminBtn = document.getElementById('createTournamentAdminBtn');
     const banUserBtn = document.getElementById('banUserBtn');
     const unbanUserBtn = document.getElementById('unbanUserBtn');
     const givePrizeBtn = document.getElementById('givePrizeBtn');
     const disqualifyTeamBtn = document.getElementById('disqualifyTeamBtn');
-    // const tournamentMenuBtn = document.getElementById('tournamentMenuBtn'); // Removed
-    const closeAdminModal = document.getElementById('closeAdminModal');
 
-    // Simulate admin status (can be toggled for testing)
-    let isAdmin = true; // Set to true for testing admin view, false for user view
+    // Admin User IDs for validation
+    // IMPORTANT: In a real application, this list should be securely stored on a backend
+    // and fetched from there, not hardcoded in the frontend.
+    const adminUserIds = ['123456789', 'YOUR_OTHER_ADMIN_ID_HERE']; // Replace with actual admin IDs
+
+    // Determine admin status based on tgWebAppUser.id
+    const isAdmin = adminUserIds.includes(tgWebAppUser.id);
 
     adminMenuBtn.addEventListener('click', (event) => {
+      closeAllPopups(); // Close other popups
       adminPopup.classList.toggle('active');
       event.stopPropagation();
     });
-
-    document.addEventListener('click', (event) => {
-      if (!adminPopup.contains(event.target) && event.target !== adminMenuBtn) {
-        adminPopup.classList.remove('active');
-      }
-    });
-
-    // Tournament creation modal (from previous interactions)
-    const createTournamentModal = document.createElement('div');
-    createTournamentModal.className = 'modal';
-    createTournamentModal.innerHTML = `
-      <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2>Створити Турнір</h2>
-        <form id="tournamentForm">
-          <div class="form-group">
-            <label for="tournamentName">Назва Турніру</label>
-            <input type="text" id="tournamentName" required>
-          </div>
-          <div class="form-group">
-            <label for="tournamentDiscipline">Дисципліна</label>
-            <select id="tournamentDiscipline" required>
-              <option value="standoff2">Standoff 2</option>
-              </select>
-          </div>
-          <div class="form-group">
-            <label for="tournamentFormat">Формат</label>
-            <select id="tournamentFormat" required>
-              <option value="1v1">1v1</option>
-              <option value="2v2">2v2</option>
-              <option value="5v5">5v5</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="startDate">Дата початку</label>
-            <input type="date" id="startDate" required>
-          </div>
-          <div class="form-group">
-            <label for="endDate">Дата закінчення</label>
-            <input type="date" id="endDate" required>
-          </div>
-          <div class="form-group">
-            <label for="prizePool">Призовий Фонд</label>
-            <input type="number" id="prizePool" min="0" value="0" required>
-          </div>
-          <div class="form-group">
-            <label for="description">Опис</label>
-            <textarea id="description" rows="4"></textarea>
-          </div>
-          <button type="submit" class="submit-btn">Створити</button>
-        </form>
-      </div>
-    `;
-    document.body.appendChild(createTournamentModal);
 
     const tournamentForm = createTournamentModal.querySelector('#tournamentForm');
     const closeTournamentModalBtn = createTournamentModal.querySelector('.close-button');
 
     createTournamentAdminBtn.addEventListener('click', () => {
+      closeAllPopups(); // Close other popups before opening modal
       createTournamentModal.style.display = 'block';
     });
 
@@ -1820,9 +1837,6 @@
       }
     });
 
-    // Removed tournamentMenuBtn click event listener
-
-
     editGroupStageBtn.addEventListener('click', () => {
       groupStageEdit.style.display = 'block';
       adminPlayoffBracketView.style.display = 'none';
@@ -1868,9 +1882,6 @@
 
 
     // Section management
-    const sections = document.querySelectorAll('.section');
-    const navItems = document.querySelectorAll('.nav-item');
-
     function showSection(sectionId) {
       sections.forEach(section => {
         section.classList.remove('active');
@@ -1892,28 +1903,6 @@
     // Awards section functionality
     const awardsList = document.getElementById('awardsList');
     const awardsSection = document.getElementById('awardsSection');
-    const tournamentDetailsSection = document.createElement('div');
-    tournamentDetailsSection.id = 'tournamentDetailsSection';
-    tournamentDetailsSection.className = 'section'; // ADDED 'section' class
-    tournamentDetailsSection.innerHTML = `
-      <button id="backToAwardsBtn" class="back-btn" data-i18n="back_to_awards">← Нагороди</button>
-      <h2 id="tournamentDetailsTitle"></h2>
-      <p id="tournamentDetailsDescription"></p>
-      <h3 data-i18n="ranking">Рейтинг</h3>
-      <table class="ranking-table">
-        <thead>
-          <tr>
-            <th>Місце</th>
-            <th>Команда/Гравець</th>
-            <th>Нагорода</th>
-          </tr>
-        </thead>
-        <tbody id="tournamentRankingBody">
-          </tbody>
-      </table>
-    `;
-    document.body.appendChild(tournamentDetailsSection);
-
     const backToAwardsBtn = document.getElementById('backToAwardsBtn');
 
     // Dummy awards data
