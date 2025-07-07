@@ -928,7 +928,7 @@
 <div id="notificationList" style="width:100%;"></div>
 <button class="done-btn" data-i18n="clear_notifications_btn" id="clearNotificationsBtn" style="margin-top:10px;">Очистити</button>
 </div>
-<div class="section active" id="homeSection">
+<div class="section" id="homeSection">
 <div class="main-section" id="mainSection">
 <div class="news-section">
 <div class="news-title" data-i18n="news">Новини</div>
@@ -1046,10 +1046,6 @@
 </tr>
 </thead>
 <tbody>
-<tr><td>Команда Alpha</td><td>3</td><td>0</td></tr>
-<tr><td>Команда Beta</td><td>2</td><td>1</td></tr>
-<tr><td>Команда Gamma</td><td>1</td><td>2</td></tr>
-<tr><td>Команда Delta</td><td>0</td><td>3</td></tr>
 </tbody>
 </table>
 <h3 data-i18n="group_b_title" style="margin-top:20px;">Група B</h3>
@@ -1062,10 +1058,6 @@
 </tr>
 </thead>
 <tbody>
-<tr><td>Команда Echo</td><td>3</td><td>0</td></tr>
-<tr><td>Команда Foxtrot</td><td>2</td><td>1</td></tr>
-<tr><td>Команда Golf</td><td>1</td><td>2</td></tr>
-<tr><td>Команда Hotel</td><td>0</td><td>3</td></tr>
 </tbody>
 </table>
 </div>
@@ -1174,19 +1166,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Define the admin user ID
   const ADMIN_USER_ID = "5806282517";
-  let currentUserId = "YOUR_TELEGRAM_USER_ID"; // Placeholder: Replace with actual Telegram.WebApp.initDataUnsafe.user.id
-  // Example for local testing: currentUserId = "5806282517";
+  let currentUserId = ""; // Initialize as empty string, not admin by default
 
   if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
     currentUserId = tg.initDataUnsafe.user.id.toString();
-  } else {
-    // Fallback for testing outside Telegram environment
-    console.warn("Telegram WebApp user ID not available. Simulating admin for demonstration.");
-    currentUserId = ADMIN_USER_ID; // For testing, assume admin if not in Telegram WebApp
   }
 
+  // Define the admin user ID (already defined, keeping for context if it was defined again)
+  // const ADMIN_USER_ID = "5806282517";
 
-  // Словник перекладів
+  // Existing code for translation dictionary
   const translation_dictionary = {
     "home": {
       "uk": "Головна",
@@ -1287,7 +1276,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "team_name_ph": {
       "uk": "Назва команди",
       "en": "Team name",
-      "ru": "Nazwa drużyny",
+      "ru": "Название команды",
       "pl": "Nazwa drużyny"
     },
     "main_player1": {
@@ -1970,6 +1959,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Застосувати дефолтну мову при завантаженні сторінки
   const currentLanguage = localStorage.getItem("language") || "uk";
   applyLanguage(currentLanguage);
+
+  // Ensure home section is shown on load
+  showSection('homeSection');
 });
 
 // Функція для показу секції (з попереднього коду)
