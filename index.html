@@ -1172,6 +1172,20 @@ document.addEventListener("DOMContentLoaded", function () {
   const sections = document.querySelectorAll(".section");
   const navItems = document.querySelectorAll(".nav-item");
 
+  // Define the admin user ID
+  const ADMIN_USER_ID = "5806282517";
+  let currentUserId = "YOUR_TELEGRAM_USER_ID"; // Placeholder: Replace with actual Telegram.WebApp.initDataUnsafe.user.id
+  // Example for local testing: currentUserId = "5806282517";
+
+  if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+    currentUserId = tg.initDataUnsafe.user.id.toString();
+  } else {
+    // Fallback for testing outside Telegram environment
+    console.warn("Telegram WebApp user ID not available. Simulating admin for demonstration.");
+    currentUserId = ADMIN_USER_ID; // For testing, assume admin if not in Telegram WebApp
+  }
+
+
   // Словник перекладів
   const translation_dictionary = {
     "home": {
@@ -1225,7 +1239,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "standoff_id": {
       "uk": "ID в Standoff",
       "en": "Standoff ID",
-      "ru": "ID w Standoff",
+      "ru": "ID в Standoff",
       "pl": "ID w Standoff"
     },
     "tg_user": {
@@ -1273,7 +1287,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "team_name_ph": {
       "uk": "Назва команди",
       "en": "Team name",
-      "ru": "Название команды",
+      "ru": "Nazwa drużyny",
       "pl": "Nazwa drużyny"
     },
     "main_player1": {
@@ -1816,12 +1830,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const adminMenuBtn = document.getElementById("adminMenuBtn");
   const adminPopup = document.getElementById("adminPopup");
+  const editTournamentBtn = document.getElementById("editTournamentBtn");
+  const userTournamentView = document.getElementById("userTournamentView");
+  const adminTournamentView = document.getElementById("adminTournamentView");
+
+
   adminMenuBtn?.addEventListener("click", (event) => {
     event.stopPropagation(); // Prevent immediate closing by document click
     adminPopup?.classList.toggle("active");
     langPopup?.classList.remove("active"); // Close other popups
     notificationPopup?.classList.remove("active");
   });
+
+  // Toggle admin view on editTournamentBtn click
+  editTournamentBtn?.addEventListener("click", () => {
+      if (userTournamentView && adminTournamentView) {
+          userTournamentView.style.display = 'none';
+          adminTournamentView.style.display = 'block';
+      }
+  });
+
+  // Show user view when leaving admin view (e.g., clicking back button)
+  document.getElementById('backToHomeFromTournamentView')?.addEventListener('click', () => {
+      if (userTournamentView && adminTournamentView) {
+          userTournamentView.style.display = 'block'; // Or 'flex' depending on original display
+          adminTournamentView.style.display = 'none';
+      }
+  });
+
+
+  // Initial visibility check for admin elements
+  if (currentUserId === ADMIN_USER_ID) {
+    adminMenuBtn.style.display = 'block';
+    editTournamentBtn.style.display = 'inline-block'; // Or 'block' based on preferred layout
+  } else {
+    adminMenuBtn.style.display = 'none';
+    editTournamentBtn.style.display = 'none';
+  }
 
   // Нова логіка для кнопки "Зареєструватись"
   const registerBtn = document.getElementById("registerBtn");
