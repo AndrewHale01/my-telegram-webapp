@@ -4,21 +4,17 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Telegram WebApp</title>
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-TZN665FNYF"></script>
+<!-- Google Analytics (можна видалити якщо не потрібно) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TZN665FNYF"></script>
 <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-TZN665FNYF');
-  </script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-TZN665FNYF');
+</script>
 <style>
-    body {
-      margin: 0;
-      background: #222;
-      color: #fff;
-      font-family: 'Segoe UI', Arial, sans-serif; /* Nicer font */
-      padding-bottom: 60px;
-    }
+/* ...весь твій CSS без змін... */
+body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; padding-bottom: 60px; }
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -386,7 +382,8 @@
       color: #00bfae;
       font-size: 1.1rem;
     }
-
+    #adminMenuBtn { display: none; } /* приховано за замовчуванням */
+    #editTournamentBtn { display: none; } /* приховано за замовчуванням */
     .news-card p,
     .tournament-card p {
       font-size: 0.95rem;
@@ -1025,9 +1022,10 @@
 </form>
 </div>
 </div>
+
 <div class="section" id="tournamentViewSection">
-<button class="back-btn" data-i18n="back_to_home" id="backToHomeFromTournamentView" onclick="showSection('homeSection')">← Головна</button>
-<button class="back-btn" data-i18n="edit_tournament_btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати турнір</button>
+  <button class="back-btn" data-i18n="back_to_home" id="backToHomeFromTournamentView" onclick="showSection('homeSection')">← Головна</button>
+  <button class="back-btn" data-i18n="edit_tournament_btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати турнір</button>
 <h2 data-i18n="tournament_view_title">Перегляд Турніру</h2>
 <div class="tournament-section-content">
 <div id="userTournamentView">
@@ -1171,6 +1169,20 @@ document.addEventListener("DOMContentLoaded", function () {
   if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
     currentUserId = tg.initDataUnsafe.user.id.toString();
   }
+
+  // Елементи адмін-меню та кнопки редагування
+  const adminMenuBtn = document.getElementById("adminMenuBtn");
+  const editTournamentBtn = document.getElementById("editTournamentBtn");
+
+  // Показуємо адмін-меню і кнопку редагування тільки для адміна
+  if (currentUserId === ADMIN_USER_ID) {
+    adminMenuBtn.style.display = 'block';
+    editTournamentBtn.style.display = 'inline-block';
+  } else {
+    adminMenuBtn.style.display = 'none';
+    editTournamentBtn.style.display = 'none';
+  }
+
 
   // Define the admin user ID (already defined, keeping for context if it was defined again)
   // const ADMIN_USER_ID = "5806282517";
@@ -1817,9 +1829,8 @@ document.addEventListener("DOMContentLoaded", function () {
     adminPopup?.classList.remove("active");
   });
 
-  const adminMenuBtn = document.getElementById("adminMenuBtn");
+
   const adminPopup = document.getElementById("adminPopup");
-  const editTournamentBtn = document.getElementById("editTournamentBtn");
   const userTournamentView = document.getElementById("userTournamentView");
   const adminTournamentView = document.getElementById("adminTournamentView");
 
