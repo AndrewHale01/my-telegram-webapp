@@ -1166,9 +1166,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const ADMIN_USER_ID = "5806282517";
   let currentUserId = ""; // Initialize as empty string, not admin by default
 
-  if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-    currentUserId = tg.initDataUnsafe.user.id.toString();
-  }
+if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+  currentUserId = tg.initDataUnsafe.user.id.toString();
+}
+console.log("currentUserId:", currentUserId, "ADMIN_USER_ID:", ADMIN_USER_ID);
 
   // Елементи адмін-меню та кнопки редагування
   const adminMenuBtn = document.getElementById("adminMenuBtn");
@@ -1860,13 +1861,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // Initial visibility check for admin elements
-  if (currentUserId === ADMIN_USER_ID) {
-    adminMenuBtn.style.display = 'block';
-    editTournamentBtn.style.display = 'inline-block'; // Or 'block' based on preferred layout
-  } else {
-    adminMenuBtn.style.display = 'none';
-    editTournamentBtn.style.display = 'none';
-  }
+  // if (currentUserId === ADMIN_USER_ID) {
+  //   adminMenuBtn.style.display = 'block';
+  //   editTournamentBtn.style.display = 'inline-block'; // Or 'block' based on preferred layout
+  // } else {
+  //   adminMenuBtn.style.display = 'none';
+  //   editTournamentBtn.style.display = 'none';
+  // }
 
   // Нова логіка для кнопки "Зареєструватись"
   const registerBtn = document.getElementById("registerBtn");
