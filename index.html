@@ -1174,15 +1174,16 @@ if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
 console.log("currentUserId:", currentUserId, "ADMIN_USER_ID:", ADMIN_USER_ID);
 
   // Елементи адмін-меню та кнопки редагування
-  const adminMenuBtn = document.getElementById("adminMenuBtn");
-  const editTournamentBtn = document.getElementById("editTournamentBtn");
+  const adminButtonContainer = document.getElementById('admin-button-container');
+const editTournamentBtn = document.getElementById('editTournamentBtn');
 
-  // Показуємо адмін-меню і кнопку редагування тільки для адміна
-  if (userId === 5806282517) {
-    // Показати кнопку лише для цього ID
-    document.getElementById('admin-button-container').style.display = 'block';
-    document.getElementById('editTournamentBtn').style.display = 'block';
-  }
+if (userId === 5806282517) {
+  if (adminButtonContainer) adminButtonContainer.style.display = 'block';
+  if (editTournamentBtn) editTournamentBtn.style.display = 'block';
+} else {
+  if (adminButtonContainer) adminButtonContainer.style.display = 'none';
+  if (editTournamentBtn) editTournamentBtn.style.display = 'none';
+}
 
 
   // Define the admin user ID (already defined, keeping for context if it was defined again)
