@@ -1163,7 +1163,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const navItems = document.querySelectorAll(".nav-item");
 
   // Define the admin user ID
-  const ADMIN_USER_ID = "5806282517";
+
   let currentUserId = ""; // Initialize as empty string, not admin by default
 
 if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -1176,13 +1176,14 @@ console.log("currentUserId:", currentUserId, "ADMIN_USER_ID:", ADMIN_USER_ID);
   const editTournamentBtn = document.getElementById("editTournamentBtn");
 
   // Показуємо адмін-меню і кнопку редагування тільки для адміна
-  if (Number(currentUserId) === 5806282517) {
-  adminMenuBtn.style.display = 'block';
-  editTournamentBtn.style.display = 'inline-block';
-} else {
-  adminMenuBtn.style.display = 'none';
-  editTournamentBtn.style.display = 'none';
-}
+  const userId = tg.initDataUnsafe?.user?.id;
+
+  if (userId === 5806282517) {
+    // Показати кнопку лише для цього ID
+    // document.getElementById('admin-button-container').style.display = 'block';
+    document.getElementById('adminMenuBtn').style.display = 'block';
+    document.getElementById('editTournamentBtn').style.display = 'block';
+  }
 
 
   // Define the admin user ID (already defined, keeping for context if it was defined again)
