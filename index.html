@@ -1517,6 +1517,14 @@ Nagrody są rozdzielane wewnątrz drużyny samodzielnie lub po równo (domyślni
 document.getElementById("doneBtn")?.addEventListener("click", (e) => {
   e.preventDefault();
 
+  // Перевірка на заповненість полів
+  const standoffNick = document.getElementById("standoffNick").value.trim();
+  const standoffId = document.getElementById("standoffId").value.trim();
+  if (!standoffNick || !standoffId) {
+    alert("Будь ласка, заповніть усі обов'язкові поля.");
+    return;
+  }
+
 const profile = JSON.parse(localStorage.getItem("userProfile") || "{}");
 const team = JSON.parse(localStorage.getItem("userTeam") || "{}");
 
