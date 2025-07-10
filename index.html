@@ -1154,6 +1154,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const userUsername = user?.username || "";
   console.log('userId:', userId, typeof userId, 'username:', userUsername);
 
+  
+
   // Адмін-кнопка
   const adminButtonContainer = document.getElementById('admin-button-container');
   const adminMenuBtn = document.getElementById('adminMenuBtn');
@@ -1510,6 +1512,106 @@ Nagrody są rozdzielane wewnątrz drużyny samodzielnie lub po równo (domyślni
     const tgIdInput = document.getElementById("tgId");
     if (tgUsernameInput) tgUsernameInput.value = userUsername ? "@" + userUsername : "";
     if (tgIdInput) tgIdInput.value = userId || "";
+
+    // Після натискання "Готово" — зберегти профіль
+document.getElementById("doneBtn")?.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const profileData = {
+    standoffNick: document.getElementById("standoffNick").value,
+    standoffId: document.getElementById("standoffId").value,
+    tgUsername: document.getElementById("tgUsername")?.value || "",
+    tgId: document.getElementById("tgId")?.value || "",
+  };
+
+  localStorage.setItem("userProfile", JSON.stringify(profileData));
+  document.getElementById("successMsg").style.display = "block";
+  document.getElementById("createTeamBtn").style.display = "block";
+  document.getElementById("profileForm").style.display = "none";
+  document.getElementById("profileNick").textContent = profileData.standoffNick;
+  document.getElementById("profileId").textContent = profileData.standoffId;
+  document.getElementById("playerProfile").style.display = "block";
+});
+
+// Збереження команди
+document.getElementById("teamDoneBtn")?.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const teamData = {
+    tag: document.getElementById("teamTag").value,
+    name: document.getElementById("teamName").value,
+    players: []
+  };
+
+  for (let i = 1; i <= 5; i++) {
+    teamData.players.push({
+      id: document.getElementById(`main${i}Id`).value,
+      nick: document.getElementById(`main${i}Nick`).value,
+      tg: document.getElementById(`main${i}Tg`).value
+    });
+  }
+
+  localStorage.setItem("userTeam", JSON.stringify(teamData));
+  document.getElementById("teamSuccessMsg").style.display = "block";
+  document.getElementById("teamForm").style.display = "none";
+  showTeamInfo();
+});
+
+// Показ команди
+function showTeamInfo() {
+  const data = JSON.parse(localStorage.getItem("userTeam") || "{}");
+  if (!data?.name) return;
+
+  const container = document.createElement("div");
+  container.style.marginTop = "20px";
+  container.style.borderTop = "1px solid #555";
+  container.style.paddingTop = "10px";
+
+  container.innerHTML = `
+    <div class="player-profile-title">Моя команда</div>
+    <div><b>[${data.tag}] ${data.name}</b></div>
+    <ul style="margin:10px 0; padding-left:20px;">
+      ${data.players.map(p => `<li>${p.nick} (${p.tg})</li>`).join("")}
+    </ul>
+    <button class="done-btn" id="editTeamBtn">Змінити</button>
+  `;
+
+  const profileSection = document.getElementById("playerProfile");
+  profileSection.appendChild(container);
+
+  document.getElementById("editTeamBtn")?.addEventListener("click", () => {
+    loadTeamIntoForm();
+    document.getElementById("teamForm").style.display = "block";
+    document.getElementById("teamSuccessMsg").style.display = "none";
+  });
+}
+
+// Заповнення форми редагування
+function loadTeamIntoForm() {
+  const data = JSON.parse(localStorage.getItem("userTeam") || "{}");
+  if (!data?.name) return;
+
+  document.getElementById("teamTag").value = data.tag;
+  document.getElementById("teamName").value = data.name;
+
+  data.players.forEach((p, i) => {
+    const idx = i + 1;
+    document.getElementById(`main${idx}Id`).value = p.id;
+    document.getElementById(`main${idx}Nick`).value = p.nick;
+    document.getElementById(`main${idx}Tg`).value = p.tg;
+  });
+}
+
+// При відкритті — відображення збереженого профілю/команди
+const savedProfile = JSON.parse(localStorage.getItem("userProfile") || "{}");
+if (savedProfile.standoffNick) {
+  document.getElementById("profileNick").textContent = savedProfile.standoffNick;
+  document.getElementById("profileId").textContent = savedProfile.standoffId;
+  document.getElementById("playerProfile").style.display = "block";
+  document.getElementById("createTeamBtn").style.display = "block";
+}
+showTeamInfo();
+
   });
 });
 </script>
