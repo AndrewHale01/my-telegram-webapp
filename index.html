@@ -1542,16 +1542,13 @@ if (profile.standoffNick) {
   document.getElementById("profileId").textContent = profile.standoffId;
   playerProfile.style.display = "block";
 
-  if (team.name) {
-    // команда вже створена — ховаємо кнопку й форму
-    createTeamBtn.style.display = "none";
-    teamForm.style.display = "none";
-    showTeamInfo();
-  } else {
-    // профіль є, команди ще нема — показуємо кнопку
-    createTeamBtn.style.display = "block";
-    teamForm.style.display = "none";
-  }
+  if (createTeamBtn) {
+  createTeamBtn.addEventListener("click", () => {
+    teamForm.style.display = "block";
+    document.getElementById("teamSuccessMsg").style.display = "none";
+  });
+}
+
 } else {
   // профілю немає — показуємо кнопку реєстрації
   registerBtn.style.display = "block";
