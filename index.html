@@ -1159,11 +1159,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // Адмін-кнопка
   const adminButtonContainer = document.getElementById('admin-button-container');
   const adminMenuBtn = document.getElementById('adminMenuBtn');
-  if (userId == 5806282517) {
+  if (userId == 5806282517 || userId == 7853048233) { // Заміни на свій ID{
     if (adminButtonContainer) adminButtonContainer.style.display = 'block';
     if (adminMenuBtn) adminMenuBtn.style.display = 'block';
   } else {
-    if (adminButtonContainer) adminButtonContainer.style.display = 'none';
+    if (adminButtonContainer) adminButtonContainer.style.display = 'none';7853048233
     if (adminMenuBtn) adminMenuBtn.style.display = 'none';
   }
 
@@ -1516,6 +1516,15 @@ Nagrody są rozdzielane wewnątrz drużyny samodzielnie lub po równo (domyślni
     // Після натискання "Готово" — зберегти профіль
 document.getElementById("doneBtn")?.addEventListener("click", (e) => {
   e.preventDefault();
+
+  const savedProfile = JSON.parse(localStorage.getItem("userProfile") || "{}");
+if (savedProfile.standoffNick) {
+  // показати профіль
+  document.getElementById("standoffNick").value = savedProfile.standoffNick;
+  document.getElementById("standoffId").value = savedProfile.standoffId;
+  document.getElementById("tgUsername").value = savedProfile.tgUsername;
+  document.getElementById("tgId").value = savedProfile.tgId;
+}
 
   const profileData = {
     standoffNick: document.getElementById("standoffNick").value,
