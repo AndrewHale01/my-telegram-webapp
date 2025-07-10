@@ -955,8 +955,8 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
 <div class="tournament-list" id="tournamentList">
 <div class="tournament-card" onclick="showSection('tournamentViewSection'); loadTournamentDetails('RFORZ Grand Prix');">
-<h4 data-i18n="tournament_name_grand_prix">RFORZ Grand Prix</h4>
-<p data-i18n="tournament1desc">Старт: 1 липня. Призовий фонд: 5000₴</p>
+  <h4>RFORZ Grand Prix</h4>
+  <p>Старт: 1 липня. Призовий фонд: 5000₴</p>
 </div>
 </div>
 </div>
@@ -1028,45 +1028,35 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 <div class="section" id="tournamentViewSection">
   <button class="back-btn" data-i18n="back_to_home" id="backToHomeFromTournamentView" onclick="showSection('homeSection')">← Головна</button>
   <button class="back-btn" data-i18n="edit_tournament_btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати турнір</button>
-<h2 data-i18n="tournament_view_title">Перегляд Турніру</h2>
-<div class="tournament-section-content">
-<div id="userTournamentView">
-<div class="tournament-tabs" id="tournamentTabs">
-<div class="tournament-tab active" data-tab="groupStage" data-i18n="group_stage_tab">Груповий етап</div>
-<div class="tournament-tab" data-tab="playoffs" data-i18n="playoffs_tab">Плей-офф</div>
-</div>
-<div class="tournament-tab-content active" id="groupStageContent">
-<h3 data-i18n="group_a_title">Група A</h3>
-<table class="group-table">
-<thead>
-<tr>
-<th data-i18n="team_column">Команда</th>
-<th data-i18n="wins_column">Перемоги</th>
-<th data-i18n="losses_column">Поразки</th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
-<h3 data-i18n="group_b_title" style="margin-top:20px;">Група B</h3>
-<table class="group-table">
-<thead>
-<tr>
-<th data-i18n="team_column">Команда</th>
-<th data-i18n="wins_column">Перемоги</th>
-<th data-i18n="losses_column">Поразки</th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
-</div>
-<div class="tournament-tab-content" id="playoffsContent">
-<h3 data-i18n="playoffs_title">Плей-офф</h3>
-<div class="playoff-bracket">
-<p data-i18n="playoff_bracket_text">Тут буде сітка плей-офф.</p>
-<img alt="Playoff Bracket" src="playoff_bracket_placeholder.png"/>
-</div>
+  <h2 data-i18n="tournament_view_title">Перегляд Турніру</h2>
+  <h3 id="tournamentViewTitle"></h3> <!-- ДОДАЙ ЦЕ -->
+  <p id="tournamentViewDescription"></p> <!-- ДОДАЙ ЦЕ -->
+  <div class="tournament-section-content">
+    <div id="userTournamentView">
+      <div class="tournament-tabs" id="tournamentTabs">
+        <div class="tournament-tab active" data-tab="groupStage" data-i18n="group_stage_tab">Груповий етап</div>
+        <div class="tournament-tab" data-tab="playoffs" data-i18n="playoffs_tab">Плей-офф</div>
+      </div>
+      <div class="tournament-tab-content active" id="groupStageContent">
+        <table class="group-table">
+          <thead>
+            <tr>
+              <th data-i18n="team_column">Команда</th>
+              <th data-i18n="wins_column">Перемоги</th>
+              <th data-i18n="losses_column">Поразки</th>
+            </tr>
+          </thead>
+          <tbody id="tournamentViewRankingBody"></tbody> <!-- ДОДАЙ ЦЕ -->
+        </table>
+      </div>
+      <div class="tournament-tab-content" id="playoffsContent">
+        <h3 data-i18n="playoffs_title">Плей-офф</h3>
+        <div class="playoff-bracket">
+          <p data-i18n="playoff_bracket_text">Тут буде сітка плей-офф.</p>
+          <img alt="Playoff Bracket" src="playoff_bracket_placeholder.png"/>
+        </div>
+      </div>
+    </div>
 </div>
 </div>
 <div id="adminTournamentView" style="display:none;">
@@ -1159,41 +1149,54 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const tg = window.Telegram?.WebApp;
-  if (tg) tg.expand();
+  tg?.ready();
 
   const sections = document.querySelectorAll(".section");
   const navItems = document.querySelectorAll(".nav-item");
-
-  // Define the admin user ID
-  const userId = tg.initDataUnsafe?.user?.id;
-  let currentUserId = ""; // Initialize as empty string, not admin by default
-
-if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-  currentUserId = tg.initDataUnsafe.user.id.toString();
-}
-console.log("currentUserId:", currentUserId, "ADMIN_USER_ID:", ADMIN_USER_ID);
-
-  // Елементи адмін-меню та кнопки редагування
   const adminButtonContainer = document.getElementById('admin-button-container');
-const editTournamentBtn = document.getElementById('editTournamentBtn');
+  const editTournamentBtn = document.getElementById('editTournamentBtn');
+  const adminMenuBtn = document.getElementById("admin-button"); // ДОДАЙ ЦЕ
+  const userId = tg?.initDataUnsafe?.user?.id;
 
-if (userId === 5806282517) {
-  if (adminButtonContainer) adminButtonContainer.style.display = 'block';
-  if (editTournamentBtn) editTournamentBtn.style.display = 'block';
-} else {
-  if (adminButtonContainer) adminButtonContainer.style.display = 'none';
-  if (editTournamentBtn) editTournamentBtn.style.display = 'none';
+  if (userId === 5806282517) {
+    if (adminButtonContainer) adminButtonContainer.style.display = 'block';
+    if (editTournamentBtn) editTournamentBtn.style.display = 'block';
+    if (adminMenuBtn) adminMenuBtn.style.display = 'block'; // ДОДАЙ ЦЕ
+  } else {
+    if (adminButtonContainer) adminButtonContainer.style.display = 'none';
+    if (editTournamentBtn) editTournamentBtn.style.display = 'none';
+    if (adminMenuBtn) adminMenuBtn.style.display = 'none'; // ДОДАЙ ЦЕ
+  }
+
+// ...всередині document.addEventListener("DOMContentLoaded", function () { ... })
+
+function showSection(sectionId) {
+  sections.forEach(s => s.classList.remove("active"));
+  document.getElementById(sectionId)?.classList.add("active");
+
+  navItems.forEach(n => n.classList.remove("active"));
+  const correspondingNavItem = document.getElementById(sectionId.replace("Section", "Nav"));
+  if (correspondingNavItem) {
+    correspondingNavItem.classList.add("active");
+  }
 }
 
+// Показати головну секцію при завантаженні
+showSection('homeSection');
 
-  // Define the admin user ID (already defined, keeping for context if it was defined again)
-  // const ADMIN_USER_ID = "5806282517";
+// Додати обробники подій для навігаційних кнопок
+navItems.forEach(nav => {
+  nav.addEventListener('click', () => {
+    const sectionId = nav.id.replace('Nav', 'Section');
+    showSection(sectionId);
+  });
+});
 
-  // Existing code for translation dictionary
-  const translation_dictionary = {
-    "home": {
-      "uk": "Головна",
-      "en": "Home",
+// Existing code for translation dictionary
+const translation_dictionary = {
+  "home": {
+    "uk": "Головна",
+    "en": "Home",
       "ru": "Главная",
       "pl": "Strona Główna"
     },
@@ -1788,15 +1791,15 @@ if (userId === 5806282517) {
   };
 
   // Навігація футера
-  navItems.forEach(item => {
-    item.addEventListener("click", () => {
-      const targetId = item.id.replace("Nav", "Section");
-      sections.forEach(s => s.classList.remove("active"));
-      navItems.forEach(n => n.classList.remove("active"));
-      document.getElementById(targetId)?.classList.add("active");
-      item.classList.add("active");
-    });
-  });
+  // navItems.forEach(item => {
+  //   item.addEventListener("click", () => {
+  //     const targetId = item.id.replace("Nav", "Section");
+  //     sections.forEach(s => s.classList.remove("active"));
+  //     navItems.forEach(n => n.classList.remove("active"));
+  //     document.getElementById(targetId)?.classList.add("active");
+  //     item.classList.add("active");
+  //   });
+  // });
 
   // Попапи
   const langBtn = document.getElementById("langBtn");
@@ -1852,6 +1855,41 @@ if (userId === 5806282517) {
       }
   });
 
+function loadTournamentDetails(name) {
+  showSection('tournamentViewSection');
+  // Завжди показувати userTournamentView і ховати adminTournamentView
+  if (userTournamentView && adminTournamentView) {
+    userTournamentView.style.display = 'block';
+    adminTournamentView.style.display = 'none';
+  }
+
+  document.getElementById('tournamentViewTitle').textContent = name;
+  document.getElementById('tournamentViewDescription').textContent = "Це опис турніру " + name + ".";
+
+  // Заповнити таблицю
+  const tbody = document.getElementById("tournamentViewRankingBody");
+  if (tbody) {
+    tbody.innerHTML = "";
+    const sampleTeams = [
+      { name: "Команда А", wins: 3, losses: 1 },
+      { name: "Команда Б", wins: 2, losses: 2 },
+      { name: "Команда В", wins: 1, losses: 3 }
+    ];
+    sampleTeams.forEach(team => {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${team.name}</td><td>${team.wins}</td><td>${team.losses}</td>`;
+      tbody.appendChild(row);
+    });
+  }
+
+  // Скинути вкладки
+  const tournamentTabs = document.querySelectorAll("#tournamentViewSection .tournament-tab");
+  const tournamentTabContents = document.querySelectorAll("#tournamentViewSection .tournament-tab-content");
+  tournamentTabs.forEach(t => t.classList.remove("active"));
+  tournamentTabContents.forEach(c => c.classList.remove("active"));
+  if (tournamentTabs[0]) tournamentTabs[0].classList.add("active");
+  if (tournamentTabContents[0]) tournamentTabContents[0].classList.add("active");
+}
   // Show user view when leaving admin view (e.g., clicking back button)
   document.getElementById('backToHomeFromTournamentView')?.addEventListener('click', () => {
       if (userTournamentView && adminTournamentView) {
@@ -1975,48 +2013,57 @@ if (userId === 5806282517) {
 
   // Ensure home section is shown on load
   showSection('homeSection');
-});
+;
 
 // Функція для показу секції (з попереднього коду)
-function showSection(sectionId) {
-    const sections = document.querySelectorAll(".section");
-    sections.forEach(s => s.classList.remove("active"));
-    document.getElementById(sectionId)?.classList.add("active");
+// function showSection(sectionId) {
+//     const sections = document.querySelectorAll(".section");
+//     sections.forEach(s => s.classList.remove("active"));
+//     document.getElementById(sectionId)?.classList.add("active");
 
-    const navItems = document.querySelectorAll(".nav-item");
-    navItems.forEach(n => n.classList.remove("active"));
-    const correspondingNavItem = document.getElementById(sectionId.replace("Section", "Nav"));
-    if (correspondingNavItem) {
-        correspondingNavItem.classList.add("active");
-    }
-}
+//     const navItems = document.querySelectorAll(".nav-item");
+//     navItems.forEach(n => n.classList.remove("active"));
+//     const correspondingNavItem = document.getElementById(sectionId.replace("Section", "Nav"));
+//     if (correspondingNavItem) {
+//         correspondingNavItem.classList.add("active");
+//     }
+// }
 
 // Функція для завантаження деталей турніру, оновлена для підтримки перекладу
-function loadTournamentDetails(name) {
-  showSection('tournamentViewSection'); // Changed to tournamentViewSection as per new structure
+// function openTournamentModal(tournamentName) {
+//   document.getElementById('tournamentModal').style.display = 'block';
+//   // Якщо треба — підставляй назву турніру у заголовок або дані
+// }
 
-  document.getElementById('tournamentDetailsTitle').textContent = name;
-  const currentLang = localStorage.getItem("language") || "uk";
-  const translation_dictionary = { // Re-define or pass the dictionary if not global
-    "tournament_details_desc": {
-        "uk": "Це опис турніру",
-        "en": "This is a description of the tournament",
-        "ru": "Это описание турнира",
-        "pl": "To jest opis turnieju"
-    }
-  };
-  document.getElementById('tournamentDetailsDescription').textContent =
-      (translation_dictionary["tournament_details_desc"] && translation_dictionary["tournament_details_desc"][currentLang]) ?
-      translation_dictionary["tournament_details_desc"][currentLang] + " " + name + "." :
-      "Це опис турніру " + name + "."; // Fallback
+// function closeTournamentModal() {
+//   document.getElementById('tournamentModal').style.display = 'none';
+// }
 
-  const rankingBody = document.getElementById('tournamentRankingBody');
-  rankingBody.innerHTML = `
-    <tr><td>1</td><td>Команда Alpha</td><td>9</td></tr>
-    <tr><td>2</td><td>Команда Beta</td><td>6</td></tr>
-    <tr><td>3</td><td>Команда Gamma</td><td>3</td></tr>
-  `;
-}
+// function switchTournamentTab(tab) {
+//   document.querySelectorAll('#tournamentModal .tab').forEach(el => el.classList.remove('active'));
+//   document.querySelectorAll('#tournamentModal .tab-content').forEach(el => el.classList.remove('active'));
+
+//   document.querySelector(`#tournamentModal .tab[onclick*="${tab}"]`).classList.add('active');
+//   document.getElementById(`tab-${tab}`).classList.add('active');
+// }
+
+  // Очистити та додати умовний список команд у рейтинг
+//   const tbody = document.getElementById("tournamentViewRankingBody");
+//   if (tbody) {
+//     tbody.innerHTML = "";
+//     const sampleTeams = [
+//       { name: "Команда А", wins: 3, losses: 1 },
+//       { name: "Команда Б", wins: 2, losses: 2 },
+//       { name: "Команда В", wins: 1, losses: 3 }
+//     ];
+//     sampleTeams.forEach(team => {
+//       const row = document.createElement("tr");
+//       row.innerHTML = `<td>${team.name}</td><td>${team.wins}</td><td>${team.losses}</td>`;
+//       tbody.appendChild(row);
+//     });
+//   }
+// }
+})
 </script>
 </body>
 </html>
