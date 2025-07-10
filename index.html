@@ -1524,36 +1524,34 @@ const playerProfile = document.getElementById("playerProfile");
 const createTeamBtn = document.getElementById("createTeamBtn");
 const profileForm = document.getElementById("profileForm");
 const teamForm = document.getElementById("teamForm");
-document.getElementById("createTeamBtn")?.addEventListener("click", () => {
-  document.getElementById("teamForm").style.display = "block";
-  document.getElementById("teamSuccessMsg").style.display = "none";
-});
-
+const registerBtn = document.getElementById("registerBtn");
 
 if (profile.standoffNick) {
-  // профіль є
+  // профіль є — ховаємо кнопку реєстрації й форму
+  registerBtn.style.display = "none";
+  profileForm.style.display = "none";
   document.getElementById("profileNick").textContent = profile.standoffNick;
   document.getElementById("profileId").textContent = profile.standoffId;
   playerProfile.style.display = "block";
-  
+
   if (team.name) {
-    // якщо вже є і команда — нічого не показувати, лише випадаючий блок
+    // команда вже створена — ховаємо кнопку й форму
     createTeamBtn.style.display = "none";
-    profileForm.style.display = "none";
     teamForm.style.display = "none";
     showTeamInfo();
   } else {
-    // профіль є, але команди немає
+    // профіль є, команди ще нема — показуємо кнопку
     createTeamBtn.style.display = "block";
-    profileForm.style.display = "none";
     teamForm.style.display = "none";
   }
 } else {
-  // профілю немає — показати форму
-  profileForm.style.display = "flex";
+  // профілю немає — показуємо кнопку реєстрації
+  registerBtn.style.display = "block";
+  profileForm.style.display = "none";
   createTeamBtn.style.display = "none";
   teamForm.style.display = "none";
 }
+
 
   const profileData = {
     standoffNick: document.getElementById("standoffNick").value,
