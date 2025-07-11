@@ -854,14 +854,21 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 <button class="done-btn" data-i18n="done" id="doneBtn" type="submit">Готово</button>
 </form>
 <div class="player-profile" id="playerProfile">
-<div class="player-profile-title" data-i18n="profile">Профіль гравця</div>
-<div class="player-profile-row">
-<span data-i18n="standoff_nick">Нік в Standoff</span>: <span id="profileNick"></span>
+  <div class="player-profile-title" data-i18n="profile">Профіль гравця</div>
+  <div class="player-profile-row">
+    <span data-i18n="standoff_nick">Нік в Standoff</span>: <span id="profileNick"></span>
+  </div>
+  <div class="player-profile-row">
+    <span data-i18n="standoff_id">ID в Standoff</span>: <span id="profileId"></span>
+  </div>
+  <div class="player-profile-row">
+    <span data-i18n="tg_user">Telegram Username</span>: <span id="profileTgUsername"></span>
+  </div>
+  <div class="player-profile-row">
+    <span data-i18n="tg_id">Telegram ID</span>: <span id="profileTgId"></span>
+  </div>
 </div>
-<div class="player-profile-row">
-<span data-i18n="standoff_id">ID в Standoff</span>: <span id="profileId"></span>
-</div>
-</div>
+
 <button class="create-team-btn" data-i18n="create_team" id="createTeamBtn" style="display:none;">Створити команду</button>
 <div class="success-message" data-i18n="profile_saved" id="successMsg" style="display:none;">Профіль збережено!</div>
 <form class="team-form" id="teamForm" style="display:none;">
@@ -876,43 +883,50 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 <div class="team-player-title" data-i18n="main_player1">Гравець 1 (капітан)</div>
 <input data-i18n-placeholder="player_id_ph" id="main1Id" placeholder="ID в Standoff 2" required="" type="text"/>
 <input data-i18n-placeholder="player_nick_ph" id="main1Nick" placeholder="Нікнейм" required="" type="text"/>
-<input data-i18n-placeholder="player_tg_ph" id="main1Tg" placeholder="Telegram" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_ph" id="main1Tg" placeholder="Telegram_Username" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_id_ph" id="main1TgId" placeholder="Telegram ID" required="" type="text"/>
 </div>
 <div class="team-player-block">
 <div class="team-player-title" data-i18n="main_player2">Гравець 2 (основний)</div>
 <input data-i18n-placeholder="player_id_ph" id="main2Id" placeholder="ID в Standoff 2" required="" type="text"/>
 <input data-i18n-placeholder="player_nick_ph" id="main2Nick" placeholder="Нікнейм" required="" type="text"/>
-<input data-i18n-placeholder="player_tg_ph" id="main2Tg" placeholder="Telegram" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_ph" id="main2Tg" placeholder="Telegram_Username" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_id_ph" id="main2TgId" placeholder="Telegram ID" required="" type="text"/>
 </div>
 <div class="team-player-block">
 <div class="team-player-title" data-i18n="main_player3">Гравець 3 (основний)</div>
 <input data-i18n-placeholder="player_id_ph" id="main3Id" placeholder="ID в Standoff 2" required="" type="text"/>
 <input data-i18n-placeholder="player_nick_ph" id="main3Nick" placeholder="Нікнейм" required="" type="text"/>
-<input data-i18n-placeholder="player_tg_ph" id="main3Tg" placeholder="Telegram" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_ph" id="main3Tg" placeholder="Telegram_Username" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_id_ph" id="main3TgId" placeholder="Telegram ID" required="" type="text"/>
 </div>
 <div class="team-player-block">
 <div class="team-player-title" data-i18n="main_player4">Гравець 4 (основний)</div>
 <input data-i18n-placeholder="player_id_ph" id="main4Id" placeholder="ID в Standoff 2" required="" type="text"/>
 <input data-i18n-placeholder="player_nick_ph" id="main4Nick" placeholder="Нікнейм" required="" type="text"/>
-<input data-i18n-placeholder="player_tg_ph" id="main4Tg" placeholder="Telegram" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_ph" id="main4Tg" placeholder="Telegram_Username" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_id_ph" id="main4TgId" placeholder="Telegram ID" required="" type="text"/>
 </div>
 <div class="team-player-block">
 <div class="team-player-title" data-i18n="main_player5">Гравець 5 (основний)</div>
 <input data-i18n-placeholder="player_id_ph" id="main5Id" placeholder="ID в Standoff 2" required="" type="text"/>
 <input data-i18n-placeholder="player_nick_ph" id="main5Nick" placeholder="Нікнейм" required="" type="text"/>
-<input data-i18n-placeholder="player_tg_ph" id="main5Tg" placeholder="Telegram" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_ph" id="main5Tg" placeholder="Telegram_Username" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_id_ph" id="main5TgId" placeholder="Telegram ID" required="" type="text"/>
 </div>
 <div class="team-player-block">
 <div class="team-player-title" data-i18n="spare_player1">Гравець 6 (запасний)</div>
 <input data-i18n-placeholder="player_id_ph" id="spare1Id" placeholder="ID в Standoff 2" required="" type="text"/>
 <input data-i18n-placeholder="player_nick_ph" id="spare1Nick" placeholder="Нікнейм" required="" type="text"/>
-<input data-i18n-placeholder="player_tg_ph" id="spare1Tg" placeholder="Telegram" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_ph" id="spare1Tg" placeholder="Telegram_Username" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_id_ph" id="spare1TgId" placeholder="Telegram ID" required="" type="text"/>
 </div>
 <div class="team-player-block">
 <div class="team-player-title" data-i18n="spare_player2">Гравець 7 (запасний)</div>
 <input data-i18n-placeholder="player_id_ph" id="spare2Id" placeholder="ID в Standoff 2" required="" type="text"/>
 <input data-i18n-placeholder="player_nick_ph" id="spare2Nick" placeholder="Нікнейм" required="" type="text"/>
-<input data-i18n-placeholder="player_tg_ph" id="spare2Tg" placeholder="Telegram" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_ph" id="spare2Tg" placeholder="Telegram_Username" required="" type="text"/>
+<input data-i18n-placeholder="player_tg_id_ph" id="spare2TgId" placeholder="Telegram ID" required="" type="text"/>
 </div>
 <button class="done-btn" data-i18n="team_done" id="teamDoneBtn" type="submit">Готово</button>
 </form>
@@ -1167,8 +1181,10 @@ if (savedProfile.standoffNick) {
   // Показуємо збережений профіль
   document.getElementById("profileNick").textContent = savedProfile.standoffNick;
   document.getElementById("profileId").textContent = savedProfile.standoffId;
-  document.getElementById("tgUsername").textContent = savedProfile.tgUsername;
-  document.getElementById("tgId").textContent = savedProfile.tgId;
+  document.getElementById("profileTgUsername").textContent = savedProfile.tgUsername;
+  document.getElementById("profileTgId").textContent = savedProfile.tgId;
+
+  
   playerProfile.style.display = "block";
 
   // Команда ще не створена — показуємо кнопку
@@ -1619,8 +1635,6 @@ if (profile.standoffNick) {
   document.getElementById("profileForm").style.display = "none";
   document.getElementById("profileNick").textContent = profileData.standoffNick;
   document.getElementById("profileId").textContent = profileData.standoffId;
-  document.getElementById("tgUsername").textContent = profileData.tgUsername || "Не вказано";
-  document.getElementById("tgId").textContent = profileData.tgId || "Не вказано";
   document.getElementById("playerProfile").style.display = "block";
 });
 
