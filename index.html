@@ -1167,6 +1167,8 @@ if (savedProfile.standoffNick) {
   // Показуємо збережений профіль
   document.getElementById("profileNick").textContent = savedProfile.standoffNick;
   document.getElementById("profileId").textContent = savedProfile.standoffId;
+  document.getElementById("tgUsername").textContent = savedProfile.tgUsername;
+  document.getElementById("tgId").textContent = savedProfile.tgId;
   playerProfile.style.display = "block";
 
   // Команда ще не створена — показуємо кнопку
@@ -1617,6 +1619,8 @@ if (profile.standoffNick) {
   document.getElementById("profileForm").style.display = "none";
   document.getElementById("profileNick").textContent = profileData.standoffNick;
   document.getElementById("profileId").textContent = profileData.standoffId;
+  document.getElementById("tgUsername").textContent = profileData.tgUsername || "Не вказано";
+  document.getElementById("tgId").textContent = profileData.tgId || "Не вказано";
   document.getElementById("playerProfile").style.display = "block";
 });
 
