@@ -811,7 +811,26 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
     .submit-btn:hover {
       background: #008f82;
     }
-  </style>
+  
+.register-tournament-btn {
+  background: #007ba7;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  margin: 16px auto 0;
+  text-align: center;
+  transition: background 0.2s ease-in-out;
+}
+.register-tournament-btn:hover {
+  background: #006994;
+}
+
+</style>
 </head>
 <body>
 <div class="topbar">
@@ -976,8 +995,14 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 
 <div class="section" id="tournamentViewSection">
     <h2 id="currentTournamentTitle" style="text-align: center; color: #00bfae; margin-bottom: 20px;"></h2>
-    <button class="back-btn" onclick="showSection('homeSection')">← Назад на Головну</button>
-    <button class="register-tournament-btn" id="registerTournamentBtn">Зареєструватись</button>
+    
+<div style="display: flex; justify-content: left; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+  <button class="back-btn" onclick="showSection('homeSection')">← Назад на Головну</button>
+  <button class="back-btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати</button>
+</div>
+
+    <br>
+<button class="register-tournament-btn" id="registerTournamentBtn">Зареєструватись</button>
 
     <div class="tournament-tabs">
         <div class="tournament-tab active" onclick="showTournamentTab('groupStageTab')">Груповий етап</div>
@@ -1311,6 +1336,12 @@ if (createTeamBtn) {
     });
   });
   showSection('homeSection');
+
+  const editBtn = document.getElementById("editTournamentBtn");
+  if (userId == 5806282517 || userId == 7853048233) {
+    if (editBtn) editBtn.style.display = "inline-block";
+  }
+
   // Робимо функції доступними глобально
   window.showSection = showSection;
   window.loadTournamentDetails = loadTournamentDetails;
