@@ -966,8 +966,62 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 <div class="tournaments-title" data-i18n="tournaments">Турніри</div>
 <div class="tournament-list" id="tournamentList">
 <div class="tournament-card" onclick="showSection('tournamentViewSection'); loadTournamentDetails('RFORZ Grand Prix');">
-  <h4>RFORZ Grand Prix</h4>
-  <p>Старт: 1 липня. Призовий фонд: 5000₴</p>
+<h4>RFORZ Grand Prix</h4>
+<p>Старт: 1 липня. Призовий фонд: 5000₴</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section" id="tournamentViewSection">
+    <h2 id="currentTournamentTitle" style="text-align: center; color: #00bfae; margin-bottom: 20px;"></h2>
+    <button class="back-btn" onclick="showSection('homeSection')">← Назад на Головну</button>
+    <button class="register-tournament-btn" id="registerTournamentBtn">Зареєструватись</button>
+
+    <div class="tournament-tabs">
+        <div class="tournament-tab active" onclick="showTournamentTab('groupStageTab')">Груповий етап</div>
+        <div class="tournament-tab" onclick="showTournamentTab('playoffTab')">Плей-офф</div>
+    </div>
+
+    <div id="groupStageTab" class="tournament-tab-content active">
+        <h3 style="color:#00bfae; margin-top: 20px;">Група А</h3>
+        <table class="group-table">
+            <thead>
+                <tr>
+                    <th>Команда</th>
+                    <th>В</th>
+                    <th>П</th>
+                    <th>Р</th>
+                    <th>Очки</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <h3 style="color:#00bfae; margin-top: 30px;">Група В</h3>
+        <table class="group-table">
+            <thead>
+                <tr>
+                    <th>Команда</th>
+                    <th>В</th>
+                    <th>П</th>
+                    <th>Р</th>
+                    <th>Очки</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="playoffTab" class="tournament-tab-content">
+        <h3 style="color:#00bfae; margin-top: 20px;">Сітка плей-офф</h3>
+        <div class="playoff-bracket">
+            <p>Тут буде розміщено сітка плей-офф.</p>
+            </div>
+    </div>
 </div>
 </div>
 </div>
@@ -1036,7 +1090,7 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 </div>
 </div>
 
-<div class="section" id="tournamentViewSection">
+<div class="section" id="tournamentAdminViewSection">
   <button class="back-btn" data-i18n="back_to_home" id="backToHomeFromTournamentView" onclick="showSection('homeSection')">← Головна</button>
   <button class="back-btn" data-i18n="edit_tournament_btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати турнір</button>
   <h2 data-i18n="tournament_view_title">Перегляд Турніру</h2>
@@ -1218,7 +1272,16 @@ if (createTeamBtn) {
   const userUsername = user?.username || "";
   console.log('userId:', userId, typeof userId, 'username:', userUsername);
 
-  
+  function showSection(sectionId) {
+  console.log('⏩ Відкривається секція:', sectionId);
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.classList.add("active");
+    window.scrollTo({ top: section.offsetTop, behavior: "smooth" });
+  }
+}
+
 
   // Адмін-кнопка
   const adminButtonContainer = document.getElementById('admin-button-container');
@@ -1248,6 +1311,32 @@ if (createTeamBtn) {
     });
   });
   showSection('homeSection');
+  // Робимо функції доступними глобально
+  window.showSection = showSection;
+  window.loadTournamentDetails = loadTournamentDetails;
+  window.showTournamentTab = showTournamentTab;
+
+
+  // Function to load tournament details (example data)
+    function loadTournamentDetails(tournamentName) {
+        const titleElement = document.getElementById('currentTournamentTitle');
+        titleElement.textContent = tournamentName; // Set the tournament title
+        showTournamentTab('groupStageTab'); // Default to Group Stage tab when opening tournament details
+    }
+
+    // Function to switch tournament tabs
+    function showTournamentTab(tabId) {
+        document.querySelectorAll('.tournament-tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        document.getElementById(tabId).classList.add('active');
+
+        document.querySelectorAll('.tournament-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelector(`.tournament-tab[onclick*="${tabId}"]`).classList.add('active');
+    }
+
 
   // Локалізація (розширена)
   const translation = {
