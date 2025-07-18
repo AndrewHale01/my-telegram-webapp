@@ -1153,27 +1153,24 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 </div>
 </div>
 <!-- === Сторінка редагування турніру для адміна === -->
-<div id="adminTournamentView" style="display:none; padding: 20px;">
-  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-    <!-- Ліва панель з категоріями -->
-    <div style="flex: 1;">
-      <h3>Редагування турніру</h3>
-      <ul style="list-style: none; padding: 0;">
-        <li><button onclick="alert('Редагування групового етапу');" style="margin-bottom: 10px;">📊 Редагувати груповий етап</button></li>
-        <li><button onclick="alert('Редагування плей-офф');" style="margin-bottom: 10px;">🏆 Редагувати плей-офф</button></li>
-        <li><button onclick="alert('Дискваліфікація команди');" style="margin-bottom: 10px;">🚫 Дискваліфікувати команду</button></li>
-        <li><button onclick="alert('Попередження команді');" style="margin-bottom: 10px;">⚠️ Видати попередження команді</button></li>
-      </ul>
-    </div>
-
-    <!-- Права панель з кнопкою видалення -->
-    <div style="text-align: right;">
-      <button id="deleteTournamentBtn" style="background-color: #d32f2f; color: white; border: none; padding: 10px 15px; border-radius: 5px; font-size: 16px; cursor: pointer;">
-        🗑️ Видалити турнір
-      </button>
+<div id="adminModal" class="modal" style="display: none;">
+  <div class="modal-content" style="max-width: 600px; margin: 10% auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); position: relative;">
+    <span class="close" id="adminModalClose" style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 20px;">❌</span>
+    <h2 style="margin-top: 0;">Редагування турніру</h2>
+    <div style="display: flex; justify-content: space-between; gap: 20px;">
+      <div style="flex: 1;">
+        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Груповий етап')">📊 Редагувати груповий етап</button>
+        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Плей-офф')">🏆 Редагувати плей-офф</button>
+        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Дискваліфікація')">🚫 Дискваліфікувати команду</button>
+        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Попередження')">⚠️ Видати попередження</button>
+      </div>
+      <div style="text-align: right;">
+        <button id="deleteTournamentBtn" style="background-color: #d32f2f; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-size: 16px; cursor: pointer;">🗑️ Видалити турнір</button>
+      </div>
     </div>
   </div>
 </div>
+
 
 <div id="adminTournamentView" style="display:none;">
 <h3 data-i18n="edit_tournament_admin_title">Редагування Турніру</h3>
