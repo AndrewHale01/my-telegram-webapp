@@ -1152,6 +1152,29 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
     </div>
 </div>
 </div>
+<!-- === Сторінка редагування турніру для адміна === -->
+<div id="adminTournamentView" style="display:none; padding: 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <!-- Ліва панель з категоріями -->
+    <div style="flex: 1;">
+      <h3>Редагування турніру</h3>
+      <ul style="list-style: none; padding: 0;">
+        <li><button onclick="alert('Редагування групового етапу');" style="margin-bottom: 10px;">📊 Редагувати груповий етап</button></li>
+        <li><button onclick="alert('Редагування плей-офф');" style="margin-bottom: 10px;">🏆 Редагувати плей-офф</button></li>
+        <li><button onclick="alert('Дискваліфікація команди');" style="margin-bottom: 10px;">🚫 Дискваліфікувати команду</button></li>
+        <li><button onclick="alert('Попередження команді');" style="margin-bottom: 10px;">⚠️ Видати попередження команді</button></li>
+      </ul>
+    </div>
+
+    <!-- Права панель з кнопкою видалення -->
+    <div style="text-align: right;">
+      <button id="deleteTournamentBtn" style="background-color: #d32f2f; color: white; border: none; padding: 10px 15px; border-radius: 5px; font-size: 16px; cursor: pointer;">
+        🗑️ Видалити турнір
+      </button>
+    </div>
+  </div>
+</div>
+
 <div id="adminTournamentView" style="display:none;">
 <h3 data-i18n="edit_tournament_admin_title">Редагування Турніру</h3>
 <button data-i18n="add_team_btn" id="addTeamBtn">Додати команду</button>
@@ -1340,10 +1363,34 @@ if (createTeamBtn) {
   });
   showSection('homeSection');
 
+
+  // const userId = 5806282517; // ← або заміни на свій
+
   const editBtn = document.getElementById("editTournamentBtn");
-  if (userId == 5806282517 || userId == 7853048233) {
+  const deleteBtn = document.getElementById("deleteTournamentBtn");
+
+  if (userId === 5806282517 || userId === 7853048233) {
     if (editBtn) editBtn.style.display = "inline-block";
   }
+
+  editBtn?.addEventListener("click", () => {
+    document.getElementById("adminTournamentView").style.display = "block";
+  });
+
+  deleteBtn?.addEventListener("click", () => {
+    const confirmDelete = confirm("Ти впевнений, що хочеш видалити цей турнір?");
+    if (confirmDelete) {
+      const tournamentName = document.getElementById("tournamentViewTitle")?.textContent;
+      if (tournamentName) {
+        const allTournaments = JSON.parse(localStorage.getItem("tournaments") || "[]");
+        const updated = allTournaments.filter(t => t.name !== tournamentName);
+        localStorage.setItem("tournaments", JSON.stringify(updated));
+        alert("Турнір видалено.");
+        location.reload();
+      }
+    }
+  });
+
 
   // Робимо функції доступними глобально
   window.showSection = showSection;
