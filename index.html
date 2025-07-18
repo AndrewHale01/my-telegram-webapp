@@ -1153,9 +1153,6 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 </div>
 </div>
 <div id="adminTournamentView" style="display:none;">
-
-<button id="deleteTournamentBtn" style="background:#d32f2f; color:#fff; border:none; padding:10px 20px; border-radius:8px; font-size:0.95rem; cursor:pointer; margin-top:20px; display:none;">🗑️ Видалити турнір</button>
-
 <h3 data-i18n="edit_tournament_admin_title">Редагування Турніру</h3>
 <button data-i18n="add_team_btn" id="addTeamBtn">Додати команду</button>
 <button data-i18n="remove_team_btn" id="removeTeamBtn">Видалити команду</button>
@@ -1346,27 +1343,6 @@ if (createTeamBtn) {
   const editBtn = document.getElementById("editTournamentBtn");
   if (userId == 5806282517 || userId == 7853048233) {
     if (editBtn) editBtn.style.display = "inline-block";
-
-  const deleteBtn = document.getElementById("deleteTournamentBtn");
-  if ((userId == 5806282517 || userId == 7853048233) && deleteBtn) {
-    deleteBtn.style.display = "inline-block";
-  }
-
-  deleteBtn?.addEventListener("click", () => {
-    const confirmDelete = confirm("Ти впевнений, що хочеш видалити цей турнір?");
-    if (confirmDelete) {
-      const tournamentName = document.getElementById("tournamentViewTitle")?.textContent;
-      if (tournamentName) {
-        const allTournaments = JSON.parse(localStorage.getItem("tournaments") || "[]");
-        const updated = allTournaments.filter(t => t.name !== tournamentName);
-        localStorage.setItem("tournaments", JSON.stringify(updated));
-        alert("Турнір видалено.");
-        showSection("homeSection");
-        location.reload();
-      }
-    }
-  });
-
   }
 
   // Робимо функції доступними глобально
@@ -2139,5 +2115,42 @@ function loadTeamIntoForm() {
   });
 });
 </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const editBtn = document.getElementById("editTournamentBtn");
+      const deleteBtn = document.getElementById("deleteTournamentBtn");
+
+      if (userId === 5806282517 || userId === 7853048233) {
+        if (editBtn) editBtn.style.display = "inline-block";
+        if (deleteBtn) deleteBtn.style.display = "inline-block";
+      }
+
+      editBtn?.addEventListener("click", () => {
+        showSection("adminTournamentView");
+        const title = document.getElementById("tournamentViewTitle")?.textContent;
+        if (title) {
+          const input = document.getElementById("adminTournamentName");
+          if (input) input.value = title;
+        }
+      });
+
+      deleteBtn?.addEventListener("click", () => {
+        const confirmDelete = confirm("Ти впевнений, що хочеш видалити цей турнір?");
+        if (confirmDelete) {
+          const tournamentName = document.getElementById("tournamentViewTitle")?.textContent;
+          if (tournamentName) {
+            const allTournaments = JSON.parse(localStorage.getItem("tournaments") || "[]");
+            const updated = allTournaments.filter(t => t.name !== tournamentName);
+            localStorage.setItem("tournaments", JSON.stringify(updated));
+            alert("Турнір видалено.");
+            showSection("homeSection");
+            location.reload();
+          }
+        }
+      });
+    });
+  </script>
 </body>
+
 </html>
