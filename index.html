@@ -2135,5 +2135,133 @@ function loadTeamIntoForm() {
   });
 </script>
 
+
+<script>
+  const userId = 5806282517;
+
+  if (userId === 5806282517 || userId === 7853048233) {
+    const modalHTML = `
+      <div id="adminModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 700px; margin: 5% auto; background: #fdfdfd; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); position: relative;">
+          <span class="close" id="adminModalClose" style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 20px;">❌</span>
+          <h2 style="margin-top: 0;">Редагування турніру</h2>
+          <div style="display: flex; justify-content: space-between; gap: 20px;">
+            <div style="flex: 1;">
+              <button class="admin-action-btn" id="editGroupStageBtn">📊 Редагувати груповий етап</button>
+              <button class="admin-action-btn" onclick="alert('Плей-офф ще в розробці')">🏆 Редагувати плей-офф</button>
+              <button class="admin-action-btn" onclick="alert('Попередження ще в розробці')">⚠️ Видати попередження</button>
+            </div>
+            <div style="text-align: right;">
+              <button id="deleteTournamentBtn" style="background-color: #d32f2f; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-size: 16px; cursor: pointer;">🗑️ Видалити турнір</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Вікно групового етапу -->
+      <div id="groupStageWindow" style="display:none; background: #fff; padding: 20px; max-width: 800px; margin: 30px auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h3>Груповий етап</h3>
+        <div style="margin-bottom: 20px;">
+          <button class="admin-subaction-btn">➕ Додати команду</button>
+          <button class="admin-subaction-btn">🎯 Видати очки</button>
+          <button class="admin-subaction-btn">🏁 Надати статус матчу</button>
+        </div>
+        <div style="display: flex; gap: 20px;">
+          <div style="flex:1;">
+            <h4>Група A</h4>
+            <table border="1" width="100%">
+              <tr><th>Команда</th><th>Очки</th><th>Матчі</th></tr>
+              <tr><td>Alpha</td><td>6</td><td>3</td></tr>
+              <tr><td>Bravo</td><td>3</td><td>3</td></tr>
+            </table>
+          </div>
+          <div style="flex:1;">
+            <h4>Група B</h4>
+            <table border="1" width="100%">
+              <tr><th>Команда</th><th>Очки</th><th>Матчі</th></tr>
+              <tr><td>Charlie</td><td>4</td><td>3</td></tr>
+              <tr><td>Delta</td><td>2</td><td>3</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML("beforeend", modalHTML);
+
+    const editBtn = document.getElementById("editTournamentBtn");
+    const modal = document.getElementById("adminModal");
+    const closeBtn = document.getElementById("adminModalClose");
+    const deleteBtn = document.getElementById("deleteTournamentBtn");
+    const groupBtn = () => document.getElementById("editGroupStageBtn");
+    const groupStageWindow = () => document.getElementById("groupStageWindow");
+
+    editBtn?.addEventListener("click", () => {
+      modal.style.display = "block";
+    });
+
+    window.addEventListener("click", (event) => {
+      if (event.target === modal) modal.style.display = "none";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (e.target.id === "adminModalClose") modal.style.display = "none";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (e.target.id === "editGroupStageBtn") {
+        modal.style.display = "none";
+        groupStageWindow().style.display = "block";
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if (e.target.id === "deleteTournamentBtn") {
+        const confirmDelete = confirm("Ти впевнений, що хочеш видалити цей турнір?");
+        if (confirmDelete) {
+          const title = document.getElementById("tournamentViewTitle")?.textContent;
+          if (title) {
+            const allTournaments = JSON.parse(localStorage.getItem("tournaments") || "[]");
+            const updated = allTournaments.filter(t => t.name !== title);
+            localStorage.setItem("tournaments", JSON.stringify(updated));
+            alert("Турнір видалено.");
+            location.reload();
+          }
+        }
+      }
+    });
+  }
+</script>
+
+<style>
+  .admin-action-btn {
+    display: block;
+    width: 100%;
+    background: #2196f3;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .admin-action-btn:hover {
+    background: #1976d2;
+  }
+  .admin-subaction-btn {
+    background: #eeeeee;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    margin-right: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .admin-subaction-btn:hover {
+    background: #ddd;
+  }
+</style>
+
 </body>
 </html>
