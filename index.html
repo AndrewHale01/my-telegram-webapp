@@ -2136,5 +2136,29 @@ function loadTeamIntoForm() {
 </script>
 
 <script src="admin-functions.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tg = window.Telegram?.WebApp;
+  tg?.ready();
+  const user = tg?.initDataUnsafe?.user;
+  const userId = user?.id;
+
+  const isAdmin = userId === 5806282517 || userId === 7853048233;
+  const editTournamentBtn = document.getElementById("editTournamentBtn");
+
+  if (editTournamentBtn) {
+    if (isAdmin) {
+      editTournamentBtn.style.display = "inline-block";
+      editTournamentBtn.addEventListener("click", () => {
+        alert("Редагування турніру доступне лише адміністраторам.");
+      });
+    } else {
+      editTournamentBtn.style.display = "none";
+    }
+  }
+});
+</script>
+
 </body>
 </html>
