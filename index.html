@@ -2150,9 +2150,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (editTournamentBtn) {
     if (isAdmin) {
       editTournamentBtn.style.display = "inline-block";
-      editTournamentBtn.addEventListener("click", () => {
-        alert("Редагування турніру доступне лише адміністраторам.");
-      });
     } else {
       editTournamentBtn.style.display = "none";
     }
