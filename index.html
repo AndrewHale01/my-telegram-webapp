@@ -2157,5 +2157,74 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const groupStageBtn = document.getElementById("editGroupStageBtn");
+  const groupStageTable = document.getElementById("groupStageTable");
+  const groupStageActions = document.getElementById("groupStageActions");
+
+  groupStageBtn?.addEventListener("click", () => {
+    if (groupStageTable) groupStageTable.style.display = "table";
+    if (groupStageActions) groupStageActions.style.display = "block";
+  });
+
+  document.getElementById("addTeamBtn")?.addEventListener("click", () => {
+    const tbody = document.querySelector("#groupStageTable tbody");
+    if (tbody) {
+      const row = tbody.insertRow();
+      row.insertCell().textContent = "Нова команда";
+      row.insertCell().textContent = "0";
+      row.insertCell().textContent = "0";
+      row.insertCell().textContent = "0";
+    }
+  });
+
+  document.getElementById("removeTeamBtn")?.addEventListener("click", () => {
+    const tbody = document.querySelector("#groupStageTable tbody");
+    if (tbody && tbody.rows.length > 0) {
+      tbody.deleteRow(tbody.rows.length - 1);
+    }
+  });
+
+  document.getElementById("disqualifyTeamBtn")?.addEventListener("click", () => {
+    const name = prompt("Введіть назву команди для дискваліфікації:");
+    if (!name) return;
+    const rows = document.querySelectorAll("#groupStageTable tbody tr");
+    rows.forEach(row => {
+      if (row.cells[0]?.textContent.trim() === name.trim()) {
+        row.style.backgroundColor = "#fca5a5";
+        row.insertCell().textContent = "DSQ";
+      }
+    });
+  });
+
+  document.getElementById("editTeamBtn")?.addEventListener("click", () => {
+    const name = prompt("Введіть назву команди для редагування:");
+    const newName = prompt("Нове ім’я команди:");
+    if (!name || !newName) return;
+    const rows = document.querySelectorAll("#groupStageTable tbody tr");
+    rows.forEach(row => {
+      if (row.cells[0]?.textContent.trim() === name.trim()) {
+        row.cells[0].textContent = newName;
+      }
+    });
+  });
+
+  document.getElementById("assignPointsBtn")?.addEventListener("click", () => {
+    const name = prompt("Назва команди для нарахування очок:");
+    const points = prompt("Скільки очок додати?", "3");
+    if (!name || isNaN(points)) return;
+    const rows = document.querySelectorAll("#groupStageTable tbody tr");
+    rows.forEach(row => {
+      if (row.cells[0]?.textContent.trim() === name.trim()) {
+        const current = parseInt(row.cells[1].textContent) || 0;
+        row.cells[1].textContent = current + parseInt(points);
+      }
+    });
+  });
+});
+</script>
+
 </body>
 </html>
