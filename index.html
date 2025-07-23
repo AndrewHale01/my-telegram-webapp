@@ -4,7 +4,6 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Telegram WebApp</title>
-<!-- Google Analytics (можна видалити якщо не потрібно) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZN665FNYF"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
@@ -689,6 +688,13 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
     .group-table tbody tr:nth-child(odd) {
         background-color: #222;
     }
+    /* Style for disqualified teams */
+    .group-table tbody tr.disqualified {
+        background-color: #555; /* Darker background */
+        color: #aaa; /* Lighter text */
+        text-decoration: line-through; /* Strikethrough */
+    }
+
 
     .playoff-bracket {
         margin-top: 20px;
@@ -853,6 +859,7 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 <h2 data-i18n="admin_menu_title" id="adminMenuTitle">Адмін-меню</h2>
 <div style="display:flex; flex-direction:column; gap:12px;">
 <button data-i18n="create_tournament_btn" id="createTournamentAdminBtn">➕ Створити турнір</button>
+<button data-i18n="edit_group_stage_btn" id="editGroupStageBtn">⚙️ Редагувати груповий етап</button>
 <button data-i18n="ban_user" id="banUserBtn">🚫 Заблокувати користувача</button>
 <button data-i18n="unban_user" id="unbanUserBtn">✅ Розблокувати користувача</button>
 <button data-i18n="give_prize" id="givePrizeBtn">🏆 Видати приз</button>
@@ -992,65 +999,39 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 </div>
 </div>
 </div>
-
 <div class="section" id="tournamentViewSection">
-    <h2 id="currentTournamentTitle" style="text-align: center; color: #00bfae; margin-bottom: 20px;"></h2>
-    
+<h2 id="currentTournamentTitle" style="text-align: center; color: #00bfae; margin-bottom: 20px;"></h2>
 <div style="display: flex; justify-content: left; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-  <button class="back-btn" onclick="showSection('homeSection')">← Назад на Головну</button>
-  <button class="back-btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати</button>
+<button class="back-btn" onclick="showSection('homeSection')">← Назад на Головну</button>
+<button class="back-btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати</button>
 </div>
-
-    <br>
+<br>
 <button class="register-tournament-btn" id="registerTournamentBtn">Зареєструватись</button>
-
-    <div class="tournament-tabs">
-        <div class="tournament-tab active" onclick="showTournamentTab('groupStageTab')">Груповий етап</div>
-        <div class="tournament-tab" onclick="showTournamentTab('playoffTab')">Плей-офф</div>
-    </div>
-
-    <div id="groupStageTab" class="tournament-tab-content active">
-        <h3 style="color:#00bfae; margin-top: 20px;">Група А</h3>
-        <table class="group-table">
-            <thead>
-                <tr>
-                    <th>Команда</th>
-                    <th>М</th>
-                    <th>В</th>
-                    <th>Н</th>
-                    <th>П</th>
-                    <th>О</th>
-
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>  
-
-        <h3 style="color:#00bfae; margin-top: 30px;">Група В</h3>
-        <table class="group-table">
-            <thead>
-                <tr>
-                    <th>Команда</th>
-                    <th>М</th>
-                    <th>В</th>
-                    <th>Н</th>
-                    <th>П</th>
-                    <th>О</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-
-    <div id="playoffTab" class="tournament-tab-content">
-        <h3 style="color:#00bfae; margin-top: 20px;">Сітка плей-офф</h3>
-        <div class="playoff-bracket">
-            <p>Тут буде розміщено сітка плей-офф.</p>
-            </div>
-    </div>
+<div class="tournament-tabs">
+<div class="tournament-tab active" onclick="showTournamentTab('groupStageTab')">Груповий етап</div>
+<div class="tournament-tab" onclick="showTournamentTab('playoffTab')">Плей-офф</div>
 </div>
+<div id="groupStageTab" class="tournament-tab-content active">
+<h3 style="color:#00bfae; margin-top: 20px;">Таблиця групового етапу</h3>
+<table class="group-table" id="groupStageTable">
+<thead>
+<tr>
+<th>Команда</th>
+<th>М</th>
+<th>В</th>
+<th>Н</th>
+<th>П</th>
+<th>О</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+<div id="playoffTab" class="tournament-tab-content">
+<h3 style="color:#00bfae; margin-top: 20px;">Сітка плей-офф</h3>
+<div class="playoff-bracket">
+<p>Тут буде розміщено сітка плей-офф.</p>
 </div>
 </div>
 </div>
@@ -1072,7 +1053,8 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 </div>
 <div class="section" id="awardsSection">
 <h2 data-i18n="awards_title">Нагороди</h2>
-<div id="awardsList"> </div>
+<div id="awardsList">
+</div>
 </div>
 <div class="modal" id="createTournamentModal">
 <div class="modal-content">
@@ -1118,1103 +1100,864 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 </div>
 </div>
 
-<div class="section" id="tournamentAdminViewSection">
-  <button class="back-btn" data-i18n="back_to_home" id="backToHomeFromTournamentView" onclick="showSection('homeSection')">← Головна</button>
-  <button class="back-btn" data-i18n="edit_tournament_btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати турнір</button>
-  <h2 data-i18n="tournament_view_title">Перегляд Турніру</h2>
-  <h3 id="tournamentViewTitle"></h3> <!-- ДОДАЙ ЦЕ -->
-  <p id="tournamentViewDescription"></p> <!-- ДОДАЙ ЦЕ -->
-  <div class="tournament-section-content">
-    <div id="userTournamentView">
-      <div class="tournament-tabs" id="tournamentTabs">
-        <div class="tournament-tab active" data-tab="groupStage" data-i18n="group_stage_tab">Груповий етап</div>
-        <div class="tournament-tab" data-tab="playoffs" data-i18n="playoffs_tab">Плей-офф</div>
-      </div>
-      <div class="tournament-tab-content active" id="groupStageContent">
-        <table class="group-table">
-          <thead>
-            <tr>
-              <th data-i18n="team_column">Команда</th>
-              <th data-i18n="wins_column">Перемоги</th>
-              <th data-i18n="losses_column">Поразки</th>
-            </tr>
-          </thead>
-          <tbody id="tournamentViewRankingBody"></tbody> <!-- ДОДАЙ ЦЕ -->
-        </table>
-      </div>
-      <div class="tournament-tab-content" id="playoffsContent">
-        <h3 data-i18n="playoffs_title">Плей-офф</h3>
-        <div class="playoff-bracket">
-          <p data-i18n="playoff_bracket_text">Тут буде сітка плей-офф.</p>
-          <img alt="Playoff Bracket" src="playoff_bracket_placeholder.png"/>
+<div class="modal" id="groupStageAdminModal">
+    <div class="modal-content">
+        <span class="close-button" id="closeGroupStageAdminModalBtn">×</span>
+        <h2 data-i18n="group_stage_admin_title">Редагувати груповий етап</h2>
+
+        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom: 20px;">
+            <button data-i18n="add_team_btn" id="addTeamBtn">➕ Додати команду</button>
+            <button data-i18n="delete_team_btn" id="deleteTeamBtn">🗑️ Видалити команду</button>
+            <button data-i18n="disqualify_team_gs_btn" id="disqualifyTeamGSBtn">❌ Дискваліфікувати команду</button>
+            <button data-i18n="award_points_btn" id="awardPointsBtn">📊 Видати очки команді</button>
+            <button class="submit-btn" data-i18n="save_changes_btn" id="saveGroupStageDataBtn">Зберегти зміни</button>
         </div>
-      </div>
+
+        <h3 style="color:#00bfae; margin-top: 20px;">Таблиця групового етапу</h3>
+        <table class="group-table" id="groupStageAdminTable">
+            <thead>
+                <tr>
+                    <th>Команда</th>
+                    <th>М</th>
+                    <th>В</th>
+                    <th>Н</th>
+                    <th>П</th>
+                    <th>О</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
     </div>
 </div>
-</div>
 
-<div class="section" id="tournamentDetailsSection">
-<button class="back-btn" data-i18n="back_to_awards" id="backToAwardsBtn" style="display:none;">← Нагороди</button>
-<button class="back-btn" data-i18n="back_to_tournaments" id="backToTournamentsBtn">← Турніри</button>
-<h2 data-i18n="tournament_details_title" id="tournamentDetailsTitle">Деталі Турніру</h2>
-<p data-i18n="tournament_details_desc" id="tournamentDetailsDescription"></p>
-<div class="ranking-table">
-<h3 data-i18n="ranking_title">Рейтинг</h3>
-<table>
+<div class="section" id="tournamentAdminViewSection">
+<button class="back-btn" data-i18n="back_to_home" id="backToHomeFromTournamentView" onclick="showSection('homeSection')">← Головна</button>
+<button class="back-btn" data-i18n="edit_tournament_btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати турнір</button>
+<h2 data-i18n="tournament_view_title">Перегляд Турніру</h2>
+<h3 id="tournamentViewTitle"></h3> <p id="tournamentViewDescription"></p> <div class="tournament-section-content">
+<div id="userTournamentView">
+<div class="tournament-tabs" id="tournamentTabs">
+<div class="tournament-tab active" data-tab="groupStage" data-i18n="group_stage_tab">Груповий етап</div>
+<div class="tournament-tab" data-tab="playoffs" data-i18n="playoffs_tab">Плей-офф</div>
+</div>
+<div class="tournament-tab-content active" id="groupStageContent">
+<table class="group-table">
 <thead>
 <tr>
-<th data-i18n="place_column">Місце</th>
 <th data-i18n="team_column">Команда</th>
-<th data-i18n="points_column">Очки</th>
+<th data-i18n="wins_column">Перемоги</th>
+<th data-i18n="losses_column">Поразки</th>
 </tr>
 </thead>
-<tbody id="tournamentRankingBody">
-</tbody>
-</table>
+<tbody id="tournamentViewRankingBody"></tbody> </table>
 </div>
-<button class="btn-primary" data-i18n="participate_btn" id="participateBtn">Взяти участь</button>
-</div>
-<div class="section" id="supportSection">
-<h2 data-i18n="support_title">Підтримка</h2>
-<p data-i18n="support_text">Якщо у вас виникли питання або проблеми, будь ласка, зв'яжіться з нашою службою підтримки.</p>
-<p data-i18n="support_contact_info">Ви можете зв'язатися з нами через Telegram: <a href="https://t.me/your_support_username" target="_blank">@your_support_username</a></p>
-</div>
-<div class="bottom-nav">
-<div class="nav-item active" id="homeNav">
-<span>🏠</span>
-<span data-i18n="home">Головна</span>
-</div>
-<div class="nav-item" id="rulesNav">
-<span>📜</span>
-<span data-i18n="rules">Правила</span>
-</div>
-<div class="nav-item" id="awardsNav">
-<span>🏆</span>
-<span data-i18n="awards">Нагороди</span>
-</div>
-<div class="nav-item" id="supportNav">
-<span>🤖</span>
-<span data-i18n="support">Підтримка</span>
+<div class="tournament-tab-content" id="playoffsContent">
+<h3 data-i18n="playoffs_title">Плей-офф</h3>
+<div class="playoff-bracket">
+<p data-i18n="playoff_bracket_text">Тут буде сітка плей-офф.</p>
+<img alt="Playoff Bracket" src="playoff_bracket_placeholder.jpg"/>
 </div>
 </div>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</div>
+</div>
+</div>
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  // Telegram WebApp userId
-  const tg = window.Telegram?.WebApp;
-  tg?.ready();
-  // --- Перевірка чи профіль уже збережений ---
-const savedProfile = JSON.parse(localStorage.getItem("userProfile") || "{}");
-const savedTeam = JSON.parse(localStorage.getItem("userTeam") || "{}");
+  // Припустимо, що Telegram WebApp API вже завантажено та доступне через window.Telegram.WebApp
+  // Додамо заглушку, якщо це не так, для локального тестування
+  if (!window.Telegram || !window.Telegram.WebApp) {
+    window.Telegram = {
+      WebApp: {
+        initDataUnsafe: {
+          user: {
+            id: 123456789,
+            first_name: 'Тестовий',
+            last_name: 'Користувач',
+            username: 'test_user'
+          }
+        },
+        ready: () => console.log('WebApp ready (stub)'),
+        expand: () => console.log('WebApp expanded (stub)'),
+        close: () => console.log('WebApp closed (stub)'),
+        MainButton: {
+          isVisible: false,
+          text: '',
+          onClick: null,
+          show: () => {},
+          hide: () => {},
+          setText: () => {},
+          setParams: () => {}
+        },
+        isExpanded: true
+      }
+    };
+  }
 
-const registerBtn = document.getElementById("registerBtn");
-const profileForm = document.getElementById("profileForm");
-const playerProfile = document.getElementById("playerProfile");
-const createTeamBtn = document.getElementById("createTeamBtn");
-const teamForm = document.getElementById("teamForm");
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
 
-if (savedProfile.standoffNick) {
-  // Приховуємо реєстрацію
-  registerBtn.style.display = "none";
-  profileForm.style.display = "none";
+  const user = Telegram.WebApp.initDataUnsafe.user;
+  const isAdmin = user && user.id === 123456789; // Замініть на реальний ID адміна
 
-  // Показуємо збережений профіль
-  document.getElementById("profileNick").textContent = savedProfile.standoffNick;
-  document.getElementById("profileId").textContent = savedProfile.standoffId;
-  document.getElementById("profileTgUsername").textContent = savedProfile.tgUsername;
-  document.getElementById("profileTgId").textContent = savedProfile.tgId;
 
-  
-  playerProfile.style.display = "block";
+  // Об'єкт для локалізації
+  const i18n = {
+    'uk': {
+      'admin_menu_title': 'Адмін-меню',
+      'create_tournament_btn': '➕ Створити турнір',
+      'ban_user': '🚫 Заблокувати користувача',
+      'unban_user': '✅ Розблокувати користувача',
+      'give_prize': '🏆 Видати приз',
+      'disqualify_team': '❌ Дискваліфікувати команду',
+      'profile': 'Профіль гравця',
+      'register': 'Зареєструватись',
+      'standoff_nick': 'Нік в Standoff',
+      'standoff_id': 'ID в Standoff',
+      'done': 'Готово',
+      'profile_saved': 'Профіль збережено!',
+      'create_team': 'Створити команду',
+      'team_avatar': 'Аватарка команди',
+      'team_tag': 'Тег команди',
+      'team_tag_ph': 'Наприклад, RFZ',
+      'team_name': 'Назва команди',
+      'team_name_ph': 'Наприклад, RFORZ ESPORTS',
+      'main_player1': 'Гравець 1 (капітан)',
+      'main_player2': 'Гравець 2 (основний)',
+      'main_player3': 'Гравець 3 (основний)',
+      'main_player4': 'Гравець 4 (основний)',
+      'main_player5': 'Гравець 5 (основний)',
+      'spare_player1': 'Гравець 6 (запасний)',
+      'spare_player2': 'Гравець 7 (запасний)',
+      'player_id_ph': 'ID в Standoff 2',
+      'player_nick_ph': 'Нікнейм',
+      'player_tg_ph': 'Telegram_Username',
+      'player_tg_id_ph': 'Telegram ID',
+      'team_done': 'Готово',
+      'team_created': 'Команду створено!',
+      'notification_title': 'Сповіщення',
+      'clear_notifications_btn': 'Очистити',
+      'news': 'Новини',
+      'news1title': '🔔 Оновлення',
+      'news1desc': 'Ми додали підтримку англійської мови та оновили інтерфейс.',
+      'news2title': '🏆 Турніри оновлено',
+      'news2desc': 'Тепер усі турніри доступні на окремій сторінці.',
+      'disciplines': 'Дисципліни',
+      'discipline_standoff2': 'Standoff 2',
+      'tournaments': 'Турніри',
+      'rules_main_title': 'Правила турніру',
+      'rules_1v1_summary': 'Турніри 1х1',
+      'rules_1v1_text': '• Гравці грають один проти одного.<br/> • Раунди проходять до 3 перемог.<br/> • Перемагає той, хто перший виграє 3 раунди.',
+      'rules_2v2_summary': 'Турніри 2х2',
+      'rules_2v2_text': '• Команди по 2 гравці.<br/> • Успіх залежить від координації та злагодженої гри.<br/> • Перші до 5 перемог — проходять далі.<br/> • Якщо рахунок 5-5, грається додатковий раунд.',
+      'rules_5v5_standoff_summary': 'Турніри 5х5',
+      'rules_5v5_full': '• Команди по 5 гравців.<br/> • Грають на спеціально підготовлених картах.<br/> • Комунікація та стратегія є ключовими для перемоги.<br/> • Турнір може складатися з групового етапу та плей-офф.',
+      'awards_title': 'Нагороди',
+      'create_tournament_modal_title': 'Створити Турнір',
+      'tournament_name_label': 'Назва Турніру',
+      'tournament_discipline_label': 'Дисципліна',
+      'tournament_format_label': 'Формат',
+      'start_date_label': 'Дата початку',
+      'end_date_label': 'Дата закінчення',
+      'prize_pool_label': 'Призовий Фонд',
+      'description_label': 'Опис',
+      'create_btn_submit': 'Створити',
+      'back_to_home': '← Головна',
+      'edit_tournament_btn': '✏️ Редагувати турнір',
+      'tournament_view_title': 'Перегляд Турніру',
+      'group_stage_tab': 'Груповий етап',
+      'playoffs_tab': 'Плей-офф',
+      'team_column': 'Команда',
+      'wins_column': 'Перемоги',
+      'losses_column': 'Поразки',
+      'playoffs_title': 'Плей-офф',
+      'playoff_bracket_text': 'Тут буде сітка плей-офф.',
+      'tg_user': 'Telegram Username',
+      'tg_id': 'Telegram ID',
+      'edit_group_stage_btn': '⚙️ Редагувати груповий етап',
+      'group_stage_admin_title': 'Редагувати груповий етап',
+      'add_team_btn': '➕ Додати команду',
+      'delete_team_btn': '🗑️ Видалити команду',
+      'disqualify_team_gs_btn': '❌ Дискваліфікувати команду',
+      'award_points_btn': '📊 Видати очки команді',
+      'save_changes_btn': 'Зберегти зміни'
+    },
+    'en': {
+      'admin_menu_title': 'Admin Menu',
+      'create_tournament_btn': '➕ Create Tournament',
+      'ban_user': '🚫 Ban User',
+      'unban_user': '✅ Unban User',
+      'give_prize': '🏆 Give Prize',
+      'disqualify_team': '❌ Disqualify Team',
+      'profile': 'Player Profile',
+      'register': 'Register',
+      'standoff_nick': 'Standoff Nickname',
+      'standoff_id': 'Standoff ID',
+      'done': 'Done',
+      'profile_saved': 'Profile saved!',
+      'create_team': 'Create Team',
+      'team_avatar': 'Team Avatar',
+      'team_tag': 'Team Tag',
+      'team_tag_ph': 'e.g., RFZ',
+      'team_name': 'Team Name',
+      'team_name_ph': 'e.g., RFORZ ESPORTS',
+      'main_player1': 'Player 1 (Captain)',
+      'main_player2': 'Player 2 (Main)',
+      'main_player3': 'Player 3 (Main)',
+      'main_player4': 'Player 4 (Main)',
+      'main_player5': 'Player 5 (Main)',
+      'spare_player1': 'Player 6 (Substitute)',
+      'spare_player2': 'Player 7 (Substitute)',
+      'player_id_ph': 'Standoff 2 ID',
+      'player_nick_ph': 'Nickname',
+      'player_tg_ph': 'Telegram Username',
+      'player_tg_id_ph': 'Telegram ID',
+      'team_done': 'Done',
+      'team_created': 'Team created!',
+      'notification_title': 'Notifications',
+      'clear_notifications_btn': 'Clear',
+      'news': 'News',
+      'news1title': '🔔 Update',
+      'news1desc': 'We have added English language support and updated the interface.',
+      'news2title': '🏆 Tournaments Updated',
+      'news2desc': 'All tournaments are now available on a separate page.',
+      'disciplines': 'Disciplines',
+      'discipline_standoff2': 'Standoff 2',
+      'tournaments': 'Tournaments',
+      'rules_main_title': 'Tournament Rules',
+      'rules_1v1_summary': '1v1 Tournaments',
+      'rules_1v1_text': '• Players play against each other.<br/> • Rounds are played until 3 wins.<br/> • The first to win 3 rounds wins.',
+      'rules_2v2_summary': '2v2 Tournaments',
+      'rules_2v2_text': '• Teams of 2 players.<br/> • Success depends on coordination and well-coordinated play.<br/> • First to 5 wins — proceed.<br/> • If the score is 5-5, an additional round is played.',
+      'rules_5v5_standoff_summary': '5v5 Tournaments',
+      'rules_5v5_full': '• Teams of 5 players.<br/> • Played on specially prepared maps.<br/> • Communication and strategy are key to victory.<br/> • The tournament can consist of a group stage and playoffs.',
+      'awards_title': 'Awards',
+      'create_tournament_modal_title': 'Create Tournament',
+      'tournament_name_label': 'Tournament Name',
+      'tournament_discipline_label': 'Discipline',
+      'tournament_format_label': 'Format',
+      'start_date_label': 'Start Date',
+      'end_date_label': 'End Date',
+      'prize_pool_label': 'Prize Pool',
+      'description_label': 'Description',
+      'create_btn_submit': 'Create',
+      'back_to_home': '← Home',
+      'edit_tournament_btn': '✏️ Edit Tournament',
+      'tournament_view_title': 'Tournament View',
+      'group_stage_tab': 'Group Stage',
+      'playoffs_tab': 'Playoffs',
+      'team_column': 'Team',
+      'wins_column': 'Wins',
+      'losses_column': 'Losses',
+      'playoffs_title': 'Playoffs',
+      'playoff_bracket_text': 'The playoff bracket will be placed here.',
+      'tg_user': 'Telegram Username',
+      'tg_id': 'Telegram ID',
+      'edit_group_stage_btn': '⚙️ Edit Group Stage',
+      'group_stage_admin_title': 'Edit Group Stage',
+      'add_team_btn': '➕ Add Team',
+      'delete_team_btn': '🗑️ Delete Team',
+      'disqualify_team_gs_btn': '❌ Disqualify Team',
+      'award_points_btn': '📊 Award Points to Team',
+      'save_changes_btn': 'Save Changes'
+    },
+    'ru': {
+      'admin_menu_title': 'Админ-меню',
+      'create_tournament_btn': '➕ Создать турнир',
+      'ban_user': '🚫 Заблокировать пользователя',
+      'unban_user': '✅ Разблокировать пользователя',
+      'give_prize': '🏆 Выдать приз',
+      'disqualify_team': '❌ Дисквалифицировать команду',
+      'profile': 'Профиль игрока',
+      'register': 'Зарегистрироваться',
+      'standoff_nick': 'Ник в Standoff',
+      'standoff_id': 'ID в Standoff',
+      'done': 'Готово',
+      'profile_saved': 'Профиль сохранен!',
+      'create_team': 'Создать команду',
+      'team_avatar': 'Аватарка команды',
+      'team_tag': 'Тег команды',
+      'team_tag_ph': 'Например, RFZ',
+      'team_name': 'Название команды',
+      'team_name_ph': 'Например, RFORZ ESPORTS',
+      'main_player1': 'Игрок 1 (капитан)',
+      'main_player2': 'Игрок 2 (основной)',
+      'main_player3': 'Игрок 3 (основной)',
+      'main_player4': 'Игрок 4 (основной)',
+      'main_player5': 'Игрок 5 (основной)',
+      'spare_player1': 'Игрок 6 (запасной)',
+      'spare_player2': 'Игрок 7 (запасной)',
+      'player_id_ph': 'ID в Standoff 2',
+      'player_nick_ph': 'Никнейм',
+      'player_tg_ph': 'Telegram_Username',
+      'player_tg_id_ph': 'Telegram ID',
+      'team_done': 'Готово',
+      'team_created': 'Команда создана!',
+      'notification_title': 'Уведомления',
+      'clear_notifications_btn': 'Очистить',
+      'news': 'Новости',
+      'news1title': '🔔 Обновление',
+      'news1desc': 'Мы добавили поддержку английского языка и обновили интерфейс.',
+      'news2title': '🏆 Турниры обновлены',
+      'news2desc': 'Теперь все турниры доступны на отдельной странице.',
+      'disciplines': 'Дисциплины',
+      'discipline_standoff2': 'Standoff 2',
+      'tournaments': 'Турниры',
+      'rules_main_title': 'Правила турнира',
+      'rules_1v1_summary': 'Турниры 1х1',
+      'rules_1v1_text': '• Игроки играют один против друга.<br/> • Раунды проходят до 3 побед.<br/> • Побеждает тот, кто первый выигрывает 3 раунда.',
+      'rules_2v2_summary': 'Турниры 2х2',
+      'rules_2v2_text': '• Команды по 2 игрока.<br/> • Успех зависит от координации и слаженной игры.<br/> • Первые до 5 побед — проходят дальше.<br/> • Если счет 5-5, играется дополнительный раунд.',
+      'rules_5v5_standoff_summary': 'Турниры 5х5',
+      'rules_5v5_full': '• Команды по 5 игроков.<br/> • Играют на специально подготовленных картах.<br/> • Коммуникация и стратегия являются ключевыми для победы.<br/> • Турнир может состоять из группового этапа и плей-офф.',
+      'awards_title': 'Награды',
+      'create_tournament_modal_title': 'Создать Турнир',
+      'tournament_name_label': 'Название Турнира',
+      'tournament_discipline_label': 'Дисциплина',
+      'tournament_format_label': 'Формат',
+      'start_date_label': 'Дата начала',
+      'end_date_label': 'Дата окончания',
+      'prize_pool_label': 'Призовой Фонд',
+      'description_label': 'Описание',
+      'create_btn_submit': 'Создать',
+      'back_to_home': '← Главная',
+      'edit_tournament_btn': '✏️ Редактировать турнир',
+      'tournament_view_title': 'Просмотр Турнира',
+      'group_stage_tab': 'Групповой этап',
+      'playoffs_tab': 'Плей-офф',
+      'team_column': 'Команда',
+      'wins_column': 'Победы',
+      'losses_column': 'Поражения',
+      'playoffs_title': 'Плей-офф',
+      'playoff_bracket_text': 'Здесь будет сетка плей-офф.',
+      'tg_user': 'Telegram Username',
+      'tg_id': 'Telegram ID',
+      'edit_group_stage_btn': '⚙️ Редактировать групповой этап',
+      'group_stage_admin_title': 'Редактировать групповой этап',
+      'add_team_btn': '➕ Добавить команду',
+      'delete_team_btn': '🗑️ Удалить команду',
+      'disqualify_team_gs_btn': '❌ Дисквалифицировать команду',
+      'award_points_btn': '📊 Выдать очки команде',
+      'save_changes_btn': 'Сохранить изменения'
+    },
+    'pl': {
+      'admin_menu_title': 'Menu Administratora',
+      'create_tournament_btn': '➕ Utwórz turniej',
+      'ban_user': '🚫 Zablokuj użytkownika',
+      'unban_user': '✅ Odblokuj użytkownika',
+      'give_prize': '🏆 Przyznaj nagrodę',
+      'disqualify_team': '❌ Zdyskwalifikuj drużynę',
+      'profile': 'Profil gracza',
+      'register': 'Zarejestruj się',
+      'standoff_nick': 'Nick w Standoff',
+      'standoff_id': 'ID w Standoff',
+      'done': 'Gotowe',
+      'profile_saved': 'Profil zapisany!',
+      'create_team': 'Utwórz drużynę',
+      'team_avatar': 'Awatar drużyny',
+      'team_tag': 'Tag drużyny',
+      'team_tag_ph': 'Np. RFZ',
+      'team_name': 'Nazwa drużyny',
+      'team_name_ph': 'Np. RFORZ ESPORTS',
+      'main_player1': 'Gracz 1 (kapitan)',
+      'main_player2': 'Gracz 2 (główny)',
+      'main_player3': 'Gracz 3 (główny)',
+      'main_player4': 'Gracz 4 (główny)',
+      'main_player5': 'Gracz 5 (główny)',
+      'spare_player1': 'Gracz 6 (rezerwowy)',
+      'spare_player2': 'Gracz 7 (rezerwowy)',
+      'player_id_ph': 'ID w Standoff 2',
+      'player_nick_ph': 'Pseudonim',
+      'player_tg_ph': 'Nazwa użytkownika Telegram',
+      'player_tg_id_ph': 'ID Telegram',
+      'team_done': 'Gotowe',
+      'team_created': 'Drużyna utworzona!',
+      'notification_title': 'Powiadomienia',
+      'clear_notifications_btn': 'Wyczyść',
+      'news': 'Aktualności',
+      'news1title': '🔔 Aktualizacja',
+      'news1desc': 'Dodaliśmy obsługę języka angielskiego i zaktualizowaliśmy interfejs.',
+      'news2title': '🏆 Turnieje zaktualizowane',
+      'news2desc': 'Wszystkie turnieje są teraz dostępne na osobnej stronie.',
+      'disciplines': 'Dyscypliny',
+      'discipline_standoff2': 'Standoff 2',
+      'tournaments': 'Turnieje',
+      'rules_main_title': 'Zasady Turnieju',
+      'rules_1v1_summary': 'Turnieje 1x1',
+      'rules_1v1_text': '• Gracze grają jeden przeciwko drugiemu.<br/> • Rundy rozgrywane są do 3 zwycięstw.<br/> • Wygrywa ten, kto pierwszy wygra 3 rundy.',
+      'rules_2v2_summary': 'Turnieje 2x2',
+      'rules_2v2_text': '• Drużyny po 2 graczy.<br/> • Sukces zależy od koordynacji i zgranej gry.<br/> • Pierwsi do 5 zwycięstw — przechodzą dalej.<br/> • Jeśli wynik wynosi 5-5, rozgrywana jest dodatkowa runda.',
+      'rules_5v5_standoff_summary': 'Turnieje 5x5',
+      'rules_5v5_full': '• Drużyny po 5 graczy.<br/> • Rozgrywane na specjalnie przygotowanych mapach.<br/> • Komunikacja i strategia są kluczem do zwycięstwa.<br/> • Turniej może składać się z fazy grupowej i fazy pucharowej.',
+      'awards_title': 'Nagrody',
+      'create_tournament_modal_title': 'Utwórz Turniej',
+      'tournament_name_label': 'Nazwa Turnieju',
+      'tournament_discipline_label': 'Dyscyplina',
+      'tournament_format_label': 'Format',
+      'start_date_label': 'Data rozpoczęcia',
+      'end_date_label': 'Data zakończenia',
+      'prize_pool_label': 'Pula nagród',
+      'description_label': 'Opis',
+      'create_btn_submit': 'Utwórz',
+      'back_to_home': '← Strona główna',
+      'edit_tournament_btn': '✏️ Edytuj turniej',
+      'tournament_view_title': 'Widok Turnieju',
+      'group_stage_tab': 'Faza Grupowa',
+      'playoffs_tab': 'Play-offy',
+      'team_column': 'Drużyna',
+      'wins_column': 'Zwycięstwa',
+      'losses_column': 'Porażki',
+      'playoffs_title': 'Play-offy',
+      'playoff_bracket_text': 'Tutaj zostanie umieszczona drabinka play-off.',
+      'tg_user': 'Nazwa użytkownika Telegram',
+      'tg_id': 'ID Telegram',
+      'edit_group_stage_btn': '⚙️ Edytuj fazę grupową',
+      'group_stage_admin_title': 'Edytuj fazę grupową',
+      'add_team_btn': '➕ Dodaj drużynę',
+      'delete_team_btn': '🗑️ Usuń drużynę',
+      'disqualify_team_gs_btn': '❌ Zdyskwalifikuj drużynę',
+      'award_points_btn': '📊 Przyznaj punkty drużynie',
+      'save_changes_btn': 'Zapisz zmiany'
+    }
+  };
 
-  // Команда ще не створена — показуємо кнопку
-  if (!savedTeam.name) {
-    createTeamBtn.style.display = "block";
-    teamForm.style.display = "none";
+  let currentLang = 'uk'; // Можна визначити з Telegram.WebApp.initDataUnsafe.user.language_code
+  const langElements = document.querySelectorAll('[data-i18n]');
+  const langPlaceholderElements = document.querySelectorAll('[data-i18n-placeholder]');
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    langElements.forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (i18n[currentLang] && i18n[currentLang][key]) {
+        el.textContent = i18n[currentLang][key];
+      }
+    });
+    langPlaceholderElements.forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (i18n[currentLang] && i18n[currentLang][key]) {
+        el.placeholder = i18n[currentLang][key];
+      }
+    });
+    // Update labels in profile/team form explicitly if needed, or re-render
+  }
+
+  // Set initial language based on Telegram WebApp language or default to 'uk'
+  if (Telegram.WebApp.initDataUnsafe.user && i18n[Telegram.WebApp.initDataUnsafe.user.language_code]) {
+    setLanguage(Telegram.WebApp.initDataUnsafe.user.language_code);
   } else {
-    // Команда створена — ховаємо все, показуємо лише info
-    createTeamBtn.style.display = "none";
-    teamForm.style.display = "none";
-    showTeamInfo(); // 👈 це вже є в тебе
+    setLanguage('uk');
   }
-} else {
-  // Якщо профіль не збережено
-  registerBtn.style.display = "block";
-  profileForm.style.display = "none";
-  createTeamBtn.style.display = "none";
-  teamForm.style.display = "none";
-}
-// Обробник: натискання на "Створити команду"
-if (createTeamBtn) {
-  createTeamBtn.addEventListener("click", () => {
-    teamForm.style.display = "block";
-    document.getElementById("teamSuccessMsg").style.display = "none";
+
+  document.getElementById('langBtn').addEventListener('click', () => {
+    document.getElementById('langPopup').classList.toggle('active');
   });
-}
 
-
-  const user = tg?.initDataUnsafe?.user;
-  const userId = user?.id;
-  const userUsername = user?.username || "";
-  console.log('userId:', userId, typeof userId, 'username:', userUsername);
-
-  function showSection(sectionId) {
-  console.log('⏩ Відкривається секція:', sectionId);
-  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-  const section = document.getElementById(sectionId);
-  if (section) {
-    section.classList.add("active");
-    window.scrollTo({ top: section.offsetTop, behavior: "smooth" });
-  }
-}
-
-
-  // Адмін-кнопка
-  const adminButtonContainer = document.getElementById('admin-button-container');
-  const adminMenuBtn = document.getElementById('adminMenuBtn');
-  if (userId == 5806282517 || userId == 7853048233) { // Заміни на свій ID{
-    if (adminButtonContainer) adminButtonContainer.style.display = 'block';
-    if (adminMenuBtn) adminMenuBtn.style.display = 'block';
-  } else {
-    if (adminButtonContainer) adminButtonContainer.style.display = 'none';7853048233
-    if (adminMenuBtn) adminMenuBtn.style.display = 'none';
-  }
-
-  // Перемикання секцій по нижній навігації
-  const sections = document.querySelectorAll(".section");
-  const navItems = document.querySelectorAll(".nav-item");
-  function showSection(sectionId) {
-    sections.forEach(s => s.classList.remove("active"));
-    document.getElementById(sectionId)?.classList.add("active");
-    navItems.forEach(n => n.classList.remove("active"));
-    const nav = document.getElementById(sectionId.replace("Section", "Nav"));
-    if (nav) nav.classList.add("active");
-  }
-  navItems.forEach(nav => {
-    nav.addEventListener('click', () => {
-      const sectionId = nav.id.replace('Nav', 'Section');
-      showSection(sectionId);
+  document.querySelectorAll('.lang-option').forEach(button => {
+    button.addEventListener('click', (event) => {
+      setLanguage(event.target.dataset.lang);
+      document.getElementById('langPopup').classList.remove('active');
     });
   });
-  showSection('homeSection');
 
-  const editBtn = document.getElementById("editTournamentBtn");
-  if (userId == 5806282517 || userId == 7853048233) {
-    if (editBtn) editBtn.style.display = "inline-block";
+  document.getElementById('avatar').addEventListener('click', () => {
+    document.getElementById('profileModal').classList.add('active');
+    loadProfile();
+  });
+
+  document.getElementById('closeProfileModalBtn').addEventListener('click', () => {
+    document.getElementById('profileModal').classList.remove('active');
+  });
+
+  document.getElementById('notificationBtn').addEventListener('click', () => {
+    document.getElementById('notificationPopup').classList.toggle('active');
+  });
+
+  document.getElementById('clearNotificationsBtn').addEventListener('click', () => {
+    document.getElementById('notificationList').innerHTML = '';
+    document.getElementById('notificationBadge').style.display = 'none';
+    document.getElementById('notificationBadge').textContent = '0';
+  });
+
+  function addNotification(message) {
+    const notificationList = document.getElementById('notificationList');
+    const notificationItem = document.createElement('div');
+    notificationItem.className = 'notification-item';
+    notificationItem.style.cssText = 'padding: 8px 0; border-bottom: 1px solid #444; font-size: 0.95rem;';
+    notificationItem.textContent = message;
+    notificationList.prepend(notificationItem); // Додаємо нове сповіщення зверху
+
+    const badge = document.getElementById('notificationBadge');
+    let count = parseInt(badge.textContent);
+    badge.textContent = count + 1;
+    badge.style.display = 'flex';
   }
 
-  // Робимо функції доступними глобально
-  window.showSection = showSection;
-  window.loadTournamentDetails = loadTournamentDetails;
-  window.showTournamentTab = showTournamentTab;
 
+  // Profile and Team Management
+  let userProfile = JSON.parse(localStorage.getItem('userProfile')) || null;
+  let userTeam = JSON.parse(localStorage.getItem('userTeam')) || null;
 
-  // Function to load tournament details (example data)
-    function loadTournamentDetails(tournamentName) {
-        const titleElement = document.getElementById('currentTournamentTitle');
-        titleElement.textContent = tournamentName; // Set the tournament title
-        showTournamentTab('groupStageTab'); // Default to Group Stage tab when opening tournament details
-    }
-
-    // Function to switch tournament tabs
-    function showTournamentTab(tabId) {
-        document.querySelectorAll('.tournament-tab-content').forEach(content => {
-            content.classList.remove('active');
-        });
-        document.getElementById(tabId).classList.add('active');
-
-        document.querySelectorAll('.tournament-tab').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        document.querySelector(`.tournament-tab[onclick*="${tabId}"]`).classList.add('active');
-    }
-
-
-  // Локалізація (розширена)
-  const translation = {
-    "support": { "uk": "Підтримка", "en": "Support", "ru": "Поддержка", "pl": "Wsparcie" },
-    "home": { "uk": "Головна", "en": "Home", "ru": "Главная", "pl": "Strona Główna" },
-    "rules": { "uk": "Правила", "en": "Rules", "ru": "Правила", "pl": "Zasady" },
-    "awards": { "uk": "Нагороди", "en": "Awards", "ru": "Награды", "pl": "Nagrody" },
-    "register": { "uk": "Зареєструватись", "en": "Register", "ru": "Зарегистрироваться", "pl": "Zarejestruj się" },
-    "profile": { "uk": "Профіль гравця", "en": "Player Profile", "ru": "Профиль игрока", "pl": "Profil Gracza" },
-    "standoff_nick": { "uk": "Нік в Standoff", "en": "Standoff Nick", "ru": "Ник в Standoff", "pl": "Nick w Standoff" },
-    "standoff_nick_ph": { "uk": "Нік в Standoff", "en": "Standoff Nick", "ru": "Ник в Standoff", "pl": "Nick w Standoff" },
-    "standoff_id": { "uk": "ID в Standoff", "en": "Standoff ID", "ru": "ID в Standoff", "pl": "ID w Standoff" },
-    "standoff_id_ph": { "uk": "ID в Standoff", "en": "Standoff ID", "ru": "ID в Standoff", "pl": "ID w Standoff" },
-    "tg_user": { "uk": "Telegram Username", "en": "Telegram Username", "ru": "Telegram Username", "pl": "Telegram Username" },
-    "tg_user_ph": { "uk": "Telegram Username", "en": "Telegram Username", "ru": "Telegram Username", "pl": "Telegram Username" },
-    "tg_id": { "uk": "ID в Telegram", "en": "Telegram ID", "ru": "ID в Telegram", "pl": "ID w Telegram" },
-    "tg_id_ph": { "uk": "ID в Telegram", "en": "Telegram ID", "ru": "ID в Telegram", "pl": "ID w Telegram" },
-    "done": { "uk": "Готово", "en": "Done", "ru": "Готово", "pl": "Gotowe" },
-    "profile_saved": { "uk": "Профіль збережено!", "en": "Profile saved!", "ru": "Профиль сохранен!", "pl": "Profil zapisany!" },
-    "create_team": { "uk": "Створити команду", "en": "Create Team", "ru": "Создать команду", "pl": "Stwórz drużynę" },
-    "news": { "uk": "Новини", "en": "News", "ru": "Новости", "pl": "Aktualności" },
-  "news1title": { "uk": "🔔 Оновлення", "en": "🔔 Update", "ru": "🔔 Обновление", "pl": "🔔 Aktualizacja" },
-  "news1desc": { "uk": "Ми додали підтримку англійської мови та оновили інтерфейс.", "en": "We've added English language support and updated the interface.", "ru": "Мы добавили поддержку английского языка и обновили интерфейс.", "pl": "Dodaliśmy obsługę języka angielskiego i zaktualizowaliśmy interfejs." },
-  "news2title": { "uk": "🏆 Турніри оновлено", "en": "🏆 Tournaments updated", "ru": "🏆 Турниры обновлены", "pl": "🏆 Turnieje zaktualizowane" },
-  "news2desc": { "uk": "Тепер усі турніри доступні на окремій сторінці.", "en": "All tournaments are now available on a separate page.", "ru": "Теперь все турниры доступны на отдельной странице.", "pl": "Wszystkie turnieje są teraz dostępne na osobnej stronie." },
-  "disciplines": { "uk": "Дисципліни", "en": "Disciplines", "ru": "Дисциплины", "pl": "Dyscypliny" },
-  "tournaments": { "uk": "Турніри", "en": "Tournaments", "ru": "Турниры", "pl": "Turnieje" },
-  "notification_title": { "uk": "Сповіщення", "en": "Notifications", "ru": "Уведомления", "pl": "Powiadomienia" },
-  "clear_notifications_btn": { "uk": "Очистити", "en": "Clear", "ru": "Очистить", "pl": "Wyczyść" },
-  "create_tournament_btn": { "uk": "➕ Створити турнір", "en": "➕ Create Tournament", "ru": "➕ Создать турнир", "pl": "➕ Stwórz turniej" },
-  "ban_user": { "uk": "🚫 Заблокувати користувача", "en": "🚫 Ban User", "ru": "🚫 Заблокировать пользователя", "pl": "🚫 Zablokuj użytkownika" },
-  "unban_user": { "uk": "✅ Розблокувати користувача", "en": "✅ Unban User", "ru": "✅ Разблокировать пользователя", "pl": "✅ Odblokuj użytkownika" },
-  "give_prize": { "uk": "🏆 Видати приз", "en": "🏆 Give Prize", "ru": "🏆 Выдать приз", "pl": "🏆 Przyznaj nagrodę" },
-  "disqualify_team": { "uk": "❌ Дискваліфікувати команду", "en": "❌ Disqualify Team", "ru": "❌ Дисквалифицировать команду", "pl": "❌ Zdyskwalifikuj drużynę" },
-  "admin_menu_title": { "uk": "Адмін-меню", "en": "Admin Menu", "ru": "Админ-меню", "pl": "Menu Administratora" },
-  "rules_main_title": { "uk": "Правила турніру", "en": "Tournament Rules", "ru": "Правила турнира", "pl": "Zasady turnieju" },
-  "rules_1v1_summary": { "uk": "Турніри 1х1", "en": "1v1 Tournaments", "ru": "Турниры 1х1", "pl": "Turnieje 1v1" },
-  "rules_2v2_summary": { "uk": "Турніри 2х2", "en": "2v2 Tournaments", "ru": "Турниры 2х2", "pl": "Turnieje 2v2" },
-  "rules_5v5_standoff_summary": { "uk": "Турніри 5х5", "en": "5v5 Tournaments", "ru": "Турниры 5х5", "pl": "Turnieje 5v5" },
-  "rules_1v1_text": { "uk": `1. Загальні положення:<br>
-Турнір проводиться з дисципліни Standoff 2.<br>
-Формат матчів: 1 на 1 у режимі Союзники.<br>
-Усі учасники повинні дотримуватись правил чесної гри та поважати інших гравців і суддів.<br><br>
-2. Участь та реєстрація:<br>
-Команда складається з 1 гравця.<br>
-Регіони: Польща, Нідерланди, Франція.<br>
-Максимально допустимий пінг — 100 мс. Гравці з більшим пінгом можуть бути відсторонені.<br>
-Реєстрація проходить через платформу або форму, вказану організаторами.<br><br>
-3. Технічні вимоги:<br>
-Гра проводиться лише на мобільних пристроях. Використання емуляторів заборонено.<br>
-Перевірка пінгу перед кожним матчем.<br>
-Використання VPN, проксі та будь-яких засобів для зміни регіону/пінгу суворо заборонено.<br><br>
-4. Формат турніру:<br>
-Матчі групового етапу — Best of 2 (BO2).<br>
-Півфінал — Best of 3 (BO3).<br>
-Фінал — Best of 5 (BO5).<br>
-Перемагає команда, яка першою виграє 13 раундів.<br>
-Карти обираються методом “ban/pick” (відмова/вибір).<br>
-Перерва між половинами — 1 хвилина. Перемикання сторін після 12 раундів.<br><br>
-5. Поведінка гравців:<br>
-Заборонено використання стороннього ПЗ, читів і багів.<br>
-Образи, токсична поведінка та провокації заборонені.<br>
-Усі спірні ситуації вирішує суддя. Рішення адміністрації остаточні.<br><br>
-6. Переривання матчу:<br>
-Якщо гравець вилетів — матч ставиться на технічну перерву.<br><br>
-7. Санкції:<br>
-1-е порушення — попередження.<br>
-2-е — дискваліфікація гравця або команди залежно від тяжкості.<br>
-Повторні порушення — негайне зняття з турніру.<br><br>
-8. Призи та нагороди:<br>
-Призовий фонд і розподіл місць оголошуються перед початком турніру.<br>
-Призи розподіляються всередині команди самостійно або порівну (за замовчуванням).`,
-
-
-  "en": `1. General Provisions:<br>
-The tournament is held in the Standoff 2 discipline.<br>
-Match format: 1 vs 1 Allies mode.<br>
-All participants must follow fair play rules and respect other players and referees.<br><br>
-2. Participation and Registration:<br>
-A team consists of 1 player.<br>
-Regions: Poland, Netherlands, France.<br>
-Maximum allowed ping is 100 ms. Players exceeding this may be removed.<br>
-Registration is via the platform or form specified by the organizers.<br><br>
-3. Technical Requirements:<br>
-Games are played only on mobile devices. Emulators are prohibited.<br>
-Ping is checked before each match.<br>
-Use of VPN, proxy, or any means to change region/ping is strictly prohibited.<br><br>
-4. Tournament Format:<br>
-Group stage matches — Best of 2 (BO2).<br>
-Semifinals — Best of 3 (BO3).<br>
-Final — Best of 5 (BO5).<br>
-Victory goes to the team that first wins 13 rounds.<br>
-Maps are chosen by “ban/pick” method.<br>
-Break between halves — 1 minute. Sides switch after 12 rounds.<br><br>
-5. Player Behavior:<br>
-Use of third-party software, cheats, and bugs is prohibited.<br>
-Insults, toxic behavior, and provocations are forbidden.<br>
-All disputes are resolved by the referee. Administration decisions are final.<br><br>
-6. Match Interruptions:<br>
-If a player disconnects, the match is put on technical pause.<br><br>
-7. Sanctions:<br>
-1st violation — warning.<br>
-2nd — disqualification of the player or team depending on severity.<br>
-Repeated violations — immediate removal from the tournament.<br><br>
-8. Prizes and Awards:<br>
-Prize pool and placements are announced before the tournament.<br>
-Prizes are distributed within the team independently or equally (by default).`,
-
-
-  "ru": `1. Общие положения:<br>
-Турнир проводится по дисциплине Standoff 2.<br>
-Формат матчей: 1 на 1 в режиме Союзники.<br>
-Все участники обязаны соблюдать правила честной игры и уважать других игроков и судей.<br><br>
-2. Участие и регистрация:<br>
-Команда состоит из 1 игрока.<br>
-Регионы: Польша, Нидерланды, Франция.<br>
-Максимально допустимый пинг — 100 мс. Игроки с превышением этого значения могут быть отстранены.<br>
-Регистрация проходит через платформу или форму, указанную организаторами.<br><br>
-3. Технические требования:<br>
-Игра проводится только на мобильных устройствах. Использование эмуляторов запрещено.<br>
-Проверка пинга производится перед каждым матчем.<br>
-Использование VPN, прокси и любых средств для изменения региона/пинга строго запрещено.<br><br>
-4. Формат турнира:<br>
-Матчи группового этапа — Best of 2 (BO2).<br>
-Полуфинал — Best of 3 (BO3).<br>
-Финал — Best of 5 (BO5).<br>
-Победа присуждается команде, первой выигравшей 13 раундов.<br>
-Карты выбираются методом “ban/pick” (отказ/выбор).<br>
-Перерывы между половинами — 1 минута. Переключение сторон после 12 раундов.<br><br>
-5. Поведение игроков:<br>
-Запрещено использование стороннего ПО, читов и багов.<br>
-Оскорбления, токсичное поведение и провокации запрещены.<br>
-Все спорные ситуации решаются судьёй. Решения администрации окончательны.<br><br>
-6. Прерывание матча:<br>
-При вылете игрока матч ставится на техническую паузу.<br><br>
-7. Санкции:<br>
-1-е нарушение — предупреждение.<br>
-2-е — дисквалификация игрока или команды в зависимости от тяжести.<br>
-Повторяющиеся нарушения — немедленное снятие с турнира.<br><br>
-8. Призы и награды:<br>
-Призовой фонд и распределение мест объявляются перед началом турнира.<br>
-Призы распределяются внутри команды самостоятельно или поровну (по умолчанию).`,
-
-
-  "pl": `1. Postanowienia ogólne:<br>
-Turniej odbywa się w dyscyplinie Standoff 2.<br>
-Format meczów: 1 na 1 w trybie Sojusznicy.<br>
-Wszyscy uczestnicy muszą przestrzegać zasad fair play i szanować innych graczy oraz sędziów.<br><br>
-2. Udział i rejestracja:<br>
-Drużyna składa się z 1 gracza.<br>
-Regiony: Polska, Holandia, Francja.<br>
-Maksymalny dozwolony ping — 100 ms. Gracze z wyższym pingiem mogą zostać wykluczeni.<br>
-Rejestracja odbywa się przez platformę lub formularz wskazany przez organizatorów.<br><br>
-3. Wymagania techniczne:<br>
-Gra odbywa się wyłącznie na urządzeniach mobilnych. Używanie emulatorów jest zabronione.<br>
-Ping sprawdzany jest przed każdym meczem.<br>
-Korzystanie z VPN, proxy lub innych środków do zmiany regionu/pingu jest surowo zabronione.<br><br>
-4. Format turnieju:<br>
-Mecze fazy grupowej — Best of 2 (BO2).<br>
-Półfinał — Best of 3 (BO3).<br>
-Finał — Best of 5 (BO5).<br>
-Wygrywa drużyna, która jako pierwsza zdobędzie 13 rund.<br>
-Mapy wybierane są metodą “ban/pick” (odrzucenie/wybór).<br>
-Przerwa między połowami — 1 minuta. Zmiana stron po 12 rundach.<br><br>
-5. Zachowanie graczy:<br>
-Zakazane jest używanie zewnętrznego oprogramowania, cheatów i bugów.<br>
-Obelgi, toksyczne zachowanie i prowokacje są zabronione.<br>
-Wszelkie sporne sytuacje rozstrzyga sędzia. Decyzje administracji są ostateczne.<br><br>
-6. Przerwanie meczu:<br>
-W przypadku rozłączenia gracza mecz zostaje wstrzymany.<br><br>
-7. Sankcje:<br>
-1. naruszenie — ostrzeżenie.<br>
-2. — dyskwalifikacja gracza lub drużyny w zależności od wagi przewinienia.<br>
-Powtarzające się naruszenia — natychmiastowe usunięcie z turnieju.<br><br>
-8. Nagrody:<br>
-Pula nagród i podział miejsc ogłaszane są przed rozpoczęciem turnieju.<br>
-Nagrody są rozdzielane wewnątrz drużyny samodzielnie lub po równo (domyślnie).` },
-
-
-  "rules_2v2_text": { "uk": `1. Загальні положення:<br>
-Турнір проводиться з дисципліни Standoff 2.<br>
-Формат матчів: 2 на 2 у режимі Союзники.<br>
-Усі учасники повинні дотримуватись правил чесної гри та поважати інших гравців і суддів.<br><br>
-2. Участь та реєстрація:<br>
-Команда складається з 2 гравців.<br>
-Регіони: Польща, Нідерланди, Франція.<br>
-Максимально допустимий пінг — 100 мс. Гравці з більшим пінгом можуть бути відсторонені.<br>
-Реєстрація проходить через платформу або форму, вказану організаторами.<br><br>
-3. Технічні вимоги:<br>
-Гра проводиться лише на мобільних пристроях. Використання емуляторів заборонено.<br>
-Перевірка пінгу перед кожним матчем.<br>
-Використання VPN, проксі та будь-яких засобів для зміни регіону/пінгу суворо заборонено.<br><br>
-4. Формат турніру:<br>
-Матчі групового етапу — Best of 2 (BO2).<br>
-Півфінал — Best of 3 (BO3).<br>
-Фінал — Best of 5 (BO5).<br>
-Перемагає команда, яка першою виграє 13 раундів.<br>
-Карти обираються методом “ban/pick” (відмова/вибір).<br>
-Перерва між половинами — 1 хвилина. Перемикання сторін після 12 раундів.<br><br>
-5. Поведінка гравців:<br>
-Заборонено використання стороннього ПЗ, читів і багів.<br>
-Образи, токсична поведінка та провокації заборонені.<br>
-Усі спірні ситуації вирішує суддя. Рішення адміністрації остаточні.<br><br>
-6. Переривання матчу:<br>
-Якщо гравець вилетів — матч ставиться на технічну перерву.<br><br>
-7. Санкції:<br>
-1-е порушення — попередження.<br>
-2-е — дискваліфікація гравця або команди залежно від тяжкості.<br>
-Повторні порушення — негайне зняття з турніру.<br><br>
-8. Призи та нагороди:<br>
-Призовий фонд і розподіл місць оголошуються перед початком турніру.<br>
-Призи розподіляються всередині команди самостійно або порівну (за замовчуванням).`,
-
-
-  "en": `1. General Provisions:<br>
-The tournament is held in the Standoff 2 discipline.<br>
-Match format: 2 vs 2 Allies mode.<br>
-All participants must follow fair play rules and respect other players and referees.<br><br>
-2. Participation and Registration:<br>
-A team consists of 2 main players.<br>
-Regions: Poland, Netherlands, France.<br>
-Maximum allowed ping is 100 ms. Players exceeding this may be removed.<br>
-Registration is via the platform or form specified by the organizers.<br><br>
-3. Technical Requirements:<br>
-Games are played only on mobile devices. Emulators are prohibited.<br>
-Ping is checked before each match.<br>
-Use of VPN, proxy, or any means to change region/ping is strictly prohibited.<br><br>
-4. Tournament Format:<br>
-Group stage matches — Best of 2 (BO2).<br>
-Semifinals — Best of 3 (BO3).<br>
-Final — Best of 5 (BO5).<br>
-Victory goes to the team that first wins 13 rounds.<br>
-Maps are chosen by “ban/pick” method.<br>
-Break between halves — 1 minute. Sides switch after 12 rounds.<br><br>
-5. Player Behavior:<br>
-Use of third-party software, cheats, and bugs is prohibited.<br>
-Insults, toxic behavior, and provocations are forbidden.<br>
-All disputes are resolved by the referee. Administration decisions are final.<br><br>
-6. Match Interruptions:<br>
-If a player disconnects, the match is put on technical pause.<br><br>
-7. Sanctions:<br>
-1st violation — warning.<br>
-2nd — disqualification of the player or team depending on severity.<br>
-Repeated violations — immediate removal from the tournament.<br><br>
-8. Prizes and Awards:<br>
-Prize pool and placements are announced before the tournament.<br>
-Prizes are distributed within the team independently or equally (by default).`,
-
-
-  "ru": `1. Общие положения:<br>
-Турнир проводится по дисциплине Standoff 2.<br>
-Формат матчей: 2 на 2 в режиме Союзники.<br>
-Все участники обязаны соблюдать правила честной игры и уважать других игроков и судей.<br><br>
-2. Участие и регистрация:<br>
-Команда состоит из 2 основных игроков.<br>
-Регионы: Польша, Нидерланды, Франция.<br>
-Максимально допустимый пинг — 100 мс. Игроки с превышением этого значения могут быть отстранены.<br>
-Регистрация проходит через платформу или форму, указанную организаторами.<br><br>
-3. Технические требования:<br>
-Игра проводится только на мобильных устройствах. Использование эмуляторов запрещено.<br>
-Проверка пинга производится перед каждым матчем.<br>
-Использование VPN, прокси и любых средств для изменения региона/пинга строго запрещено.<br><br>
-4. Формат турнира:<br>
-Матчи группового этапа — Best of 2 (BO2).<br>
-Полуфинал — Best of 3 (BO3).<br>
-Финал — Best of 5 (BO5).<br>
-Победа присуждается команде, первой выигравшей 13 раундов.<br>
-Карты выбираются методом “ban/pick” (отказ/выбор).<br>
-Перерывы между половинами — 1 минута. Переключение сторон после 12 раундов.<br><br>
-5. Поведение игроков:<br>
-Запрещено использование стороннего ПО, читов и багов.<br>
-Оскорбления, токсичное поведение и провокации запрещены.<br>
-Все спорные ситуации решаются судьёй. Решения администрации окончательны.<br><br>
-6. Прерывание матча:<br>
-При вылете игрока матч ставится на техническую паузу.<br><br>
-7. Санкции:<br>
-1-е нарушение — предупреждение.<br>
-2-е — дисквалификация игрока или команды в зависимости от тяжести.<br>
-Повторяющиеся нарушения — немедленное снятие с турнира.<br><br>
-8. Призы и награды:<br>
-Призовой фонд и распределение мест объявляются перед началом турнира.<br>
-Призы распределяются внутри команды самостоятельно или поровну (по умолчанию).`,
-
-
-  "pl": `1. Postanowienia ogólne:<br>
-Turniej odbywa się w dyscyplinie Standoff 2.<br>
-Format meczów: 2 na 2 w trybie Turniej.<br>
-Wszyscy uczestnicy muszą przestrzegać zasad fair play i szanować innych graczy oraz sędziów.<br><br>
-2. Udział i rejestracja:<br>
-Drużyna składa się z 2 głównych graczyi.<br>
-Regiony: Polska, Holandia, Francja.<br>
-Maksymalny dozwolony ping — 100 ms. Gracze z wyższym pingiem mogą zostać wykluczeni.<br>
-Rejestracja odbywa się przez platformę lub formularz wskazany przez organizatorów.<br><br>
-3. Wymagania techniczne:<br>
-Gra odbywa się wyłącznie na urządzeniach mobilnych. Używanie emulatorów jest zabronione.<br>
-Ping sprawdzany jest przed każdym meczem.<br>
-Korzystanie z VPN, proxy lub innych środków do zmiany regionu/pingu jest surowo zabronione.<br><br>
-4. Format turnieju:<br>
-Mecze fazy grupowej — Best of 2 (BO2).<br>
-Półfinał — Best of 3 (BO3).<br>
-Finał — Best of 5 (BO5).<br>
-Wygrywa drużyna, która jako pierwsza zdobędzie 13 rund.<br>
-Mapy wybierane są metodą “ban/pick” (odrzucenie/wybór).<br>
-Przerwa między połowami — 1 minuta. Zmiana stron po 12 rundach.<br><br>
-5. Zachowanie graczy:<br>
-Zakazane jest używanie zewnętrznego oprogramowania, cheatów i bugów.<br>
-Obelgi, toksyczne zachowanie i prowokacje są zabronione.<br>
-Wszelkie sporne sytuacje rozstrzyga sędzia. Decyzje administracji są ostateczne.<br><br>
-6. Przerwanie meczu:<br>
-W przypadku rozłączenia gracza mecz zostaje wstrzymany.<br><br>
-7. Sankcje:<br>
-1. naruszenie — ostrzeżenie.<br>
-2. — dyskwalifikacja gracza lub drużyny w zależności od wagi przewinienia.<br>
-Powtarzające się naruszenia — natychmiastowe usunięcie z turnieju.<br><br>
-8. Nagrody:<br>
-Pula nagród i podział miejsc ogłaszane są przed rozpoczęciem turnieju.<br>
-Nagrody są rozdzielane wewnątrz drużyny samodzielnie lub po równo (domyślnie).` },
-
-
-
-  "rules_5v5_full": {
-  "uk": `1. Загальні положення:<br>
-Турнір проводиться з дисципліни Standoff 2.<br>
-Формат матчів: 5 на 5 у режимі Турнір.<br>
-Усі учасники повинні дотримуватись правил чесної гри та поважати інших гравців і суддів.<br><br>
-2. Участь та реєстрація:<br>
-Команда складається з 5 основних гравців і до 2 запасних.<br>
-Регіони: Польща, Нідерланди, Франція.<br>
-Максимально допустимий пінг — 100 мс. Гравці з більшим пінгом можуть бути відсторонені.<br>
-Реєстрація проходить через платформу або форму, вказану організаторами.<br><br>
-3. Технічні вимоги:<br>
-Гра проводиться лише на мобільних пристроях. Використання емуляторів заборонено.<br>
-Перевірка пінгу перед кожним матчем.<br>
-Використання VPN, проксі та будь-яких засобів для зміни регіону/пінгу суворо заборонено.<br><br>
-4. Формат турніру:<br> 
-Матчі групового етапу — Best of 2 (BO2).<br>
-Півфінал — Best of 3 (BO3).<br>
-Фінал — Best of 5 (BO5).<br>
-Перемагає команда, яка першою виграє 13 раундів.<br>
-Карти обираються методом “ban/pick” (відмова/вибір).<br>
-Перерва між половинами — 1 хвилина. Перемикання сторін після 12 раундів.<br><br>
-5. Поведінка гравців:<br>
-Заборонено використання стороннього ПЗ, читів і багів.<br>
-Образи, токсична поведінка та провокації заборонені.<br>
-Усі спірні ситуації вирішує суддя. Рішення адміністрації остаточні.<br><br>
-6. Переривання матчу:<br>
-Якщо гравець вилетів — матч ставиться на технічну перерву.<br><br>
-7. Санкції:<br>
-1-е порушення — попередження.<br>
-2-е — дискваліфікація гравця або команди залежно від тяжкості.<br>
-Повторні порушення — негайне зняття з турніру.<br><br>
-8. Призи та нагороди:<br>
-Призовий фонд і розподіл місць оголошуються перед початком турніру.<br>
-Призи розподіляються всередині команди самостійно або порівну (за замовчуванням).`,
-
-
-  "en": `1. General Provisions:<br>
-The tournament is held in the Standoff 2 discipline.<br>
-Match format: 5 vs 5 Tournament mode.<br>
-All participants must follow fair play rules and respect other players and referees.<br><br>
-2. Participation and Registration:<br>
-A team consists of 5 main players and up to 2 substitutes.<br>
-Regions: Poland, Netherlands, France.<br>
-Maximum allowed ping is 100 ms. Players exceeding this may be removed.<br>
-Registration is via the platform or form specified by the organizers.<br><br>
-3. Technical Requirements:<br>
-Games are played only on mobile devices. Emulators are prohibited.<br>
-Ping is checked before each match.<br>
-Use of VPN, proxy, or any means to change region/ping is strictly prohibited.<br><br>
-4. Tournament Format:<br>
-Group stage matches — Best of 2 (BO2).<br>
-Semifinals — Best of 3 (BO3).<br>
-Final — Best of 5 (BO5).<br>
-Victory goes to the team that first wins 13 rounds.<br>
-Maps are chosen by “ban/pick” method.<br>
-Break between halves — 1 minute. Sides switch after 12 rounds.<br><br>
-5. Player Behavior:<br>
-Use of third-party software, cheats, and bugs is prohibited.<br>
-Insults, toxic behavior, and provocations are forbidden.<br>
-All disputes are resolved by the referee. Administration decisions are final.<br><br>
-6. Match Interruptions:<br>
-If a player disconnects, the match is put on technical pause.<br><br>
-7. Sanctions:<br>
-1st violation — warning.<br>
-2nd — disqualification of the player or team depending on severity.<br>
-Repeated violations — immediate removal from the tournament.<br><br>
-8. Prizes and Awards:<br>
-Prize pool and placements are announced before the tournament.<br>
-Prizes are distributed within the team independently or equally (by default).`,
-
-
-  "ru": `1. Общие положения:<br>
-Турнир проводится по дисциплине Standoff 2.<br>
-Формат матчей: 5 на 5 в режиме Турнир.<br>
-Все участники обязаны соблюдать правила честной игры и уважать других игроков и судей.<br><br>
-2. Участие и регистрация:<br>
-Команда состоит из 5 основных игроков и до 2 запасных.<br>
-Регионы: Польша, Нидерланды, Франция.<br>
-Максимально допустимый пинг — 100 мс. Игроки с превышением этого значения могут быть отстранены.<br>
-Регистрация проходит через платформу или форму, указанную организаторами.<br><br>
-3. Технические требования:<br>
-Игра проводится только на мобильных устройствах. Использование эмуляторов запрещено.<br>
-Проверка пинга производится перед каждым матчем.<br>
-Использование VPN, прокси и любых средств для изменения региона/пинга строго запрещено.<br><br>
-4. Формат турнира:<br>
-Матчи группового этапа — Best of 2 (BO2).<br>
-Полуфинал — Best of 3 (BO3).<br>
-Финал — Best of 5 (BO5).<br>
-Победа присуждается команде, первой выигравшей 13 раундов.<br>
-Карты выбираются методом “ban/pick” (отказ/выбор).<br>
-Перерывы между половинами — 1 минута. Переключение сторон после 12 раундов.<br><br>
-5. Поведение игроков:<br>
-Запрещено использование стороннего ПО, читов и багов.<br>
-Оскорбления, токсичное поведение и провокации запрещены.<br>
-Все спорные ситуации решаются судьёй. Решения администрации окончательны.<br><br>
-6. Прерывание матча:<br>
-При вылете игрока матч ставится на техническую паузу.<br><br>
-7. Санкции:<br>
-1-е нарушение — предупреждение.<br>
-2-е — дисквалификация игрока или команды в зависимости от тяжести.<br>
-Повторяющиеся нарушения — немедленное снятие с турнира.<br><br>
-8. Призы и награды:<br>
-Призовой фонд и распределение мест объявляются перед началом турнира.<br>
-Призы распределяются внутри команды самостоятельно или поровну (по умолчанию).`,
-
-
-  "pl": `1. Postanowienia ogólne:<br>
-Turniej odbywa się w dyscyplinie Standoff 2.<br>
-Format meczów: 5 na 5 w trybie Turniej.<br>
-Wszyscy uczestnicy muszą przestrzegać zasad fair play i szanować innych graczy oraz sędziów.<br><br>
-2. Udział i rejestracja:<br>
-Drużyna składa się z 5 głównych graczy i do 2 rezerwowych.<br>
-Regiony: Polska, Holandia, Francja.<br>
-Maksymalny dozwolony ping — 100 ms. Gracze z wyższym pingiem mogą zostać wykluczeni.<br>
-Rejestracja odbywa się przez platformę lub formularz wskazany przez organizatorów.<br><br>
-3. Wymagania techniczne:<br>
-Gra odbywa się wyłącznie na urządzeniach mobilnych. Używanie emulatorów jest zabronione.<br>
-Ping sprawdzany jest przed każdym meczem.<br>
-Korzystanie z VPN, proxy lub innych środków do zmiany regionu/pingu jest surowo zabronione.<br><br>
-4. Format turnieju:<br>
-Mecze fazy grupowej — Best of 2 (BO2).<br>
-Półfinał — Best of 3 (BO3).<br>
-Finał — Best of 5 (BO5).<br>
-Wygrywa drużyna, która jako pierwsza zdobędzie 13 rund.<br>
-Mapy wybierane są metodą “ban/pick” (odrzucenie/wybór).<br>
-Przerwa między połowami — 1 minuta. Zmiana stron po 12 rundach.<br><br>
-5. Zachowanie graczy:<br>
-Zakazane jest używanie zewnętrznego oprogramowania, cheatów i bugów.<br>
-Obelgi, toksyczne zachowanie i prowokacje są zabronione.<br>
-Wszelkie sporne sytuacje rozstrzyga sędzia. Decyzje administracji są ostateczne.<br><br>
-6. Przerwanie meczu:<br>
-W przypadku rozłączenia gracza mecz zostaje wstrzymany.<br><br>
-7. Sankcje:<br>
-1. naruszenie — ostrzeżenie.<br>
-2. — dyskwalifikacja gracza lub drużyny w zależności od wagi przewinienia.<br>
-Powtarzające się naruszenia — natychmiastowe usunięcie z turnieju.<br><br>
-8. Nagrody:<br>
-Pula nagród i podział miejsc ogłaszane są przed rozpoczęciem turnieju.<br>
-Nagrody są rozdzielane wewnątrz drużyny samodzielnie lub po równo (domyślnie).`
-},
-    // ... додай інші ключі за потреби
-  };
-  function applyLang(lang) {
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-      const key = el.getAttribute("data-i18n");
-      if (translation[key] && translation[key][lang]) {
-        el.innerHTML = translation[key][lang];
+  function loadProfile() {
+    if (userProfile) {
+      document.getElementById('registerBtn').style.display = 'none';
+      document.getElementById('profileForm').style.display = 'none';
+      document.getElementById('playerProfile').style.display = 'block';
+      document.getElementById('profileNick').textContent = userProfile.standoffNick;
+      document.getElementById('profileId').textContent = userProfile.standoffId;
+      document.getElementById('profileTgUsername').textContent = userProfile.tgUsername || 'N/A';
+      document.getElementById('profileTgId').textContent = userProfile.tgId || 'N/A';
+      document.getElementById('createTeamBtn').style.display = 'block';
+      if (userTeam) {
+        document.getElementById('createTeamBtn').style.display = 'none'; // Hide if team exists
       }
-    });
-    // Placeholder переклад
-    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
-      const key = el.getAttribute("data-i18n-placeholder");
-      if (translation[key] && translation[key][lang]) {
-        el.placeholder = translation[key][lang];
-      }
-    });
-    localStorage.setItem("language", lang);
-  }
-  document.querySelectorAll(".lang-option").forEach(btn => {
-    btn.addEventListener("click", () => {
-      applyLang(btn.dataset.lang);
-      langPopup.classList.remove("active");
-    });
-  });
-  applyLang(localStorage.getItem("language") || "uk");
-
-  // --- Попапи ---
-  const langBtn = document.getElementById("langBtn");
-  const langPopup = document.getElementById("langPopup");
-  const notificationBtn = document.getElementById("notificationBtn");
-  const notificationPopup = document.getElementById("notificationPopup");
-  const avatar = document.getElementById("avatar");
-  const profileModal = document.getElementById("profileModal");
-  const closeProfileModalBtn = document.getElementById("closeProfileModalBtn");
-  const adminPopup = document.getElementById("adminPopup");
-
-  // Відкрити попап мови
-  langBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    closeAllPopupsExcept(langPopup);
-    langPopup?.classList.toggle("active");
-  });
-
-  // Відкрити попап нотифікацій
-  notificationBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    closeAllPopupsExcept(notificationPopup);
-    notificationPopup?.classList.toggle("active");
-  });
-
-  // Відкрити попап профілю
-  avatar?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    closeAllPopupsExcept(profileModal);
-    profileModal?.classList.add("active");
-  });
-  closeProfileModalBtn?.addEventListener("click", () => {
-    profileModal?.classList.remove("active");
-  });
-
-  // Відкрити адмін-попап
-  adminMenuBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    closeAllPopupsExcept(adminPopup);
-    adminPopup?.classList.toggle("active");
-  });
-
-  // Закриття всіх попапів при кліку поза ними або на інший попап
-  function closeAllPopupsExcept(except) {
-    [langPopup, notificationPopup, adminPopup].forEach(popup => {
-      if (popup && popup !== except) popup.classList.remove("active");
-    });
-    if (profileModal && profileModal !== except) profileModal.classList.remove("active");
-  }
-  document.addEventListener("click", function(event) {
-    const popups = [langPopup, notificationPopup, adminPopup, profileModal];
-    let clickedInside = false;
-    popups.forEach(popup => {
-      if (popup && popup.classList.contains("active") && popup.contains(event.target)) {
-        clickedInside = true;
-      }
-    });
-    if (!clickedInside) {
-      closeAllPopupsExcept(null);
-    }
-  });
-  profileModal?.addEventListener("click", function(event) {
-    if (event.target === profileModal) {
-      profileModal.classList.remove("active");
-    }
-  });
-
-  // --- Реєстрація: додаткові поля Telegram ---
-  // const registerBtn = document.getElementById("registerBtn");
-  // const profileForm = document.getElementById("profileForm");
-
-  // Додаємо поля Telegram Username та Telegram ID, якщо їх ще немає
-  if (!document.getElementById("tgUsername")) {
-    const tgUsernameLabel = document.createElement("label");
-    tgUsernameLabel.setAttribute("for", "tgUsername");
-    tgUsernameLabel.setAttribute("data-i18n", "tg_user");
-    tgUsernameLabel.innerHTML = translation["tg_user"]["uk"];
-    const tgUsernameInput = document.createElement("input");
-    tgUsernameInput.id = "tgUsername";
-    tgUsernameInput.name = "tgUsername";
-    tgUsernameInput.type = "text";
-    tgUsernameInput.readOnly = true;
-    tgUsernameInput.style.background = "#222";
-    tgUsernameInput.style.color = "#aaa";
-    tgUsernameInput.style.border = "1px solid #444";
-    tgUsernameInput.required = true;
-
-    const tgIdLabel = document.createElement("label");
-    tgIdLabel.setAttribute("for", "tgId");
-    tgIdLabel.setAttribute("data-i18n", "tg_id");
-    tgIdLabel.innerHTML = translation["tg_id"]["uk"];
-    const tgIdInput = document.createElement("input");
-    tgIdInput.id = "tgId";
-    tgIdInput.name = "tgId";
-    tgIdInput.type = "text";
-    tgIdInput.readOnly = true;
-    tgIdInput.style.background = "#222";
-    tgIdInput.style.color = "#aaa";
-    tgIdInput.style.border = "1px solid #444";
-    tgIdInput.required = true;
-
-    // Вставити після поля standoffId
-    const standoffIdInput = document.getElementById("standoffId");
-    if (standoffIdInput && profileForm) {
-      profileForm.insertBefore(tgUsernameLabel, standoffIdInput.nextSibling);
-      profileForm.insertBefore(tgUsernameInput, tgUsernameLabel.nextSibling);
-      profileForm.insertBefore(tgIdLabel, tgUsernameInput.nextSibling);
-      profileForm.insertBefore(tgIdInput, tgIdLabel.nextSibling);
-    }
-  }
-
-  // Кнопка "Зареєструватись" завжди активна
-  registerBtn?.removeAttribute("disabled");
-
-  // При відкритті форми — підставляємо username та id
-  registerBtn?.addEventListener("click", () => {
-    registerBtn.style.display = "none";
-    profileForm.style.display = "flex";
-    // Підставити username та id
-    const tgUsernameInput = document.getElementById("tgUsername");
-    const tgIdInput = document.getElementById("tgId");
-    if (tgUsernameInput) tgUsernameInput.value = userUsername ? "@" + userUsername : "";
-    if (tgIdInput) tgIdInput.value = userId || "";
-
-    // Після натискання "Готово" — зберегти профіль
-document.getElementById("doneBtn")?.addEventListener("click", (e) => {
-  e.preventDefault();
-
-  // Перевірка на заповненість полів
-  const standoffNick = document.getElementById("standoffNick").value.trim();
-  const standoffId = document.getElementById("standoffId").value.trim();
-  if (!standoffNick || !standoffId) {
-    alert("Будь ласка, заповніть усі обов'язкові поля.");
-    return;
-  }
-
-const profile = JSON.parse(localStorage.getItem("userProfile") || "{}");
-const team = JSON.parse(localStorage.getItem("userTeam") || "{}");
-
-const playerProfile = document.getElementById("playerProfile");
-const createTeamBtn = document.getElementById("createTeamBtn");
-const profileForm = document.getElementById("profileForm");
-const teamForm = document.getElementById("teamForm");
-const registerBtn = document.getElementById("registerBtn");
-
-if (profile.standoffNick) {
-  // профіль є — ховаємо кнопку реєстрації й форму
-  registerBtn.style.display = "none";
-  profileForm.style.display = "none";
-  document.getElementById("profileNick").textContent = profile.standoffNick;
-  document.getElementById("profileId").textContent = profile.standoffId;
-  playerProfile.style.display = "block";
-
-  if (createTeamBtn) {
-  createTeamBtn.addEventListener("click", () => {
-    teamForm.style.display = "block";
-    document.getElementById("teamSuccessMsg").style.display = "none";
-  });
-}
-
-} else {
-  // профілю немає — показуємо кнопку реєстрації
-  registerBtn.style.display = "block";
-  profileForm.style.display = "none";
-  createTeamBtn.style.display = "none";
-  teamForm.style.display = "none";
-}
-
-
-  const profileData = {
-    standoffNick: document.getElementById("standoffNick").value,
-    standoffId: document.getElementById("standoffId").value,
-    tgUsername: document.getElementById("tgUsername")?.value || "",
-    tgId: document.getElementById("tgId")?.value || "",
-  };
-
-  localStorage.setItem("userProfile", JSON.stringify(profileData));
-  document.getElementById("successMsg").style.display = "block";
-  document.getElementById("createTeamBtn").style.display = "block";
-  document.getElementById("profileForm").style.display = "none";
-  document.getElementById("profileNick").textContent = profileData.standoffNick;
-  document.getElementById("profileId").textContent = profileData.standoffId;
-  document.getElementById("playerProfile").style.display = "block";
-});
-
-// Збереження команди
-document.getElementById("teamDoneBtn")?.addEventListener("click", (e) => {
-  e.preventDefault();
-
-  const teamData = {
-    tag: document.getElementById("teamTag").value,
-    name: document.getElementById("teamName").value,
-    players: []
-  };
-
-  for (let i = 1; i <= 5; i++) {
-    teamData.players.push({
-      id: document.getElementById(`main${i}Id`).value,
-      nick: document.getElementById(`main${i}Nick`).value,
-      tg: document.getElementById(`main${i}Tg`).value
-    });
-  }
-
-  localStorage.setItem("userTeam", JSON.stringify(teamData));
-  document.getElementById("teamSuccessMsg").style.display = "block";
-  document.getElementById("teamForm").style.display = "none";
-  showTeamInfo();
-});
-
-// Показ команди
-function showTeamInfo() {
-  const data = JSON.parse(localStorage.getItem("userTeam") || "{}");
-  if (!data?.name) return;
-
-  const container = document.createElement("div");
-  container.style.marginTop = "20px";
-  container.style.borderTop = "1px solid #555";
-  container.style.paddingTop = "10px";
-
-  container.innerHTML = `
-    <div class="player-profile-title">Моя команда</div>
-    <div><b>[${data.tag}] ${data.name}</b></div>
-    <ul style="margin:10px 0; padding-left:20px;">
-      ${data.players.map(p => `<li>${p.nick} (${p.tg})</li>`).join("")}
-    </ul>
-    <button class="done-btn" id="editTeamBtn">Змінити</button>
-  `;
-
-  const profileSection = document.getElementById("playerProfile");
-  profileSection.appendChild(container);
-
-  document.getElementById("editTeamBtn")?.addEventListener("click", () => {
-    loadTeamIntoForm();
-    document.getElementById("teamForm").style.display = "block";
-    document.getElementById("teamSuccessMsg").style.display = "none";
-  });
-}
-
-// Заповнення форми редагування
-function loadTeamIntoForm() {
-  const data = JSON.parse(localStorage.getItem("userTeam") || "{}");
-  if (!data?.name) return;
-
-  document.getElementById("teamTag").value = data.tag;
-  document.getElementById("teamName").value = data.name;
-
-  data.players.forEach((p, i) => {
-    const idx = i + 1;
-    document.getElementById(`main${idx}Id`).value = p.id;
-    document.getElementById(`main${idx}Nick`).value = p.nick;
-    document.getElementById(`main${idx}Tg`).value = p.tg;
-  });
-}
-
-
-
-  });
-});
-</script>
-
-<!-- Modal: Редагування турніру -->
-<div id="adminModal" class="modal" style="display: none;">
-  <div class="modal-content" style="max-width: 600px; margin: 5% auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); position: relative;">
-    <span class="close" id="adminModalClose" style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 20px;">❌</span>
-    <h2 style="margin-top: 0;">Редагування турніру</h2>
-    <div style="display: flex; justify-content: space-between; gap: 20px;">
-      <div style="flex: 1;">
-        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Груповий етап')">📊 Редагувати груповий етап</button>
-        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Плей-офф')">🏆 Редагувати плей-офф</button>
-        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Дискваліфікація')">🚫 Дискваліфікувати команду</button>
-        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Попередження')">⚠️ Видати попередження</button>
-      </div>
-      <div style="text-align: right;">
-        <button id="deleteTournamentBtn" style="background-color: #d32f2f; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-size: 16px; cursor: pointer;">🗑️ Видалити турнір</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<script>
-  const userId = 5806282517;
-
-  const editBtn = document.getElementById("editTournamentBtn");
-  const modal = document.getElementById("adminModal");
-  const closeBtn = document.getElementById("adminModalClose");
-  const deleteBtn = document.getElementById("deleteTournamentBtn");
-
-  if (userId === 5806282517 || userId === 7853048233) {
-    if (editBtn) editBtn.style.display = "inline-block";
-  }
-
-  editBtn?.addEventListener("click", () => {
-    modal.style.display = "block";
-  });
-
-  closeBtn?.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-
-  window.addEventListener("click", (event) => {
-    if (event.target === modal) {
-      modal.style.display = "none";
-    }
-  });
-
-  deleteBtn?.addEventListener("click", () => {
-    const confirmDelete = confirm("Ти впевнений, що хочеш видалити цей турнір?");
-    if (confirmDelete) {
-      const title = document.getElementById("tournamentViewTitle")?.textContent;
-      if (title) {
-        const allTournaments = JSON.parse(localStorage.getItem("tournaments") || "[]");
-        const updated = allTournaments.filter(t => t.name !== title);
-        localStorage.setItem("tournaments", JSON.stringify(updated));
-        alert("Турнір видалено.");
-        location.reload();
-      }
-    }
-  });
-</script>
-
-<script src="admin-functions.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const tg = window.Telegram?.WebApp;
-  tg?.ready();
-  const user = tg?.initDataUnsafe?.user;
-  const userId = user?.id;
-
-  const isAdmin = userId === 5806282517 || userId === 7853048233;
-  const editTournamentBtn = document.getElementById("editTournamentBtn");
-
-  if (editTournamentBtn) {
-    if (isAdmin) {
-      editTournamentBtn.style.display = "inline-block";
     } else {
-      editTournamentBtn.style.display = "none";
+      document.getElementById('registerBtn').style.display = 'block';
+      document.getElementById('profileForm').style.display = 'none';
+      document.getElementById('playerProfile').style.display = 'none';
+      document.getElementById('createTeamBtn').style.display = 'none';
+    }
+    if (userTeam) {
+      document.getElementById('teamForm').style.display = 'none';
     }
   }
-});
-</script>
+
+  document.getElementById('registerBtn').addEventListener('click', () => {
+    document.getElementById('profileForm').style.display = 'flex';
+    document.getElementById('registerBtn').style.display = 'none';
+  });
+
+  document.getElementById('profileForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    userProfile = {
+      standoffNick: document.getElementById('standoffNick').value,
+      standoffId: document.getElementById('standoffId').value,
+      tgUsername: user ? user.username : 'N/A', // З Telegram WebApp
+      tgId: user ? user.id : 'N/A' // З Telegram WebApp
+    };
+    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+    document.getElementById('successMsg').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('successMsg').style.display = 'none';
+      loadProfile(); // Re-render profile section
+    }, 2000);
+  });
+
+  document.getElementById('createTeamBtn').addEventListener('click', () => {
+    document.getElementById('teamForm').style.display = 'flex';
+    document.getElementById('createTeamBtn').style.display = 'none';
+  });
+
+  document.getElementById('teamAvatar').addEventListener('change', (event) => {
+    const [file] = event.target.files;
+    if (file) {
+      document.getElementById('teamAvatarPreview').src = URL.createObjectURL(file);
+      document.getElementById('teamAvatarPreview').style.display = 'block';
+    }
+  });
+
+  document.getElementById('teamForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const teamName = document.getElementById('teamName').value;
+    const teamTag = document.getElementById('teamTag').value;
+    const teamAvatarFile = document.getElementById('teamAvatar').files[0];
+    let teamAvatarBase64 = '';
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      teamAvatarBase64 = reader.result;
+      userTeam = {
+        name: teamName,
+        tag: teamTag,
+        avatar: teamAvatarBase64,
+        players: [
+          { id: document.getElementById('main1Id').value, nick: document.getElementById('main1Nick').value, tg: document.getElementById('main1Tg').value, tgId: document.getElementById('main1TgId').value },
+          { id: document.getElementById('main2Id').value, nick: document.getElementById('main2Nick').value, tg: document.getElementById('main2Tg').value, tgId: document.getElementById('main2TgId').value },
+          { id: document.getElementById('main3Id').value, nick: document.getElementById('main3Nick').value, tg: document.getElementById('main3Tg').value, tgId: document.getElementById('main3TgId').value },
+          { id: document.getElementById('main4Id').value, nick: document.getElementById('main4Nick').value, tg: document.getElementById('main4Tg').value, tgId: document.getElementById('main4TgId').value },
+          { id: document.getElementById('main5Id').value, nick: document.getElementById('main5Nick').value, tg: document.getElementById('main5Tg').value, tgId: document.getElementById('main5TgId').value },
+          { id: document.getElementById('spare1Id').value, nick: document.getElementById('spare1Nick').value, tg: document.getElementById('spare1Tg').value, tgId: document.getElementById('spare1TgId').value },
+          { id: document.getElementById('spare2Id').value, nick: document.getElementById('spare2Nick').value, tg: document.getElementById('spare2Tg').value, tgId: document.getElementById('spare2TgId').value }
+        ]
+      };
+      localStorage.setItem('userTeam', JSON.stringify(userTeam));
+      document.getElementById('teamSuccessMsg').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('teamSuccessMsg').style.display = 'none';
+        document.getElementById('teamForm').style.display = 'none';
+        document.getElementById('createTeamBtn').style.display = 'none'; // Hide after team creation
+      }, 2000);
+    };
+    if (teamAvatarFile) {
+      reader.readAsDataURL(teamAvatarFile);
+    } else {
+      reader.onloadend(); // Call immediately if no file
+    }
+  });
 
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const groupStageBtn = document.getElementById("editGroupStageBtn");
-  const groupStageTable = document.getElementById("groupStageTable");
-  const groupStageActions = document.getElementById("groupStageActions");
+  // Admin Menu Visibility
+  if (isAdmin) {
+    document.getElementById('admin-button-container').style.display = 'block';
+    document.getElementById('adminMenuBtn').style.display = 'block';
+  }
 
-  if (groupStageBtn) {
-    groupStageBtn.addEventListener("click", () => {
-      if (groupStageTable) groupStageTable.style.display = "table";
-      if (groupStageActions) groupStageActions.style.display = "block";
+  document.getElementById('adminMenuBtn').addEventListener('click', () => {
+    document.getElementById('adminPopup').classList.toggle('active');
+  });
+
+  document.getElementById('closeAdminModal').addEventListener('click', () => {
+    document.getElementById('adminPopup').classList.remove('active');
+  });
+
+
+  // Tournament Creation (Existing functionality)
+  document.getElementById('createTournamentAdminBtn').addEventListener('click', () => {
+    document.getElementById('createTournamentModal').classList.add('active');
+    document.getElementById('adminPopup').classList.remove('active'); // Close admin menu
+  });
+
+  document.getElementById('closeTournamentModalBtn').addEventListener('click', () => {
+    document.getElementById('createTournamentModal').classList.remove('active');
+  });
+
+  document.getElementById('tournamentForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const tournament = {
+      name: document.getElementById('tournamentName').value,
+      discipline: document.getElementById('tournamentDiscipline').value,
+      format: document.getElementById('tournamentFormat').value,
+      startDate: document.getElementById('startDate').value,
+      endDate: document.getElementById('endDate').value,
+      prizePool: document.getElementById('prizePool').value,
+      description: document.getElementById('description').value
+    };
+    console.log('New tournament created:', tournament);
+    addNotification(`Новий турнір "${tournament.name}" створено!`);
+    document.getElementById('createTournamentModal').classList.remove('active');
+    document.getElementById('tournamentForm').reset();
+  });
+
+
+  // Navigation
+  function showSection(sectionId) {
+    document.querySelectorAll('.section').forEach(section => {
+      section.classList.remove('active');
+    });
+    document.getElementById(sectionId).classList.add('active');
+    // Hide all popups when switching sections
+    document.querySelectorAll('.popup, .modal').forEach(popup => {
+      popup.classList.remove('active');
     });
   }
 
-  document.getElementById("addTeamBtn")?.addEventListener("click", () => {
-    const tbody = document.querySelector("#groupStageTable tbody");
-    if (tbody) {
-      const row = tbody.insertRow();
-      row.insertCell().textContent = "Нова команда";
-      row.insertCell().textContent = "0";
-      row.insertCell().textContent = "0";
-      row.insertCell().textContent = "0";
-    }
-  });
-
-  document.getElementById("removeTeamBtn")?.addEventListener("click", () => {
-    const tbody = document.querySelector("#groupStageTable tbody");
-    if (tbody && tbody.rows.length > 0) {
-      tbody.deleteRow(tbody.rows.length - 1);
-    }
-  });
-
-  document.getElementById("disqualifyTeamBtn")?.addEventListener("click", () => {
-    const name = prompt("Введіть назву команди для дискваліфікації:");
-    if (!name) return;
-    const rows = document.querySelectorAll("#groupStageTable tbody tr");
-    rows.forEach(row => {
-      if (row.cells[0]?.textContent.trim() === name.trim()) {
-        row.style.backgroundColor = "#fca5a5";
-        row.insertCell().textContent = "DSQ";
-      }
+  function showTournamentTab(tabId) {
+    document.querySelectorAll('.tournament-tab-content').forEach(content => {
+      content.classList.remove('active');
     });
+    document.querySelectorAll('.tournament-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    document.getElementById(tabId).classList.add('active');
+    document.querySelector(`.tournament-tab[onclick*="${tabId}"]`).classList.add('active');
+  }
+
+  // Initial load
+  document.addEventListener('DOMContentLoaded', () => {
+    loadProfile();
+    showSection('homeSection'); // Default section
+    // Check if Telegram WebApp is ready and then expand
+    if (window.Telegram && window.Telegram.WebApp) {
+      Telegram.WebApp.ready();
+      Telegram.WebApp.expand();
+    }
+    renderGroupStageTable(); // Render table on initial load
   });
 
-  document.getElementById("assignPointsBtn")?.addEventListener("click", () => {
-    const name = prompt("Назва команди для нарахування очок:");
-    const points = prompt("Скільки очок додати?", "3");
-    if (!name || isNaN(points)) return;
-    const rows = document.querySelectorAll("#groupStageTable tbody tr");
-    rows.forEach(row => {
-      if (row.cells[0]?.textContent.trim() === name.trim()) {
-        const current = parseInt(row.cells[1].textContent) || 0;
-        row.cells[1].textContent = current + parseInt(points);
-      }
-    });
+  function loadTournamentDetails(tournamentName) {
+    // This is a placeholder for actual tournament data loading
+    // In a real app, this would fetch data from a backend or a larger dataset
+    document.getElementById('currentTournamentTitle').textContent = tournamentName;
+    console.log(`Loading details for: ${tournamentName}`);
+  }
+
+  // Group Stage Management Logic
+  let groupStageTeams = JSON.parse(localStorage.getItem('groupStageTeams')) || [];
+
+  function saveGroupStageData() {
+      localStorage.setItem('groupStageTeams', JSON.stringify(groupStageTeams));
+      alert('Зміни збережено!');
+      renderGroupStageTable(); // Update both tables
+      renderGroupStageAdminTable();
+  }
+
+  function renderGroupStageTable() {
+      const tbody = document.querySelector('#groupStageTab .group-table tbody');
+      tbody.innerHTML = ''; // Clear existing rows
+
+      // Sort teams for display: by points (desc), then wins (desc), then losses (asc), then name (asc)
+      const sortedTeams = [...groupStageTeams].sort((a, b) => {
+          if (a.isDisqualified && !b.isDisqualified) return 1;
+          if (!a.isDisqualified && b.isDisqualified) return -1;
+          if (b.points !== a.points) return b.points - a.points;
+          if (b.wins !== a.wins) return b.wins - a.wins;
+          if (a.losses !== b.losses) return a.losses - b.losses;
+          return a.name.localeCompare(b.name);
+      });
+
+      sortedTeams.forEach(team => {
+          const row = tbody.insertRow();
+          if (team.isDisqualified) {
+              row.classList.add('disqualified');
+          }
+          row.insertCell().textContent = team.name;
+          row.insertCell().textContent = team.matches;
+          row.insertCell().textContent = team.wins;
+          row.insertCell().textContent = team.draws;
+          row.insertCell().textContent = team.losses;
+          row.insertCell().textContent = team.points;
+      });
+  }
+
+  function renderGroupStageAdminTable() {
+      const tbody = document.querySelector('#groupStageAdminModal .group-table tbody');
+      tbody.innerHTML = ''; // Clear existing rows
+
+      groupStageTeams.forEach(team => {
+          const row = tbody.insertRow();
+          if (team.isDisqualified) {
+              row.classList.add('disqualified');
+          }
+          row.insertCell().textContent = team.name;
+          row.insertCell().textContent = team.matches;
+          row.insertCell().textContent = team.wins;
+          row.insertCell().textContent = team.draws;
+          row.insertCell().textContent = team.losses;
+          row.insertCell().textContent = team.points;
+      });
+  }
+
+  // Open Group Stage Admin Modal
+  document.getElementById('editGroupStageBtn').addEventListener('click', () => {
+      document.getElementById('groupStageAdminModal').classList.add('active');
+      document.getElementById('adminPopup').classList.remove('active');
+      renderGroupStageAdminTable();
   });
-});
+
+  document.getElementById('closeGroupStageAdminModalBtn').addEventListener('click', () => {
+      document.getElementById('groupStageAdminModal').classList.remove('active');
+  });
+
+  document.getElementById('addTeamBtn').addEventListener('click', () => {
+      const teamName = prompt('Введіть назву команди для додавання:');
+      if (teamName) {
+          if (groupStageTeams.find(team => team.name.toLowerCase() === teamName.toLowerCase())) {
+              alert('Команда з такою назвою вже існує!');
+              return;
+          }
+          groupStageTeams.push({
+              name: teamName,
+              matches: 0,
+              wins: 0,
+              draws: 0,
+              losses: 0,
+              points: 0,
+              isDisqualified: false
+          });
+          saveGroupStageData();
+          alert(`Команду "${teamName}" додано.`);
+      }
+  });
+
+  document.getElementById('deleteTeamBtn').addEventListener('click', () => {
+      const teamName = prompt('Введіть назву команди для видалення:');
+      if (teamName) {
+          const initialLength = groupStageTeams.length;
+          groupStageTeams = groupStageTeams.filter(team => team.name.toLowerCase() !== teamName.toLowerCase());
+          if (groupStageTeams.length < initialLength) {
+              saveGroupStageData();
+              alert(`Команду "${teamName}" видалено.`);
+          } else {
+              alert(`Команду "${teamName}" не знайдено.`);
+          }
+      }
+  });
+
+  document.getElementById('disqualifyTeamGSBtn').addEventListener('click', () => {
+      const teamName = prompt('Введіть назву команди для дискваліфікації/відновлення:');
+      if (teamName) {
+          const team = groupStageTeams.find(t => t.name.toLowerCase() === teamName.toLowerCase());
+          if (team) {
+              team.isDisqualified = !team.isDisqualified; // Toggle disqualification status
+              saveGroupStageData();
+              alert(`Статус команди "${teamName}" змінено на: ${team.isDisqualified ? 'Дискваліфікована' : 'Відновлена'}.`);
+          } else {
+              alert(`Команду "${teamName}" не знайдено.`);
+          }
+      }
+  });
+
+  document.getElementById('awardPointsBtn').addEventListener('click', () => {
+      const teamName = prompt('Введіть назву команди, якій видати очки:');
+      if (!teamName) return;
+
+      const team = groupStageTeams.find(t => t.name.toLowerCase() === teamName.toLowerCase());
+      if (!team) {
+          alert(`Команду "${teamName}" не знайдено.`);
+          return;
+      }
+
+      if (team.isDisqualified) {
+          alert(`Команда "${teamName}" дискваліфікована. Неможливо видавати очки.`);
+          return;
+      }
+
+      const pointsInput = prompt('Введіть кількість очок (перемога: 3, нічия: 1, поразка: 0):');
+      const points = parseInt(pointsInput);
+
+      if (isNaN(points) || points < 0 || points > 3) {
+          alert('Невірна кількість очок. Введіть 0, 1 або 3.');
+          return;
+      }
+
+      const opponentName = prompt('Введіть назву команди-суперника (або залиште пустим, якщо матч не зіграно):');
+      let opponent = null;
+      if (opponentName) {
+          opponent = groupStageTeams.find(t => t.name.toLowerCase() === opponentName.toLowerCase());
+          if (!opponent) {
+              alert(`Команду-суперника "${opponentName}" не знайдено.`);
+              return;
+          }
+          if (opponent.isDisqualified) {
+              alert(`Команда-суперник "${opponentName}" дискваліфікована. Неможливо зарахувати матч.`);
+              return;
+          }
+      }
+
+      team.matches++;
+      if (opponent) opponent.matches++;
+
+      if (points === 3) { // Win
+          team.wins++;
+          team.points += 3;
+          if (opponent) opponent.losses++;
+      } else if (points === 1) { // Draw
+          team.draws++;
+          team.points += 1;
+          if (opponent) {
+              opponent.draws++;
+              opponent.points += 1;
+          }
+      } else { // Loss (points === 0)
+          team.losses++;
+          if (opponent) opponent.wins++;
+      }
+      saveGroupStageData();
+      alert(`Очки для команди "${teamName}" оновлено.`);
+  });
+
+  document.getElementById('saveGroupStageDataBtn').addEventListener('click', saveGroupStageData);
+
 </script>
-
 </body>
 </html>
