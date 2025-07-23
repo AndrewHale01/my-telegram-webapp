@@ -2164,10 +2164,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const groupStageTable = document.getElementById("groupStageTable");
   const groupStageActions = document.getElementById("groupStageActions");
 
-  groupStageBtn?.addEventListener("click", () => {
-    if (groupStageTable) groupStageTable.style.display = "table";
-    if (groupStageActions) groupStageActions.style.display = "block";
-  });
+  if (groupStageBtn) {
+    groupStageBtn.addEventListener("click", () => {
+      if (groupStageTable) groupStageTable.style.display = "table";
+      if (groupStageActions) groupStageActions.style.display = "block";
+    });
+  }
 
   document.getElementById("addTeamBtn")?.addEventListener("click", () => {
     const tbody = document.querySelector("#groupStageTable tbody");
@@ -2195,18 +2197,6 @@ document.addEventListener("DOMContentLoaded", function () {
       if (row.cells[0]?.textContent.trim() === name.trim()) {
         row.style.backgroundColor = "#fca5a5";
         row.insertCell().textContent = "DSQ";
-      }
-    });
-  });
-
-  document.getElementById("editTeamBtn")?.addEventListener("click", () => {
-    const name = prompt("Введіть назву команди для редагування:");
-    const newName = prompt("Нове ім’я команди:");
-    if (!name || !newName) return;
-    const rows = document.querySelectorAll("#groupStageTable tbody tr");
-    rows.forEach(row => {
-      if (row.cells[0]?.textContent.trim() === name.trim()) {
-        row.cells[0].textContent = newName;
       }
     });
   });
