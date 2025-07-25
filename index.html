@@ -1200,82 +1200,96 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+  // Telegram WebApp userId
   const tg = window.Telegram?.WebApp;
   tg?.ready();
+  // --- Перевірка чи профіль уже збережений ---
+const savedProfile = JSON.parse(localStorage.getItem("userProfile") || "{}");
+const savedTeam = JSON.parse(localStorage.getItem("userTeam") || "{}");
+
+const registerBtn = document.getElementById("registerBtn");
+const profileForm = document.getElementById("profileForm");
+const playerProfile = document.getElementById("playerProfile");
+const createTeamBtn = document.getElementById("createTeamBtn");
+const teamForm = document.getElementById("teamForm");
+
+if (savedProfile.standoffNick) {
+  // Приховуємо реєстрацію
+  registerBtn.style.display = "none";
+  profileForm.style.display = "none";
+
+  // Показуємо збережений профіль
+  document.getElementById("profileNick").textContent = savedProfile.standoffNick;
+  document.getElementById("profileId").textContent = savedProfile.standoffId;
+  document.getElementById("profileTgUsername").textContent = savedProfile.tgUsername;
+  document.getElementById("profileTgId").textContent = savedProfile.tgId;
+
+  
+  playerProfile.style.display = "block";
+
+  // Команда ще не створена — показуємо кнопку
+  if (!savedTeam.name) {
+    createTeamBtn.style.display = "block";
+    teamForm.style.display = "none";
+  } else {
+    // Команда створена — ховаємо все, показуємо лише info
+    createTeamBtn.style.display = "none";
+    teamForm.style.display = "none";
+    showTeamInfo(); // 👈 це вже є в тебе
+  }
+} else {
+  // Якщо профіль не збережено
+  registerBtn.style.display = "block";
+  profileForm.style.display = "none";
+  createTeamBtn.style.display = "none";
+  teamForm.style.display = "none";
+}
+// Обробник: натискання на "Створити команду"
+if (createTeamBtn) {
+  createTeamBtn.addEventListener("click", () => {
+    teamForm.style.display = "block";
+    document.getElementById("teamSuccessMsg").style.display = "none";
+  });
+}
+
+
   const user = tg?.initDataUnsafe?.user;
   const userId = user?.id;
   const userUsername = user?.username || "";
   console.log('userId:', userId, typeof userId, 'username:', userUsername);
 
-  // Перевірка профілю та команди
-  const savedProfile = JSON.parse(localStorage.getItem("userProfile") || "{}");
-  const savedTeam = JSON.parse(localStorage.getItem("userTeam") || "{}");
-  const registerBtn = document.getElementById("registerBtn");
-  const profileForm = document.getElementById("profileForm");
-  const playerProfile = document.getElementById("playerProfile");
-  const createTeamBtn = document.getElementById("createTeamBtn");
-  const teamForm = document.getElementById("teamForm");
-
-  if (savedProfile.standoffNick) {
-    registerBtn.style.display = "none";
-    profileForm.style.display = "none";
-    document.getElementById("profileNick").textContent = savedProfile.standoffNick;
-    document.getElementById("profileId").textContent = savedProfile.standoffId;
-    document.getElementById("profileTgUsername").textContent = savedProfile.tgUsername;
-    document.getElementById("profileTgId").textContent = savedProfile.tgId;
-    playerProfile.style.display = "block";
-    if (!savedTeam.name) {
-      createTeamBtn.style.display = "block";
-      teamForm.style.display = "none";
-    } else {
-      createTeamBtn.style.display = "none";
-      teamForm.style.display = "none";
-      showTeamInfo();
-    }
-  } else {
-    registerBtn.style.display = "block";
-    profileForm.style.display = "none";
-    createTeamBtn.style.display = "none";
-    teamForm.style.display = "none";
+  function showSection(sectionId) {
+  console.log('⏩ Відкривається секція:', sectionId);
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.classList.add("active");
+    window.scrollTo({ top: section.offsetTop, behavior: "smooth" });
   }
+}
 
-  if (createTeamBtn) {
-    createTeamBtn.addEventListener("click", () => {
-      teamForm.style.display = "block";
-      document.getElementById("teamSuccessMsg").style.display = "none";
-    });
-  }
 
-  // Налаштування адмін-панелі
+  // Адмін-кнопка
   const adminButtonContainer = document.getElementById('admin-button-container');
   const adminMenuBtn = document.getElementById('adminMenuBtn');
-  const editBtn = document.getElementById("editTournamentBtn");
-  if (userId == 5806282517 || userId == 7853048233) {
+  if (userId == 5806282517 || userId == 7853048233) { // Заміни на свій ID{
     if (adminButtonContainer) adminButtonContainer.style.display = 'block';
     if (adminMenuBtn) adminMenuBtn.style.display = 'block';
-    if (editBtn) editBtn.style.display = "inline-block";
   } else {
-    if (adminButtonContainer) adminButtonContainer.style.display = 'none';
+    if (adminButtonContainer) adminButtonContainer.style.display = 'none';7853048233
     if (adminMenuBtn) adminMenuBtn.style.display = 'none';
-    if (editBtn) editBtn.style.display = "none";
   }
 
-  // Перемикання секцій
+  // Перемикання секцій по нижній навігації
   const sections = document.querySelectorAll(".section");
   const navItems = document.querySelectorAll(".nav-item");
   function showSection(sectionId) {
-    console.log('⏩ Відкривається секція:', sectionId);
     sections.forEach(s => s.classList.remove("active"));
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.classList.add("active");
-      window.scrollTo({ top: section.offsetTop, behavior: "smooth" });
-    }
+    document.getElementById(sectionId)?.classList.add("active");
     navItems.forEach(n => n.classList.remove("active"));
     const nav = document.getElementById(sectionId.replace("Section", "Nav"));
     if (nav) nav.classList.add("active");
   }
-
   navItems.forEach(nav => {
     nav.addEventListener('click', () => {
       const sectionId = nav.id.replace('Nav', 'Section');
@@ -1284,303 +1298,39 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   showSection('homeSection');
 
-  // Відкриття профілю
-  document.getElementById("avatar").addEventListener("click", () => {
-    document.getElementById("profileModal").classList.add("active");
-  });
-  document.getElementById("closeProfileModalBtn").addEventListener("click", () => {
-    document.getElementById("profileModal").classList.remove("active");
-  });
-
-  // Реєстрація профілю
-  registerBtn.addEventListener("click", () => {
-    profileForm.style.display = "block";
-    registerBtn.style.display = "none";
-  });
-
-  profileForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const profile = {
-      standoffNick: document.getElementById("standoffNick").value,
-      standoffId: document.getElementById("standoffId").value,
-      tgUsername: userUsername,
-      tgId: userId
-    };
-    localStorage.setItem("userProfile", JSON.stringify(profile));
-    document.getElementById("profileNick").textContent = profile.standoffNick;
-    document.getElementById("profileId").textContent = profile.standoffId;
-    document.getElementById("profileTgUsername").textContent = profile.tgUsername;
-    document.getElementById("profileTgId").textContent = profile.tgId;
-    profileForm.style.display = "none";
-    playerProfile.style.display = "block";
-    createTeamBtn.style.display = "block";
-    document.getElementById("successMsg").style.display = "block";
-    setTimeout(() => document.getElementById("successMsg").style.display = "none", 2000);
-  });
-
-  // Створення команди
-  teamForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const team = {
-      name: document.getElementById("teamName").value,
-      tag: document.getElementById("teamTag").value,
-      players: [
-        { id: document.getElementById("main1Id").value, nick: document.getElementById("main1Nick").value, tg: document.getElementById("main1Tg").value, tgId: document.getElementById("main1TgId").value },
-        { id: document.getElementById("main2Id").value, nick: document.getElementById("main2Nick").value, tg: document.getElementById("main2Tg").value, tgId: document.getElementById("main2TgId").value },
-        { id: document.getElementById("main3Id").value, nick: document.getElementById("main3Nick").value, tg: document.getElementById("main3Tg").value, tgId: document.getElementById("main3TgId").value },
-        { id: document.getElementById("main4Id").value, nick: document.getElementById("main4Nick").value, tg: document.getElementById("main4Tg").value, tgId: document.getElementById("main4TgId").value },
-        { id: document.getElementById("main5Id").value, nick: document.getElementById("main5Nick").value, tg: document.getElementById("main5Tg").value, tgId: document.getElementById("main5TgId").value },
-        { id: document.getElementById("spare1Id").value, nick: document.getElementById("spare1Nick").value, tg: document.getElementById("spare1Tg").value, tgId: document.getElementById("spare1TgId").value },
-        { id: document.getElementById("spare2Id").value, nick: document.getElementById("spare2Nick").value, tg: document.getElementById("spare2Tg").value, tgId: document.getElementById("spare2TgId").value }
-      ]
-    };
-    localStorage.setItem("userTeam", JSON.stringify(team));
-    teamForm.style.display = "none";
-    document.getElementById("teamSuccessMsg").style.display = "block";
-    createTeamBtn.style.display = "none";
-    showTeamInfo();
-    setTimeout(() => document.getElementById("teamSuccessMsg").style.display = "none", 2000);
-  });
-
-  function showTeamInfo() {
-    const team = JSON.parse(localStorage.getItem("userTeam") || "{}");
-    if (team.name) {
-      const teamInfo = document.createElement("div");
-      teamInfo.className = "player-profile";
-      teamInfo.innerHTML = `
-        <div class="player-profile-title">Команда</div>
-        <div class="player-profile-row">Тег: ${team.tag}</div>
-        <div class="player-profile-row">Назва: ${team.name}</div>
-        ${team.players.map((p, i) => p.nick ? `<div class="player-profile-row">Гравець ${i+1}: ${p.nick} (ID: ${p.id})</div>` : '').join('')}
-      `;
-      document.getElementById("playerProfile").after(teamInfo);
-    }
+  const editBtn = document.getElementById("editTournamentBtn");
+  if (userId == 5806282517 || userId == 7853048233) {
+    if (editBtn) editBtn.style.display = "inline-block";
   }
 
-  // Адмін-меню
-  adminMenuBtn.addEventListener("click", () => {
-    document.getElementById("adminPopup").classList.toggle("active");
-  });
+  // Робимо функції доступними глобально
+  window.showSection = showSection;
+  window.loadTournamentDetails = loadTournamentDetails;
+  window.showTournamentTab = showTournamentTab;
 
-  // Відкриття модального вікна редагування турніру
-  editBtn.addEventListener("click", () => {
-    document.getElementById("adminModal").classList.add("active");
-    loadGroupStageEdit();
-  });
 
-  document.getElementById("adminModalClose").addEventListener("click", () => {
-    document.getElementById("adminModal").classList.remove("active");
-    document.getElementById("groupStageEdit").style.display = "none";
-  });
-
-  // Налаштування групового етапу
-  let currentTournament = "RFORZ Grand Prix"; // Для прикладу
-  document.getElementById("editGroupStageBtn").addEventListener("click", () => {
-    document.getElementById("groupStageEdit").style.display = "block";
-    loadGroupStageEdit();
-  });
-
-  function loadGroupStageEdit() {
-    const groupData = JSON.parse(localStorage.getItem(`groupStage_${currentTournament}`) || '{"groupA":[],"groupB":[]}');
-    const groupATableEditBody = document.getElementById("groupATableEditBody");
-    const groupBTableEditBody = document.getElementById("groupBTableEditBody");
-    groupATableEditBody.innerHTML = '';
-    groupBTableEditBody.innerHTML = '';
-
-    groupData.groupA.forEach(team => {
-      const row = groupATableEditBody.insertRow();
-      row.insertCell().textContent = team.name;
-      row.insertCell().textContent = team.matches;
-      row.insertCell().textContent = team.wins;
-      row.insertCell().textContent = team.draws;
-      row.insertCell().textContent = team.losses;
-      row.insertCell().textContent = team.points;
-      if (team.disqualified) {
-        row.style.backgroundColor = '#fca5a5';
-        row.insertCell().textContent = 'DSQ';
-      }
-    });
-
-    groupData.groupB.forEach(team => {
-      const row = groupBTableEditBody.insertRow();
-      row.insertCell().textContent = team.name;
-      row.insertCell().textContent = team.matches;
-      row.insertCell().textContent = team.wins;
-      row.insertCell().textContent = team.draws;
-      row.insertCell().textContent = team.losses;
-      row.insertCell().textContent = team.points;
-      if (team.disqualified) {
-        row.style.backgroundColor = '#fca5a5';
-        row.insertCell().textContent = 'DSQ';
-      }
-    });
-  }
-
-  // Додавання команди
-  document.getElementById("addTeamBtn").addEventListener("click", () => {
-    const teamName = prompt("Введіть назву команди:");
-    if (teamName) {
-      const group = prompt("Виберіть групу (A або B):").toUpperCase();
-      if (group !== "A" && group !== "B") {
-        alert("Виберіть групу A або B!");
-        return;
-      }
-      const groupData = JSON.parse(localStorage.getItem(`groupStage_${currentTournament}`) || '{"groupA":[],"groupB":[]}');
-      const newTeam = {
-        name: teamName,
-        matches: 0,
-        wins: 0,
-        draws: 0,
-        losses: 0,
-        points: 0,
-        disqualified: false
-      };
-      if (group === "A") {
-        groupData.groupA.push(newTeam);
-      } else {
-        groupData.groupB.push(newTeam);
-      }
-      localStorage.setItem(`groupStage_${currentTournament}`, JSON.stringify(groupData));
-      loadGroupStageEdit();
-      loadTournamentDetails(currentTournament);
+  // Function to load tournament details (example data)
+    function loadTournamentDetails(tournamentName) {
+        const titleElement = document.getElementById('currentTournamentTitle');
+        titleElement.textContent = tournamentName; // Set the tournament title
+        showTournamentTab('groupStageTab'); // Default to Group Stage tab when opening tournament details
     }
-  });
 
-  // Видалення команди
-  document.getElementById("removeTeamBtn").addEventListener("click", () => {
-    const teamName = prompt("Введіть назву команди для видалення:");
-    if (teamName) {
-      const groupData = JSON.parse(localStorage.getItem(`groupStage_${currentTournament}`) || '{"groupA":[],"groupB":[]}');
-      groupData.groupA = groupData.groupA.filter(team => team.name !== teamName);
-      groupData.groupB = groupData.groupB.filter(team => team.name !== teamName);
-      localStorage.setItem(`groupStage_${currentTournament}`, JSON.stringify(groupData));
-      loadGroupStageEdit();
-      loadTournamentDetails(currentTournament);
+    // Function to switch tournament tabs
+    function showTournamentTab(tabId) {
+        document.querySelectorAll('.tournament-tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        document.getElementById(tabId).classList.add('active');
+
+        document.querySelectorAll('.tournament-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelector(`.tournament-tab[onclick*="${tabId}"]`).classList.add('active');
     }
-  });
 
-  // Дискваліфікація команди
-  document.getElementById("disqualifyTeamBtn").addEventListener("click", () => {
-    const teamName = prompt("Введіть назву команди для дискваліфікації:");
-    if (teamName) {
-      const groupData = JSON.parse(localStorage.getItem(`groupStage_${currentTournament}`) || '{"groupA":[],"groupB":[]}');
-      const teamA = groupData.groupA.find(team => team.name === teamName);
-      const teamB = groupData.groupB.find(team => team.name === teamName);
-      if (teamA) {
-        teamA.disqualified = true;
-      } else if (teamB) {
-        teamB.disqualified = true;
-      } else {
-        alert("Команду не знайдено!");
-        return;
-      }
-      localStorage.setItem(`groupStage_${currentTournament}`, JSON.stringify(groupData));
-      loadGroupStageEdit();
-      loadTournamentDetails(currentTournament);
-    }
-  });
 
-  // Нарахування очок
-  document.getElementById("assignPointsBtn").addEventListener("click", () => {
-    const teamName = prompt("Введіть назву команди:");
-    if (teamName) {
-      const points = parseInt(prompt("Введіть кількість очок:"));
-      const matches = parseInt(prompt("Введіть кількість матчів:"));
-      const wins = parseInt(prompt("Введіть кількість перемог:"));
-      const draws = parseInt(prompt("Введіть кількість нічиїх:"));
-      const losses = parseInt(prompt("Введіть кількість поразок:"));
-      if (isNaN(points) || isNaN(matches) || isNaN(wins) || isNaN(draws) || isNaN(losses)) {
-        alert("Введіть коректні числові значення!");
-        return;
-      }
-      const groupData = JSON.parse(localStorage.getItem(`groupStage_${currentTournament}`) || '{"groupA":[],"groupB":[]}');
-      const teamA = groupData.groupA.find(team => team.name === teamName);
-      const teamB = groupData.groupB.find(team => team.name === teamName);
-      if (teamA) {
-        teamA.points = points;
-        teamA.matches = matches;
-        teamA.wins = wins;
-        teamA.draws = draws;
-        teamA.losses = losses;
-      } else if (teamB) {
-        teamB.points = points;
-        teamB.matches = matches;
-        teamB.wins = wins;
-        teamB.draws = draws;
-        teamB.losses = losses;
-      } else {
-        alert("Команду не знайдено!");
-        return;
-      }
-      localStorage.setItem(`groupStage_${currentTournament}`, JSON.stringify(groupData));
-      loadGroupStageEdit();
-      loadTournamentDetails(currentTournament);
-    }
-  });
-
-  // Збереження групового етапу
-  document.getElementById("saveGroupStageBtn").addEventListener("click", () => {
-    const groupData = JSON.parse(localStorage.getItem(`groupStage_${currentTournament}`) || '{"groupA":[],"groupB":[]}');
-    localStorage.setItem(`groupStage_${currentTournament}`, JSON.stringify(groupData)); // Зберігаємо остаточно
-    alert("Груповий етап збережено!");
-    loadTournamentDetails(currentTournament);
-  });
-
-  // Завантаження деталей турніру
-  function loadTournamentDetails(tournamentName) {
-    currentTournament = tournamentName;
-    const titleElement = document.getElementById('currentTournamentTitle');
-    titleElement.textContent = tournamentName;
-    const groupData = JSON.parse(localStorage.getItem(`groupStage_${tournamentName}`) || '{"groupA":[],"groupB":[]}');
-    const groupATableBody = document.getElementById('groupATableBody');
-    const groupBTableBody = document.getElementById('groupBTableBody');
-    groupATableBody.innerHTML = '';
-    groupBTableBody.innerHTML = '';
-
-    groupData.groupA.forEach(team => {
-      const row = groupATableBody.insertRow();
-      row.insertCell().textContent = team.name;
-      row.insertCell().textContent = team.matches;
-      row.insertCell().textContent = team.wins;
-      row.insertCell().textContent = team.draws;
-      row.insertCell().textContent = team.losses;
-      row.insertCell().textContent = team.points;
-      if (team.disqualified) {
-        row.style.backgroundColor = '#fca5a5';
-        row.insertCell().textContent = 'DSQ';
-      }
-    });
-
-    groupData.groupB.forEach(team => {
-      const row = groupBTableBody.insertRow();
-      row.insertCell().textContent = team.name;
-      row.insertCell().textContent = team.matches;
-      row.insertCell().textContent = team.wins;
-      row.insertCell().textContent = team.draws;
-      row.insertCell().textContent = team.losses;
-      row.insertCell().textContent = team.points;
-      if (team.disqualified) {
-        row.style.backgroundColor = '#fca5a5';
-        row.insertCell().textContent = 'DSQ';
-      }
-    });
-
-    showTournamentTab('groupStageTab');
-  }
-
-  // Перемикання вкладок турніру
-  function showTournamentTab(tabId) {
-    document.querySelectorAll('.tournament-tab-content').forEach(content => {
-      content.classList.remove('active');
-    });
-    document.getElementById(tabId).classList.add('active');
-    document.querySelectorAll('.tournament-tab').forEach(tab => {
-      tab.classList.remove('active');
-    });
-    document.querySelector(`.tournament-tab[onclick*="${tabId}"]`).classList.add('active');
-  }
-
-  // Локалізація (залишаємо як є, оскільки вона вже налаштована)
+  // Локалізація (розширена)
   const translation = {
     "support": { "uk": "Підтримка", "en": "Support", "ru": "Поддержка", "pl": "Wsparcie" },
     "home": { "uk": "Головна", "en": "Home", "ru": "Главная", "pl": "Strona Główna" },
@@ -2041,10 +1791,371 @@ Nagrody są rozdzielane wewnątrz drużyny samodzielnie lub po równo (domyślni
 },
     // ... додай інші ключі за потреби
   };
+  function applyLang(lang) {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (translation[key] && translation[key][lang]) {
+        el.innerHTML = translation[key][lang];
+      }
+    });
+    // Placeholder переклад
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+      const key = el.getAttribute("data-i18n-placeholder");
+      if (translation[key] && translation[key][lang]) {
+        el.placeholder = translation[key][lang];
+      }
+    });
+    localStorage.setItem("language", lang);
+  }
+  document.querySelectorAll(".lang-option").forEach(btn => {
+    btn.addEventListener("click", () => {
+      applyLang(btn.dataset.lang);
+      langPopup.classList.remove("active");
+    });
+  });
+  applyLang(localStorage.getItem("language") || "uk");
 
-  // Ініціалізація
-  loadTournamentDetails(currentTournament);
+  // --- Попапи ---
+  const langBtn = document.getElementById("langBtn");
+  const langPopup = document.getElementById("langPopup");
+  const notificationBtn = document.getElementById("notificationBtn");
+  const notificationPopup = document.getElementById("notificationPopup");
+  const avatar = document.getElementById("avatar");
+  const profileModal = document.getElementById("profileModal");
+  const closeProfileModalBtn = document.getElementById("closeProfileModalBtn");
+  const adminPopup = document.getElementById("adminPopup");
+
+  // Відкрити попап мови
+  langBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeAllPopupsExcept(langPopup);
+    langPopup?.classList.toggle("active");
+  });
+
+  // Відкрити попап нотифікацій
+  notificationBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeAllPopupsExcept(notificationPopup);
+    notificationPopup?.classList.toggle("active");
+  });
+
+  // Відкрити попап профілю
+  avatar?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeAllPopupsExcept(profileModal);
+    profileModal?.classList.add("active");
+  });
+  closeProfileModalBtn?.addEventListener("click", () => {
+    profileModal?.classList.remove("active");
+  });
+
+  // Відкрити адмін-попап
+  adminMenuBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeAllPopupsExcept(adminPopup);
+    adminPopup?.classList.toggle("active");
+  });
+
+  // Закриття всіх попапів при кліку поза ними або на інший попап
+  function closeAllPopupsExcept(except) {
+    [langPopup, notificationPopup, adminPopup].forEach(popup => {
+      if (popup && popup !== except) popup.classList.remove("active");
+    });
+    if (profileModal && profileModal !== except) profileModal.classList.remove("active");
+  }
+  document.addEventListener("click", function(event) {
+    const popups = [langPopup, notificationPopup, adminPopup, profileModal];
+    let clickedInside = false;
+    popups.forEach(popup => {
+      if (popup && popup.classList.contains("active") && popup.contains(event.target)) {
+        clickedInside = true;
+      }
+    });
+    if (!clickedInside) {
+      closeAllPopupsExcept(null);
+    }
+  });
+  profileModal?.addEventListener("click", function(event) {
+    if (event.target === profileModal) {
+      profileModal.classList.remove("active");
+    }
+  });
+
+  // --- Реєстрація: додаткові поля Telegram ---
+  // const registerBtn = document.getElementById("registerBtn");
+  // const profileForm = document.getElementById("profileForm");
+
+  // Додаємо поля Telegram Username та Telegram ID, якщо їх ще немає
+  if (!document.getElementById("tgUsername")) {
+    const tgUsernameLabel = document.createElement("label");
+    tgUsernameLabel.setAttribute("for", "tgUsername");
+    tgUsernameLabel.setAttribute("data-i18n", "tg_user");
+    tgUsernameLabel.innerHTML = translation["tg_user"]["uk"];
+    const tgUsernameInput = document.createElement("input");
+    tgUsernameInput.id = "tgUsername";
+    tgUsernameInput.name = "tgUsername";
+    tgUsernameInput.type = "text";
+    tgUsernameInput.readOnly = true;
+    tgUsernameInput.style.background = "#222";
+    tgUsernameInput.style.color = "#aaa";
+    tgUsernameInput.style.border = "1px solid #444";
+    tgUsernameInput.required = true;
+
+    const tgIdLabel = document.createElement("label");
+    tgIdLabel.setAttribute("for", "tgId");
+    tgIdLabel.setAttribute("data-i18n", "tg_id");
+    tgIdLabel.innerHTML = translation["tg_id"]["uk"];
+    const tgIdInput = document.createElement("input");
+    tgIdInput.id = "tgId";
+    tgIdInput.name = "tgId";
+    tgIdInput.type = "text";
+    tgIdInput.readOnly = true;
+    tgIdInput.style.background = "#222";
+    tgIdInput.style.color = "#aaa";
+    tgIdInput.style.border = "1px solid #444";
+    tgIdInput.required = true;
+
+    // Вставити після поля standoffId
+    const standoffIdInput = document.getElementById("standoffId");
+    if (standoffIdInput && profileForm) {
+      profileForm.insertBefore(tgUsernameLabel, standoffIdInput.nextSibling);
+      profileForm.insertBefore(tgUsernameInput, tgUsernameLabel.nextSibling);
+      profileForm.insertBefore(tgIdLabel, tgUsernameInput.nextSibling);
+      profileForm.insertBefore(tgIdInput, tgIdLabel.nextSibling);
+    }
+  }
+
+  // Кнопка "Зареєструватись" завжди активна
+  registerBtn?.removeAttribute("disabled");
+
+  // При відкритті форми — підставляємо username та id
+  registerBtn?.addEventListener("click", () => {
+    registerBtn.style.display = "none";
+    profileForm.style.display = "flex";
+    // Підставити username та id
+    const tgUsernameInput = document.getElementById("tgUsername");
+    const tgIdInput = document.getElementById("tgId");
+    if (tgUsernameInput) tgUsernameInput.value = userUsername ? "@" + userUsername : "";
+    if (tgIdInput) tgIdInput.value = userId || "";
+
+    // Після натискання "Готово" — зберегти профіль
+document.getElementById("doneBtn")?.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  // Перевірка на заповненість полів
+  const standoffNick = document.getElementById("standoffNick").value.trim();
+  const standoffId = document.getElementById("standoffId").value.trim();
+  if (!standoffNick || !standoffId) {
+    alert("Будь ласка, заповніть усі обов'язкові поля.");
+    return;
+  }
+
+const profile = JSON.parse(localStorage.getItem("userProfile") || "{}");
+const team = JSON.parse(localStorage.getItem("userTeam") || "{}");
+
+const playerProfile = document.getElementById("playerProfile");
+const createTeamBtn = document.getElementById("createTeamBtn");
+const profileForm = document.getElementById("profileForm");
+const teamForm = document.getElementById("teamForm");
+const registerBtn = document.getElementById("registerBtn");
+
+if (profile.standoffNick) {
+  // профіль є — ховаємо кнопку реєстрації й форму
+  registerBtn.style.display = "none";
+  profileForm.style.display = "none";
+  document.getElementById("profileNick").textContent = profile.standoffNick;
+  document.getElementById("profileId").textContent = profile.standoffId;
+  playerProfile.style.display = "block";
+
+  if (createTeamBtn) {
+  createTeamBtn.addEventListener("click", () => {
+    teamForm.style.display = "block";
+    document.getElementById("teamSuccessMsg").style.display = "none";
+  });
+}
+
+} else {
+  // профілю немає — показуємо кнопку реєстрації
+  registerBtn.style.display = "block";
+  profileForm.style.display = "none";
+  createTeamBtn.style.display = "none";
+  teamForm.style.display = "none";
+}
+
+
+  const profileData = {
+    standoffNick: document.getElementById("standoffNick").value,
+    standoffId: document.getElementById("standoffId").value,
+    tgUsername: document.getElementById("tgUsername")?.value || "",
+    tgId: document.getElementById("tgId")?.value || "",
+  };
+
+  localStorage.setItem("userProfile", JSON.stringify(profileData));
+  document.getElementById("successMsg").style.display = "block";
+  document.getElementById("createTeamBtn").style.display = "block";
+  document.getElementById("profileForm").style.display = "none";
+  document.getElementById("profileNick").textContent = profileData.standoffNick;
+  document.getElementById("profileId").textContent = profileData.standoffId;
+  document.getElementById("playerProfile").style.display = "block";
+});
+
+// Збереження команди
+document.getElementById("teamDoneBtn")?.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const teamData = {
+    tag: document.getElementById("teamTag").value,
+    name: document.getElementById("teamName").value,
+    players: []
+  };
+
+  for (let i = 1; i <= 5; i++) {
+    teamData.players.push({
+      id: document.getElementById(`main${i}Id`).value,
+      nick: document.getElementById(`main${i}Nick`).value,
+      tg: document.getElementById(`main${i}Tg`).value
+    });
+  }
+
+  localStorage.setItem("userTeam", JSON.stringify(teamData));
+  document.getElementById("teamSuccessMsg").style.display = "block";
+  document.getElementById("teamForm").style.display = "none";
+  showTeamInfo();
+});
+
+// Показ команди
+function showTeamInfo() {
+  const data = JSON.parse(localStorage.getItem("userTeam") || "{}");
+  if (!data?.name) return;
+
+  const container = document.createElement("div");
+  container.style.marginTop = "20px";
+  container.style.borderTop = "1px solid #555";
+  container.style.paddingTop = "10px";
+
+  container.innerHTML = `
+    <div class="player-profile-title">Моя команда</div>
+    <div><b>[${data.tag}] ${data.name}</b></div>
+    <ul style="margin:10px 0; padding-left:20px;">
+      ${data.players.map(p => `<li>${p.nick} (${p.tg})</li>`).join("")}
+    </ul>
+    <button class="done-btn" id="editTeamBtn">Змінити</button>
+  `;
+
+  const profileSection = document.getElementById("playerProfile");
+  profileSection.appendChild(container);
+
+  document.getElementById("editTeamBtn")?.addEventListener("click", () => {
+    loadTeamIntoForm();
+    document.getElementById("teamForm").style.display = "block";
+    document.getElementById("teamSuccessMsg").style.display = "none";
+  });
+}
+
+// Заповнення форми редагування
+function loadTeamIntoForm() {
+  const data = JSON.parse(localStorage.getItem("userTeam") || "{}");
+  if (!data?.name) return;
+
+  document.getElementById("teamTag").value = data.tag;
+  document.getElementById("teamName").value = data.name;
+
+  data.players.forEach((p, i) => {
+    const idx = i + 1;
+    document.getElementById(`main${idx}Id`).value = p.id;
+    document.getElementById(`main${idx}Nick`).value = p.nick;
+    document.getElementById(`main${idx}Tg`).value = p.tg;
+  });
+}
+
+
+
+  });
 });
 </script>
+
+<!-- Modal: Редагування турніру -->
+<div id="adminModal" class="modal" style="display: none;">
+  <div class="modal-content" style="max-width: 600px; margin: 5% auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); position: relative;">
+    <span class="close" id="adminModalClose" style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 20px;">❌</span>
+    <h2 style="margin-top: 0;">Редагування турніру</h2>
+    <div style="display: flex; justify-content: space-between; gap: 20px;">
+      <div style="flex: 1;">
+        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Груповий етап')">📊 Редагувати груповий етап</button>
+        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Плей-офф')">🏆 Редагувати плей-офф</button>
+        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Дискваліфікація')">🚫 Дискваліфікувати команду</button>
+        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Попередження')">⚠️ Видати попередження</button>
+      </div>
+      <div style="text-align: right;">
+        <button id="deleteTournamentBtn" style="background-color: #d32f2f; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-size: 16px; cursor: pointer;">🗑️ Видалити турнір</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const userId = 5806282517;
+
+  const editBtn = document.getElementById("editTournamentBtn");
+  const modal = document.getElementById("adminModal");
+  const closeBtn = document.getElementById("adminModalClose");
+  const deleteBtn = document.getElementById("deleteTournamentBtn");
+
+  if (userId === 5806282517 || userId === 7853048233) {
+    if (editBtn) editBtn.style.display = "inline-block";
+  }
+
+  editBtn?.addEventListener("click", () => {
+    modal.style.display = "block";
+  });
+
+  closeBtn?.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  deleteBtn?.addEventListener("click", () => {
+    const confirmDelete = confirm("Ти впевнений, що хочеш видалити цей турнір?");
+    if (confirmDelete) {
+      const title = document.getElementById("tournamentViewTitle")?.textContent;
+      if (title) {
+        const allTournaments = JSON.parse(localStorage.getItem("tournaments") || "[]");
+        const updated = allTournaments.filter(t => t.name !== title);
+        localStorage.setItem("tournaments", JSON.stringify(updated));
+        alert("Турнір видалено.");
+        location.reload();
+      }
+    }
+  });
+</script>
+
+<script src="admin-functions.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tg = window.Telegram?.WebApp;
+  tg?.ready();
+  const user = tg?.initDataUnsafe?.user;
+  const userId = user?.id;
+
+  const isAdmin = userId === 5806282517 || userId === 7853048233;
+  const editTournamentBtn = document.getElementById("editTournamentBtn");
+
+  if (editTournamentBtn) {
+    if (isAdmin) {
+      editTournamentBtn.style.display = "inline-block";
+    } else {
+      editTournamentBtn.style.display = "none";
+    }
+  }
+});
+</script>
+
 </body>
 </html>
