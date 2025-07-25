@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="uk">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Telegram WebApp</title>
 <!-- Google Analytics (можна видалити якщо не потрібно) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TZN665FNYF"></script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-TZN665FNYF"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
@@ -847,7 +848,7 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
       <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
 </button>
 <div class="admin-menu" id="admin-button-container" style="display: none;">
-  <button id="adminMenuBtn">🛡️</button>
+<button id="adminMenuBtn">🛡️</button>
 </div>
 <div class="adminPopup popup" id="adminPopup">
 <h2 data-i18n="admin_menu_title" id="adminMenuTitle">Адмін-меню</h2>
@@ -873,21 +874,20 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 <button class="done-btn" data-i18n="done" id="doneBtn" type="submit">Готово</button>
 </form>
 <div class="player-profile" id="playerProfile">
-  <div class="player-profile-title" data-i18n="profile">Профіль гравця</div>
-  <div class="player-profile-row">
-    <span data-i18n="standoff_nick">Нік в Standoff</span>: <span id="profileNick"></span>
-  </div>
-  <div class="player-profile-row">
-    <span data-i18n="standoff_id">ID в Standoff</span>: <span id="profileId"></span>
-  </div>
-  <div class="player-profile-row">
-    <span data-i18n="tg_user">Telegram Username</span>: <span id="profileTgUsername"></span>
-  </div>
-  <div class="player-profile-row">
-    <span data-i18n="tg_id">Telegram ID</span>: <span id="profileTgId"></span>
-  </div>
+<div class="player-profile-title" data-i18n="profile">Профіль гравця</div>
+<div class="player-profile-row">
+<span data-i18n="standoff_nick">Нік в Standoff</span>: <span id="profileNick"></span>
 </div>
-
+<div class="player-profile-row">
+<span data-i18n="standoff_id">ID в Standoff</span>: <span id="profileId"></span>
+</div>
+<div class="player-profile-row">
+<span data-i18n="tg_user">Telegram Username</span>: <span id="profileTgUsername"></span>
+</div>
+<div class="player-profile-row">
+<span data-i18n="tg_id">Telegram ID</span>: <span id="profileTgId"></span>
+</div>
+</div>
 <button class="create-team-btn" data-i18n="create_team" id="createTeamBtn" style="display:none;">Створити команду</button>
 <div class="success-message" data-i18n="profile_saved" id="successMsg" style="display:none;">Профіль збережено!</div>
 <form class="team-form" id="teamForm" style="display:none;">
@@ -977,7 +977,7 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 <div class="disciplines-list">
 <div class="discipline-card">
 <img alt="Standoff 2" class="discipline-img" src="Standoff2.jpg"/>
-<div data-i18n="discipline_standoff2" class="discipline-name">Standoff 2</div>
+<div class="discipline-name" data-i18n="discipline_standoff2">Standoff 2</div>
 </div>
 </div>
 </div>
@@ -992,74 +992,66 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 </div>
 </div>
 </div>
-
 <div class="section" id="tournamentViewSection">
-    <h2 id="currentTournamentTitle" style="text-align: center; color: #00bfae; margin-bottom: 20px;"></h2>
-    
+<h2 id="currentTournamentTitle" style="text-align: center; color: #00bfae; margin-bottom: 20px;"></h2>
 <div style="display: flex; justify-content: left; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-  <button class="back-btn" onclick="showSection('homeSection')">← Назад на Головну</button>
-  <button class="back-btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати</button>
+<button class="back-btn" onclick="showSection('homeSection')">← Назад на Головну</button>
+<button class="back-btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати</button>
 </div>
-
-    <br>
+<br/>
 <button class="register-tournament-btn" id="registerTournamentBtn">Зареєструватись</button>
-
-    <div class="tournament-tabs">
-        <div class="tournament-tab active" onclick="showTournamentTab('groupStageTab')">Груповий етап</div>
-        <div class="tournament-tab" onclick="showTournamentTab('playoffTab')">Плей-офф</div>
-    </div>
-
-    <div id="groupStageTab" class="tournament-tab-content active">
-        <h3 style="color:#00bfae; margin-top: 20px;">Група А</h3>
-        <table class="group-table">
-            <thead>
-                <tr>
-                    <th>Команда</th>
-                    <th>М</th>
-                    <th>В</th>
-                    <th>Н</th>
-                    <th>П</th>
-                    <th>О</th>
-
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>  
-
-        <h3 style="color:#00bfae; margin-top: 30px;">Група В</h3>
-        <table class="group-table">
-            <thead>
-                <tr>
-                    <th>Команда</th>
-                    <th>М</th>
-                    <th>В</th>
-                    <th>Н</th>
-                    <th>П</th>
-                    <th>О</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-
-    <div id="playoffTab" class="tournament-tab-content">
-        <h3 style="color:#00bfae; margin-top: 20px;">Сітка плей-офф</h3>
-        <div class="playoff-bracket">
-            <p>Тут буде розміщено сітка плей-офф.</p>
-            </div>
-    </div>
+<div class="tournament-tabs">
+<div class="tournament-tab active" onclick="showTournamentTab('groupStageTab')">Груповий етап</div>
+<div class="tournament-tab" onclick="showTournamentTab('playoffTab')">Плей-офф</div>
+</div>
+<div class="tournament-tab-content active" id="groupStageTab">
+<h3 style="color:#00bfae; margin-top: 20px;">Група А</h3>
+<table class="group-table">
+<thead>
+<tr>
+<th>Команда</th>
+<th>М</th>
+<th>В</th>
+<th>Н</th>
+<th>П</th>
+<th>О</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h3 style="color:#00bfae; margin-top: 30px;">Група В</h3>
+<table class="group-table">
+<thead>
+<tr>
+<th>Команда</th>
+<th>М</th>
+<th>В</th>
+<th>Н</th>
+<th>П</th>
+<th>О</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+<div class="tournament-tab-content" id="playoffTab">
+<h3 style="color:#00bfae; margin-top: 20px;">Сітка плей-офф</h3>
+<div class="playoff-bracket">
+<p>Тут буде розміщено сітка плей-офф.</p>
 </div>
 </div>
 </div>
-</div>
-</div>
+
+
+
+
 <div class="section" id="rulesSection">
 <h2 data-i18n="rules_main_title">Правила турніру</h2>
 <details>
 <summary data-i18n="rules_1v1_summary">Турніри 1х1</summary>
-<p data-i18n="rules_1v1_text">• Гравці грають один проти одного.<br/> • Раунди проходять до 3 перемог.<br/> • Перемагає той, хто перший виграє 3 раунди. </p>
+<p data-i18n="rules_1v1_text">• Гравці грають один проти одного.<br> • Раунди проходять до 3 перемог.<br/> • Перемагає той, хто перший виграє 3 раунди. </br></p>
 </details>
 <details>
 <summary data-i18n="rules_2v2_summary">Турніри 2х2</summary>
@@ -1117,42 +1109,40 @@ body { margin: 0; background: #222; color: #fff; font-family: 'Segoe UI', Arial,
 </form>
 </div>
 </div>
-
 <div class="section" id="tournamentAdminViewSection">
-  <button class="back-btn" data-i18n="back_to_home" id="backToHomeFromTournamentView" onclick="showSection('homeSection')">← Головна</button>
-  <button class="back-btn" data-i18n="edit_tournament_btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати турнір</button>
-  <h2 data-i18n="tournament_view_title">Перегляд Турніру</h2>
-  <h3 id="tournamentViewTitle"></h3> <!-- ДОДАЙ ЦЕ -->
-  <p id="tournamentViewDescription"></p> <!-- ДОДАЙ ЦЕ -->
-  <div class="tournament-section-content">
-    <div id="userTournamentView">
-      <div class="tournament-tabs" id="tournamentTabs">
-        <div class="tournament-tab active" data-tab="groupStage" data-i18n="group_stage_tab">Груповий етап</div>
-        <div class="tournament-tab" data-tab="playoffs" data-i18n="playoffs_tab">Плей-офф</div>
-      </div>
-      <div class="tournament-tab-content active" id="groupStageContent">
-        <table class="group-table">
-          <thead>
-            <tr>
-              <th data-i18n="team_column">Команда</th>
-              <th data-i18n="wins_column">Перемоги</th>
-              <th data-i18n="losses_column">Поразки</th>
-            </tr>
-          </thead>
-          <tbody id="tournamentViewRankingBody"></tbody> <!-- ДОДАЙ ЦЕ -->
-        </table>
-      </div>
-      <div class="tournament-tab-content" id="playoffsContent">
-        <h3 data-i18n="playoffs_title">Плей-офф</h3>
-        <div class="playoff-bracket">
-          <p data-i18n="playoff_bracket_text">Тут буде сітка плей-офф.</p>
-          <img alt="Playoff Bracket" src="playoff_bracket_placeholder.png"/>
-        </div>
-      </div>
-    </div>
+<button class="back-btn" data-i18n="back_to_home" id="backToHomeFromTournamentView" onclick="showSection('homeSection')">← Головна</button>
+<button class="back-btn" data-i18n="edit_tournament_btn" id="editTournamentBtn" style="display:none;">✏️ Редагувати турнір</button>
+<h2 data-i18n="tournament_view_title">Перегляд Турніру</h2>
+<h3 id="tournamentViewTitle"></h3> <!-- ДОДАЙ ЦЕ -->
+<p id="tournamentViewDescription"></p> <!-- ДОДАЙ ЦЕ -->
+<div class="tournament-section-content">
+<div id="userTournamentView">
+<div class="tournament-tabs" id="tournamentTabs">
+<div class="tournament-tab active" data-i18n="group_stage_tab" data-tab="groupStage">Груповий етап</div>
+<div class="tournament-tab" data-i18n="playoffs_tab" data-tab="playoffs">Плей-офф</div>
+</div>
+<div class="tournament-tab-content active" id="groupStageContent">
+<table class="group-table">
+<thead>
+<tr>
+<th data-i18n="team_column">Команда</th>
+<th data-i18n="wins_column">Перемоги</th>
+<th data-i18n="losses_column">Поразки</th>
+</tr>
+</thead>
+<tbody id="tournamentViewRankingBody"></tbody> <!-- ДОДАЙ ЦЕ -->
+</table>
+</div>
+<div class="tournament-tab-content" id="playoffsContent">
+<h3 data-i18n="playoffs_title">Плей-офф</h3>
+<div class="playoff-bracket">
+<p data-i18n="playoff_bracket_text">Тут буде сітка плей-офф.</p>
+<img alt="Playoff Bracket" src="playoff_bracket_placeholder.png"/>
 </div>
 </div>
-
+</div>
+</div>
+</div>
 <div class="section" id="tournamentDetailsSection">
 <button class="back-btn" data-i18n="back_to_awards" id="backToAwardsBtn" style="display:none;">← Нагороди</button>
 <button class="back-btn" data-i18n="back_to_tournaments" id="backToTournamentsBtn">← Турніри</button>
@@ -2073,27 +2063,24 @@ function loadTeamIntoForm() {
   });
 });
 </script>
-
 <!-- Modal: Редагування турніру -->
-<div id="adminModal" class="modal" style="display: none;">
-  <div class="modal-content" style="max-width: 600px; margin: 5% auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); position: relative;">
-    <span class="close" id="adminModalClose" style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 20px;">❌</span>
-    <h2 style="margin-top: 0;">Редагування турніру</h2>
-    <div style="display: flex; justify-content: space-between; gap: 20px;">
-      <div style="flex: 1;">
-        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Груповий етап')">📊 Редагувати груповий етап</button>
-        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Плей-офф')">🏆 Редагувати плей-офф</button>
-        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Дискваліфікація')">🚫 Дискваліфікувати команду</button>
-        <button class="btn" style="margin-bottom: 10px;" onclick="alert('Попередження')">⚠️ Видати попередження</button>
-      </div>
-      <div style="text-align: right;">
-        <button id="deleteTournamentBtn" style="background-color: #d32f2f; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-size: 16px; cursor: pointer;">🗑️ Видалити турнір</button>
-      </div>
-    </div>
-  </div>
+<div class="modal" id="adminModal" style="display: none;">
+<div class="modal-content" style="max-width: 600px; margin: 5% auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); position: relative;">
+<span class="close" id="adminModalClose" style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 20px;">❌</span>
+<h2 style="margin-top: 0;">Редагування турніру</h2>
+<div style="display: flex; justify-content: space-between; gap: 20px;">
+<div style="flex: 1;">
+<button class="btn" onclick="alert('Груповий етап')" style="margin-bottom: 10px;">📊 Редагувати груповий етап</button>
+<button class="btn" onclick="alert('Плей-офф')" style="margin-bottom: 10px;">🏆 Редагувати плей-офф</button>
+<button class="btn" onclick="alert('Дискваліфікація')" style="margin-bottom: 10px;">🚫 Дискваліфікувати команду</button>
+<button class="btn" onclick="alert('Попередження')" style="margin-bottom: 10px;">⚠️ Видати попередження</button>
 </div>
-
-
+<div style="text-align: right;">
+<button id="deleteTournamentBtn" style="background-color: #d32f2f; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-size: 16px; cursor: pointer;">🗑️ Видалити турнір</button>
+</div>
+</div>
+</div>
+</div>
 <script>
   const userId = 5806282517;
 
@@ -2134,9 +2121,7 @@ function loadTeamIntoForm() {
     }
   });
 </script>
-
 <script src="admin-functions.js"></script>
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const tg = window.Telegram?.WebApp;
@@ -2156,65 +2141,106 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
-
-
+<div id="groupStageEdit" style="display:none; padding: 20px">
+<div id="groupStageAdminControls" style="margin-bottom: 15px;">
+<button class="btn-primary" onclick="addTeamRow()">➕ Додати команду</button>
+<button class="btn-primary" onclick="saveGroupData()">💾 Зберегти</button>
+</div>
+<table class="group-table" id="groupStageTable">
+<thead>
+<tr>
+<th>Команда</th><th>М</th><th>В</th><th>Н</th><th>П</th><th>О</th><th>Дії</th>
+</tr>
+</thead>
+<tbody id="groupStageBody"></tbody>
+</table>
+</div>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const groupStageBtn = document.getElementById("editGroupStageBtn");
-  const groupStageTable = document.getElementById("groupStageTable");
-  const groupStageActions = document.getElementById("groupStageActions");
+  const groupDataKey = "groupStageData";
 
-  if (groupStageBtn) {
-    groupStageBtn.addEventListener("click", () => {
-      if (groupStageTable) groupStageTable.style.display = "table";
-      if (groupStageActions) groupStageActions.style.display = "block";
-    });
+  function addTeamRow(team = { name: "", matches: 0, win: 0, draw: 0, lose: 0, points: 0 }) {
+    const tbody = document.getElementById("groupStageBody");
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td><input type="text" value="${team.name}" placeholder="Назва"/></td>
+      <td><input type="number" value="${team.matches}" min="0"/></td>
+      <td><input type="number" value="${team.win}" min="0"/></td>
+      <td><input type="number" value="${team.draw}" min="0"/></td>
+      <td><input type="number" value="${team.lose}" min="0"/></td>
+      <td><input type="number" value="${team.points}" min="0"/></td>
+      <td>
+        <button onclick="disqualifyTeam(this)">❌</button>
+        <button onclick="deleteTeamRow(this)">🗑️</button>
+      </td>`;
+    tbody.appendChild(row);
   }
 
-  document.getElementById("addTeamBtn")?.addEventListener("click", () => {
-    const tbody = document.querySelector("#groupStageTable tbody");
-    if (tbody) {
-      const row = tbody.insertRow();
-      row.insertCell().textContent = "Нова команда";
-      row.insertCell().textContent = "0";
-      row.insertCell().textContent = "0";
-      row.insertCell().textContent = "0";
-    }
-  });
+  function deleteTeamRow(button) {
+    button.closest("tr").remove();
+  }
 
-  document.getElementById("removeTeamBtn")?.addEventListener("click", () => {
-    const tbody = document.querySelector("#groupStageTable tbody");
-    if (tbody && tbody.rows.length > 0) {
-      tbody.deleteRow(tbody.rows.length - 1);
-    }
-  });
+  function disqualifyTeam(button) {
+    const row = button.closest("tr");
+    row.style.background = "#442222";
+    row.querySelectorAll("input").forEach(input => input.disabled = true);
+  }
 
-  document.getElementById("disqualifyTeamBtn")?.addEventListener("click", () => {
-    const name = prompt("Введіть назву команди для дискваліфікації:");
-    if (!name) return;
-    const rows = document.querySelectorAll("#groupStageTable tbody tr");
+  function saveGroupData() {
+    const tbody = document.getElementById("groupStageBody");
+    const rows = tbody.querySelectorAll("tr");
+    const data = [];
     rows.forEach(row => {
-      if (row.cells[0]?.textContent.trim() === name.trim()) {
-        row.style.backgroundColor = "#fca5a5";
-        row.insertCell().textContent = "DSQ";
+      const inputs = row.querySelectorAll("input");
+      if (inputs.length >= 6) {
+        data.push({
+          name: inputs[0].value,
+          matches: +inputs[1].value,
+          win: +inputs[2].value,
+          draw: +inputs[3].value,
+          lose: +inputs[4].value,
+          points: +inputs[5].value
+        });
       }
     });
-  });
+    localStorage.setItem(groupDataKey, JSON.stringify(data));
+    alert("Дані збережено!");
+    renderGroupStageMain();
+  }
 
-  document.getElementById("assignPointsBtn")?.addEventListener("click", () => {
-    const name = prompt("Назва команди для нарахування очок:");
-    const points = prompt("Скільки очок додати?", "3");
-    if (!name || isNaN(points)) return;
-    const rows = document.querySelectorAll("#groupStageTable tbody tr");
-    rows.forEach(row => {
-      if (row.cells[0]?.textContent.trim() === name.trim()) {
-        const current = parseInt(row.cells[1].textContent) || 0;
-        row.cells[1].textContent = current + parseInt(points);
-      }
+  function loadGroupData() {
+    const data = JSON.parse(localStorage.getItem(groupDataKey) || "[]");
+    data.forEach(team => addTeamRow(team));
+  }
+
+  function renderGroupStageMain() {
+    const data = JSON.parse(localStorage.getItem(groupDataKey) || "[]");
+    const container = document.getElementById("groupStageDisplay");
+    if (!container) return;
+    container.innerHTML = "";
+    if (data.length === 0) {
+      container.innerHTML = "<p>Немає збережених даних.</p>";
+      return;
+    }
+    const table = document.createElement("table");
+    table.innerHTML = `<thead><tr><th>Команда</th><th>М</th><th>В</th><th>Н</th><th>П</th><th>О</th></tr></thead>`;
+    const tbody = document.createElement("tbody");
+    data.forEach(team => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${team.name}</td><td>${team.matches}</td><td>${team.win}</td>
+        <td>${team.draw}</td><td>${team.lose}</td><td>${team.points}</td>`;
+      tbody.appendChild(row);
     });
+    table.appendChild(tbody);
+    container.appendChild(table);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById("groupStageEdit")) {
+      loadGroupData();
+    }
+    renderGroupStageMain();
   });
-});
 </script>
-
 </body>
 </html>
